@@ -1,12 +1,14 @@
 "use client";
 
 import { Modal } from "@/components/ui/Modal";
+import useModal from "@/hooks/useModal";
 
 export default function PlayGround() {
+  const { open, handleOpenModal, handleCloseModal } = useModal();
   return (
     <>
-      <button>test</button>
-      <Modal>취소하겠나여?</Modal>
+      <button onClick={handleOpenModal}>modal open</button>
+      {open && <Modal onClick={handleCloseModal}>취소하겠나여?</Modal>}
     </>
   );
 }

@@ -17,6 +17,8 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.71.1",
+    "react-focus-lock": "^2.13.7",
+    "remixicon": "^4.8.0",
     "zustand": "^5.0.10"
   },
   "devDependencies": {

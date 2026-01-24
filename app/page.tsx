@@ -1,3 +1,13 @@
+import { Banner } from "./page-section/Banner";
+import { FindStore } from "./page-section/FindStore";
+import { CharityShop } from "./page-section/CharitySopt";
+
 export default function Home() {
-  return <div className="text-main bg-black p-10">TAILWIND CHECK</div>;
+  return (
+    <>
+      <Banner></Banner>
+      <FindStore></FindStore>
+      <CharityShop></CharityShop>
+    </>
+  );
 }

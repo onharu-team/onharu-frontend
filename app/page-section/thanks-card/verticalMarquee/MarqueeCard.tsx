@@ -5,7 +5,7 @@ export const MarqueeCard = ({ storename, contents, date }: CardItemProps) => {
   return (
     <div
       className={cn(
-        "relative h-full w-full cursor-pointer overflow-hidden rounded-md border border-gray-300 p-3 lg:p-7"
+        "relative h-full w-full cursor-pointer overflow-hidden rounded-md border border-gray-300 bg-white p-3 lg:p-7"
       )}
     >
       <div className="text-text flex flex-row items-center gap-2">

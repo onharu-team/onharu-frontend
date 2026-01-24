@@ -52,8 +52,8 @@ export const Card = ({
   return (
     <Link href={storelink} className="group inline-block h-full">
       <div className="h-full overflow-hidden rounded-md border border-gray-300">
-        <div className="img-container h-[183px]">
-          <div className="relative h-full w-full duration-300 ease-in-out group-hover:scale-105">
+        <div className="relative h-[183px]">
+          <div className="h-full w-full duration-300 ease-in-out group-hover:scale-105">
             <Image
               src={storeSrc || "/image/page/no-image.svg"}
               fill

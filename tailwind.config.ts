@@ -19,7 +19,7 @@ const config: Config = {
         "section-lg-top": "6.25rem",
         "section-lg-bottom": "9.375rem",
         "section-sm-top": "2.5rem",
-        "section-sm-bottom": "3,75rem",
+        "section-sm-bottom": "3.75rem",
       },
       fontSize: {
         xs: ["0.75rem", { lineHeight: "1.5" }], // 12
@@ -61,6 +61,20 @@ const config: Config = {
         text: "#212121",
         muted: "#949494",
         danger: "#EC0C0C",
+      },
+      animation: {
+        slidedown: "slidedown 300ms ease-out",
+        slideup: "slideup 300ms ease-in",
+      },
+      keyframes: {
+        slidedown: {
+          from: { height: 0 },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        slideup: {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: 0 },
+        },
       },
       fontFamily: {
         pretendard: ["var(--font-pretendard)"],

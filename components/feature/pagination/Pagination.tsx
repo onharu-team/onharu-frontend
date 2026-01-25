@@ -44,35 +44,35 @@ export default function Pagination({
   const pageNumberList = createPageNumberList(currentPage, totalPage);
 
   return (
-    <div className={clsx("flex items-center gap-5", className)}>
+    <div className={clsx("flex items-center gap-1", className)}>
       <button
-        className="flex h-16 w-16 items-center justify-center"
+        className="flex h-7 w-7 items-center justify-center"
         disabled={currentPage === 1}
         onClick={() => setCurrentPage(1)}
       >
         <RiArrowLeftDoubleLine
-          size={24}
+          size={18}
           className={currentPage === 1 ? "text-gray-400" : "text-main"}
         />
       </button>
 
       <button
-        className="flex h-16 w-16 items-center justify-center"
+        className="flex h-7 w-7 items-center justify-center"
         disabled={currentPage === 1}
         onClick={() => setCurrentPage(currentPage - 1)}
       >
-        <RiArrowLeftSLine size={24} className={currentPage === 1 ? "text-gray-400" : "text-main"} />
+        <RiArrowLeftSLine size={18} className={currentPage === 1 ? "text-gray-400" : "text-main"} />
       </button>
 
-      <ul className="flex gap-5">
+      <ul className="flex gap-1">
         {pageNumberList.map(item => (
           <li
             key={item}
             onClick={() => setCurrentPage(item)}
             className={clsx(
-              "flex h-16 w-16 cursor-pointer items-center justify-center rounded-full text-lg font-extrabold",
+              "flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-sm",
               {
-                "bg-main text-white": currentPage === item,
+                "bg-main font-bold text-white": currentPage === item,
                 "text-main hover:bg-border": currentPage !== item,
               }
             )}
@@ -83,23 +83,23 @@ export default function Pagination({
       </ul>
 
       <button
-        className="flex h-16 w-16 items-center justify-center"
+        className="flex h-7 w-7 items-center justify-center"
         disabled={currentPage === totalPage}
         onClick={() => setCurrentPage(currentPage + 1)}
       >
         <RiArrowRightSLine
-          size={24}
+          size={18}
           className={currentPage === totalPage ? "text-gray-400" : "text-main"}
         />
       </button>
 
       <button
-        className="flex h-16 w-16 items-center justify-center"
+        className="flex h-7 w-7 items-center justify-center"
         disabled={currentPage === totalPage}
         onClick={() => setCurrentPage(totalPage)}
       >
         <RiArrowRightDoubleLine
-          size={24}
+          size={18}
           className={currentPage === totalPage ? "text-gray-400" : "text-main"}
         />
       </button>

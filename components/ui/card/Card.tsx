@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Like } from "../StoreLike";
+import { Like } from "../../feature/StoreLike";
 
 interface CardProps {
   storelink: string;

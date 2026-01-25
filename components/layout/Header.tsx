@@ -13,13 +13,13 @@ import { RiNotification3Line } from "@remixicon/react";
 const NavItems = [
   {
     id: 1,
-    pathname: "/playground",
+    pathname: "/charitystore",
     title: "나눔가게",
     requireAuth: false,
   },
   {
     id: 2,
-    pathname: "/playground2",
+    pathname: "/",
     title: "지도",
     requireAuth: false,
   },

@@ -1,6 +1,6 @@
 "use client";
 
-import { createPageNumberList } from "./utils";
+import { createPageNumberList } from "./utils/utils";
 import clsx from "clsx";
 import {
   RiArrowRightSLine,

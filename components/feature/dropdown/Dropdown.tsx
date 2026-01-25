@@ -1,40 +1,64 @@
-"use client"
+"use client";
+import { useState } from "react";
+import { RiArrowDownSLine, RiCheckLine } from "@remixicon/react";
+import clsx from "clsx";
+import ReactFocusLock from "react-focus-lock";
 
-import { RiArrowDownSLine } from "@remixicon/react";
-
-const baseClasses =
-  "hover:bg-main-100 data-state-[state=checked]:bg-main-300 cursor-pointer rounded-sm px-1 py-1 text-sm outline-none";
-
+const SelectData = [
+  {
+    value: "recommand",
+    label: "추천순",
+  },
+  {
+    value: "wish",
+    label: "인기순",
+  },
+  {
+    value: "distance",
+    label: "거리순",
+  },
+];
 export const BgrDropdown = () => {
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState("추천순");
+
   return (
-    // <Select.Root defaultValue={"recommand"}>
-    //   <Select.Trigger className="group border-main mt-8 ml-auto flex cursor-pointer items-center gap-1.5 rounded-full border px-4 py-1">
-    //     <Select.Value placeholder="추천순" />
-    //     <Select.Icon>
-    //       <RiArrowDownSLine
-    //         size={16}
-    //         className="transitin duration-150 group-data-[state=open]:rotate-180"
-    //       />
-    //     </Select.Icon>
-    //   </Select.Trigger>
-    //   <Select.Portal>
-    //     <Select.Content
-    //       sideOffset={10000}
-    //       className="w-full rounded-md border border-gray-300 bg-white"
-    //     >
-    //       <Select.Viewport className="px-3 py-2">
-    //         <Select.Item value="recommand" className={baseClasses}>
-    //           <Select.ItemText>추천순</Select.ItemText>
-    //         </Select.Item>
-    //         <Select.Item value="wish" className={baseClasses}>
-    //           <Select.ItemText>인기순</Select.ItemText>
-    //         </Select.Item>
-    //         <Select.Item value="distance" className={baseClasses}>
-    //           <Select.ItemText>거리순</Select.ItemText>
-    //         </Select.Item>
-    //       </Select.Viewport>
-    //     </Select.Content>
-    //   </Select.Portal>
-    // </Select.Root>
+    <div className="relative mt-7 ml-auto w-fit">
+      <button
+        onClick={() => setOpen(!open)}
+        className="border-main text-main border-main flex items-center gap-1.5 rounded-full border bg-white px-3 py-1"
+      >
+        <span className="text-sm font-bold">{selected}</span>
+        <RiArrowDownSLine size={18} className={clsx("duration-200", open && "rotate-180")} />
+      </button>
+      <div className={clsx("absolute top-8 -z-1 mt-1", open && "z-10")}>
+        <div
+          className={clsx(
+            "flex flex-col gap-1 rounded-md border border-gray-300 bg-white px-1 py-2 opacity-0 duration-150",
+            open && "opacity-100"
+          )}
+        >
+          {SelectData.map(data => (
+            <div key={data.value}>
+              <button
+                className={clsx(
+                  "flex w-full items-center gap-2 rounded-sm px-2 py-1 text-left text-sm hover:bg-gray-100",
+                  selected === data.label && "bg-main-100 text-main"
+                )}
+                aria-hidden={!open}
+                tabIndex={open ? 1 : -1}
+                onClick={() => {
+                  setOpen(false);
+                  setSelected(data.label);
+                }}
+              >
+                {data.label}
+                {selected === data.label && <RiCheckLine size={14} />}
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };

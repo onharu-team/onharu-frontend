@@ -29,7 +29,7 @@ export default function CharityStore() {
       <h2 className="sr-only">나눔 가게 전체 보기</h2>
       <div className="wrapper">
         <Navigation value={category} onChange={setCategory} InitializePage={handleFirstPage} />
-        <BgrSelect />
+        <BgrDropdown />
         <div className="mt-4 grid grid-cols-4 gap-4 md:mt-8">
           {paginatedStores.map(item => (
             <Card

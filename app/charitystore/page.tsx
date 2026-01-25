@@ -32,6 +32,7 @@ export default function CharityStore() {
         <div className="mt-section-sm-top md:mt-section-lg-top grid grid-cols-4 gap-4">
           {paginatedStores.map(item => (
             <Card
+              key={item.id}
               storelink={item.storelink}
               storename={item.storename}
               storeIntroduce={item.storeIntroduce}
@@ -49,7 +50,7 @@ export default function CharityStore() {
             handleNextPage={handleNextPage}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-            totalDataCount={180}
+            totalDataCount={filterStore.length}
             perPageDataCount={16}
           />
         </div>

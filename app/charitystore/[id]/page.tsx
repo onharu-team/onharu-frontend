@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Like } from "@/components/feature/StoreLike";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export default function Detail() {
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -12,7 +12,8 @@ export default function Detail() {
   const [slidearea, setSlidearea] = useState({ left: 0, right: 0 });
   const [progressbar, setProgressbar] = useState(0);
   const progressRef = useRef(0);
-
+  const x = useMotionValue(0);
+  const smoothX = useSpring(x, { stiffness: 300, damping: 30 });
   //tab 접근성
   const [tabX, setTab] = useState(0);
 
@@ -36,33 +37,14 @@ export default function Detail() {
     progressRef.current = progressInit;
   }, []);
 
-  useEffect(() => {
-    utilProgressCalc();
-  }, [tabX]);
-
   const utilProgressCalc = () => {
-    console.log("함수실행전😭😭😭😭😭");
     if (!testRef.current) return;
 
-    console.log("함수실행");
+    const moveX = x.get() / maxdragRef.current;
 
-    const transform = window.getComputedStyle(testRef.current).transform;
-
-    if (transform !== "none") {
-      const matrix = new DOMMatrix(transform);
-      const finalX = matrix.m41;
-
-      const moveX = finalX / maxdragRef.current;
-
-      console.log(moveX + ": moveX 🦒🦒🦒🦒");
-
-      //기준값은 항상 progressbar의 초기값 기준으로하기때문에 state가 아닌 ref로 계산
-      const dynamicProgressBar = progressRef.current + (100 - progressRef.current) * -moveX;
-
-      console.log(dynamicProgressBar + ": 계산결과 🚀🚀🚀");
-
-      setProgressbar(dynamicProgressBar);
-    }
+    //기준값은 항상 progressbar의 초기값 기준으로하기때문에 state가 아닌 ref로 계산
+    const dynamicProgressBar = progressRef.current + (100 - progressRef.current) * -moveX;
+    setProgressbar(dynamicProgressBar);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -72,11 +54,13 @@ export default function Detail() {
 
     if (e.key === "ArrowLeft") {
       e.preventDefault();
-      setTab(prev => Math.min(prev + step, slidearea.right));
+      const nextX = Math.min(x.get() + step, slidearea.right);
+      x.set(nextX);
       utilProgressCalc();
     } else if (e.key === "ArrowRight") {
       e.preventDefault();
-      setTab(prev => Math.max(prev - step, slidearea.left));
+      const nextX = Math.max(x.get() - step, slidearea.left);
+      x.set(nextX);
       utilProgressCalc();
     } else if (e.key === "Home") {
       e.preventDefault();
@@ -99,7 +83,7 @@ export default function Detail() {
             ref={testRef}
             drag="x"
             tabIndex={0}
-            animate={{ x: tabX }}
+            style={{ x: smoothX }}
             transition={{ type: "tween", duration: 0.4 }}
             onKeyDown={handleKeyDown}
             role="region"

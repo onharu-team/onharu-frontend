@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Heading } from "./components/shared/heading";
 import { Like } from "@/components/feature/StoreLike";
 import { FramerSlide } from "./components/framerSlide";
+import { Map } from "@/components/feature/map/map";
 
 export default function Detail() {
   const [isSlide, setisSlide] = useState(false);
@@ -58,6 +59,16 @@ export default function Detail() {
                 </div>
               </div>
             )}
+          </div>
+        </article>
+        <article className="mt-21">
+          <Heading title="매장 정보" />
+          <div className="mt-8">
+            <p className="lg:text-md text-base">전화번호 : 02-0000-0000</p>
+            <p className="lg:text-md mt-2 text-base">주소 : 서울시 강남구 124</p>
+            <div className="mt-7 h-[200px] w-full">
+              <Map type="detail" address="제주특별자치도 제주시 첨단로 242" category="식당" />
+            </div>
           </div>
         </article>
       </div>

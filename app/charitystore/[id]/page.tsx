@@ -6,6 +6,7 @@ import { Like } from "@/components/feature/StoreLike";
 import { FramerSlide } from "./components/framerSlide";
 import { Map } from "@/components/feature/map/map";
 import { Reservation } from "./components/reservation";
+import { ReservationBtn } from "./components/reservation-btn";
 
 export default function Detail() {
   const [isSlide, setisSlide] = useState(false);
@@ -73,9 +74,11 @@ export default function Detail() {
           </div>
         </article>
         <article className="mt-15 md:mt-21">
-          <Heading title="예약 정보" />
+          <Heading title="예약 정보" addClassName="justify-between">
+            <ReservationBtn status="short" />
+          </Heading>
           <div className="mt-3 md:mt-8">
-            <Reservation status={"short"} />
+            <Reservation status="short" />
           </div>
         </article>
       </div>

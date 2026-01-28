@@ -2,28 +2,25 @@
 
 import Image from "next/image";
 import { Heading } from "./components/shared/Heading";
-import { DevideBar } from "./components/DevideBar";
+import { DevideBar } from "./components/shared/DevideBar";
 import { ReservationCalendar } from "./components/ReservationCalendar";
-import { useCalendarSelect } from "@/components/feature/calendar/useCalendarSelect";
-import { ReservationSelectInfo } from "./components/ReservationSelectInfo";
-import { ReservationTime } from "./components/ReservationTime";
+import { ReservationSelectInfo } from "../../components/feature/reservation/ReservationSelectInfo";
+import { ReservationTime } from "../../components/feature/reservation/ReservationTime";
 import { PeopleCounter } from "./components/PeopleCounter";
 import { usePeopleCounter } from "./hooks/usePeopleCounter";
+import { useCalendarSelect } from "@/components/feature/calendar/useCalendarSelect";
 import { Button } from "@/components/ui/Button";
-import { ReservationUtils } from "@/components/feature/calendar/utils/reservationUtils";
-
+import { ReservationUtils } from "@/components/feature/reservation/utils/reservationUtils";
+import { useReservationTime } from "@/components/feature/reservation/useReservationTime";
+import { handleSubmit } from "./utils/ReservationSubmit";
 //dummy data
 import { DummyDate } from "./data/data";
 
 export default function Reservation() {
   const { selectedDate, setSelectedDate } = useCalendarSelect();
+  const { selectedTime, handleSelectTime } = useReservationTime({ selectedDate });
   const { counter, handleSubtract, handleAdd } = usePeopleCounter({ availableCounter: 5 });
-  /**
-   * 날짜별로 시간을 그룹핑
-   * @param availableDates 예약 가능한 {날짜:시간[]} 배열에서 날짜만 뽑아 캘린더 컴포넌트로 전달
-   */
   const groupedDate = ReservationUtils(DummyDate);
-  const availableDates: Date[] = Object.keys(groupedDate).map(dateStr => new Date(dateStr));
 
   return (
     <section className="mt-section-sm-top lg:mt-section-lg-top mb-section-sm-bottom lg:mb-section-lg-bottom">
@@ -41,16 +38,21 @@ export default function Reservation() {
           <Heading title="날짜와 시간을 선택해 주세요." />
           <div className="mt-9">
             <ReservationCalendar
-              availableDate={availableDates}
+              data={groupedDate}
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
             />
           </div>
           <div className="mt-6">
-            <ReservationTime availableGroup={groupedDate} selectedDate={selectedDate} />
+            <ReservationTime
+              data={groupedDate}
+              selectedDate={selectedDate}
+              selectedTime={selectedTime}
+              handleSelectTime={handleSelectTime}
+            />
           </div>
           <div className="mt-12.5">
-            <ReservationSelectInfo selectedDate={selectedDate} />
+            <ReservationSelectInfo selectedDate={selectedDate} selectedTime={selectedTime} />
           </div>
         </div>
         <DevideBar />
@@ -65,7 +67,13 @@ export default function Reservation() {
           </div>
         </div>
         <div className="mt-10 md:mt-15">
-          <Button varient="default" fontSize="md" width="lg" height="lg">
+          <Button
+            varient="default"
+            fontSize="md"
+            width="lg"
+            height="lg"
+            onClick={() => handleSubmit(selectedDate, selectedTime, counter)}
+          >
             예약하기
           </Button>
         </div>

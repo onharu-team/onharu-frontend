@@ -26,7 +26,7 @@ export default function Reservation() {
     <section className="mt-section-sm-top lg:mt-section-lg-top mb-section-sm-bottom lg:mb-section-lg-bottom">
       <div className="m-auto w-full max-w-[700px] px-[15px]">
         <p className="text-md font-bold md:text-xl lg:text-2xl">예약하기</p>
-        <div className="bg-main-100 mt-7 flex items-center gap-7 rounded-md px-4 py-7">
+        <div className="bg-main-100 mt-7 flex items-center gap-3 rounded-md px-4 py-7 md:gap-7">
           <Image src="/image/page/reservation-img.png" alt="" width={50} height={50} />
           <p className="md:text-md text-sm font-semibold">
             사장님이 예약 확정 시 약속한 날짜에 이용 가능합니다. <br />

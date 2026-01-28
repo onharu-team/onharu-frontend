@@ -26,7 +26,7 @@ export const ReservationTime = ({
             key={date}
             onClick={() => handleSelectTime(date)}
             className={clsx(
-              "focus-visible:bg-main-300 cursor-pointer rounded-md border border-gray-300 bg-white py-4 transition duration-150 hover:bg-gray-50",
+              "focus-visible:bg-main-300 cursor-pointer rounded-md border border-gray-300 bg-white py-2 transition duration-150 hover:bg-gray-50 md:py-4",
               selectedTime === date && "!bg-main text-white"
             )}
           >

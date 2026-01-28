@@ -15,7 +15,9 @@ import { useReservationTime } from "@/components/feature/reservation/useReservat
 import { handleSubmit } from "./utils/ReservationSubmit";
 //dummy data
 import { DummyDate } from "./data/data";
-
+import { useState } from "react";
+import { Modal } from "@/components/ui/Modal";
+import useModal from "@/hooks/useModal";
 /**
  * 모든 하위 컴포넌트의 기능은 커스텀 훅으로 작동하고 있습니다.
  * 조립하는 최상위 컴포넌트 page.tsx에서는 use-* 커스텀 훅으로 예약 관련 기능을 불러와 데이터를 전달합니다.
@@ -25,7 +27,7 @@ export default function Reservation() {
   const { selectedTime, handleSelectTime } = useReservationTime({ selectedDate });
   const { counter, handleSubtract, handleAdd } = usePeopleCounter({ availableCounter: 5 });
   const groupedDate = ReservationUtils(DummyDate);
-
+  const { open, handleOpenModal, handleCloseModal } = useModal();
   /**
  * 날짜별로 시간을 그룹핑
  * @param groupedDate
@@ -51,6 +53,12 @@ export default function Reservation() {
           </p>
         </div>
         <DevideBar />
+        <button onClick={handleOpenModal}>modal on</button>
+        {open && (
+          <Modal onClick={handleCloseModal}>
+            <p>gss</p>
+          </Modal>
+        )}
         <div>
           <Heading title="날짜와 시간을 선택해 주세요." />
           <div className="mt-9">

@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import Link from "next/link";
 import Input from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import RememberMeCheckbox from "./RememberMeCheckbox";
+import Checkbox from "@/components/ui/Checkbox";
 import KakaoLoginButton from "./KakaoLoginButton";
-import Link from "next/link";
 import { LoginFormValues } from "../data/login";
 
 export default function LoginForm() {
@@ -30,7 +30,7 @@ export default function LoginForm() {
     setLoginError("");
 
     // 아이디 기억하기
-    if (data.rememberMe) {
+    if (data.rememberId) {
       localStorage.setItem("rememberedUserId", data.userId);
     } else {
       localStorage.removeItem("rememberedUserId");
@@ -43,13 +43,14 @@ export default function LoginForm() {
     const savedId = localStorage.getItem("rememberedUserId");
     if (savedId) {
       setValue("userId", savedId);
-      setValue("rememberMe", true);
+      setValue("rememberId", true);
     }
   }, [setValue]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-8 bg-gray-50 px-4">
       <h2 className="text-2xl font-bold">로그인</h2>
+
       <form onSubmit={handleSubmit(onSubmit)} className="flex w-full max-w-sm flex-col gap-5">
         <Input
           label="아이디"
@@ -70,9 +71,9 @@ export default function LoginForm() {
           }
         />
 
-        <RememberMeCheckbox registerReturn={register("rememberMe")} />
+        <Checkbox label="아이디 기억하기" {...register("rememberId")} />
 
-        <Button varient="default" width="lg" height="md" fontSize="md">
+        <Button type="submit" varient="default" width="lg" height="md" fontSize="md">
           로그인
         </Button>
 

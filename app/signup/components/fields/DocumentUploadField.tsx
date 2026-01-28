@@ -29,7 +29,7 @@ export default function DocumentUploadField({ register, errors, watch }: Documen
 
       <label
         htmlFor="document"
-        className="border-border flex h-22.5 w-22.5 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-lg border bg-white px-4 py-3 text-[14px] text-[#757575] hover:bg-gray-50"
+        className="border-border text-text-secondary flex h-22.5 w-22.5 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-lg border bg-white px-4 py-3 text-[14px] hover:bg-gray-50"
       >
         <RiCameraLine size={30} color="rgba(117,117,117,1)" />
         업로드

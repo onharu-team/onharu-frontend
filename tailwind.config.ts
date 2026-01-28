@@ -60,6 +60,7 @@ const config: Config = {
         border: "#E0E0E0",
         text: "#212121",
         subtle: "#949494",
+        "text-secondary": "#757575",
         danger: "#EC0C0C",
       },
       animation: {

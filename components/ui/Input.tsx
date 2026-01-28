@@ -47,7 +47,7 @@ export default function Input({
         className={clsx(
           "border-border placeholder:text-subtle h-11.25 rounded-[10px] border px-2.5 transition-all duration-150 ease-in-out outline-none",
           disabled
-            ? "bg-[#EEEEEE] text-[#757575]"
+            ? "text-text-secondary bg-[#EEEEEE]"
             : "hover:border-main focus:border-main text-text active:border-main focus:border-2"
         )}
       />

@@ -1,10 +1,10 @@
-import SignupLayout from "../components/SignupLayout";
+import FormLayout from "@/components/layout/FormLayout";
 import OwnerSignupForm from "./OwnerSignupForm";
 
 export default function OwnerSignupPage() {
   return (
-    <SignupLayout title="매장 회원가입">
+    <FormLayout title="매장 회원가입">
       <OwnerSignupForm />
-    </SignupLayout>
+    </FormLayout>
   );
 }

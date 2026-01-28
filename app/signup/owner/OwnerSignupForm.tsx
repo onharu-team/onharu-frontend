@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import Input from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { SignupFormValues } from "@/app/signup/data/signup";
-import PhoneAuthField from "../components/fields/PhoneAuthField";
+import PhoneAuthField from "@/components/feature/PhoneAuthField";
 import TermsField from "../components/fields/TermsField";
 import BusinessNumberField from "../components/fields/BusinessNumberField";
 
@@ -102,13 +102,15 @@ export default function OwnerSignupForm() {
       />
 
       {/* 연락처 */}
-      <PhoneAuthField
+      <PhoneAuthField<SignupFormValues>
         register={register}
         errors={errors}
         setError={setError}
         clearErrors={clearErrors}
         trigger={trigger}
         watch={watch}
+        phoneName="phone"
+        codeName="authCode"
         onVerifiedChange={setIsPhoneVerified}
         onCodeSentChange={setIsCodeSent}
       />

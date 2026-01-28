@@ -1,10 +1,10 @@
-import SignupLayout from "../components/SignupLayout";
+import FormLayout from "@/components/layout/FormLayout";
 import ChildSignupForm from "./ChildSignupForm";
 
 export default function ChildSignupPage() {
   return (
-    <SignupLayout title="아동 회원가입">
+    <FormLayout title="아동 회원가입">
       <ChildSignupForm />
-    </SignupLayout>
+    </FormLayout>
   );
 }

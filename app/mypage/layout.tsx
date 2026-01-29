@@ -1,0 +1,12 @@
+import Sidebar from "./components/Sidebar";
+
+export default async function MyPageLayout({ children }: { children: React.ReactNode }) {
+  const user = { role: "owner" as const };
+
+  return (
+    <div className="wrapper flex min-h-screen">
+      <Sidebar role={user.role} />
+      <main className="flex-1 p-6">{children}</main>
+    </div>
+  );
+}

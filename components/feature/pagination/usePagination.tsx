@@ -12,6 +12,10 @@ export function usePagination({
 
   const totalPage = Math.ceil(totalDataCount / perPageDataCount);
 
+  console.log(totalDataCount + ":totla Data Count");
+  console.log(perPageDataCount + ":per Page DAta");
+  console.log(totalPage + ": totalpage");
+
   const handleFirstPage = () => {
     //무조건 첫번째 페이지로 이동합니다
     setCurrentPage(1);
@@ -22,12 +26,12 @@ export function usePagination({
     setCurrentPage(prev => prev - 1);
   };
 
-  const handleLastPage = () => {
-    setCurrentPage(totalPage);
-  };
-
   const handleNextPage = () => {
     setCurrentPage(prev => prev + 1);
+  };
+
+  const handleLastPage = (page: number) => {
+    setCurrentPage(page);
   };
 
   return {

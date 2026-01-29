@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { ToastContainerCustom } from "@/components/feature/toast/ToastContainerCustom";
 import { Header } from "@/components/layout/header/Header";
 import { Footer } from "@/components/layout/Footer";
 
@@ -25,6 +26,7 @@ export default function RootLayout({
     <html lang="ko" className={`${pretendard.variable}`}>
       <body className={pretendard.variable}>
         <Header />
+        <ToastContainerCustom />
         {children}
         <Footer />
       </body>

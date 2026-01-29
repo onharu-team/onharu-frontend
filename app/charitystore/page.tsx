@@ -21,7 +21,7 @@ export default function CharityStore() {
     handlePrevPage,
     handleLastPage,
     handleNextPage,
-  } = usePagination({ totalDataCount: 180, perPageDataCount: 16 });
+  } = usePagination({ totalDataCount: dummyStores.length, perPageDataCount: 16 });
 
   const {
     open,

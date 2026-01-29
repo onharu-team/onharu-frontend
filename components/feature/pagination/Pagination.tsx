@@ -1,5 +1,5 @@
 "use client";
-
+import { PAGELIMIT } from "./data/PageLimit";
 import { createPageNumberList } from "./utils/utils";
 import clsx from "clsx";
 import {
@@ -12,8 +12,8 @@ import {
 interface PaginationProps {
   handleFirstPage: () => void;
   handlePrevPage: () => void;
-  handleLastPage: () => void;
   handleNextPage: () => void;
+  handleLastPage: (page: number) => void;
   currentPage: number;
   setCurrentPage: (page: number) => void;
   totalDataCount: number;
@@ -30,8 +30,15 @@ export function Pagination({
   totalDataCount,
   perPageDataCount,
 }: PaginationProps) {
+  /**
+   * @param totalPage 총 페이지 갯수 = 총 데이터갯수 / 한 페이지당 허용 데이터갯수
+   * @param groupLength 그룹 갯수 = 총 페이지 / 5
+   * @param LastGroupHead 마지막 그룹의 첫번째 페이지 넘버
+   */
+
   const totalPage = Math.ceil(totalDataCount / perPageDataCount);
-  if (totalPage <= 1) return null;
+  const groupLength = Math.ceil(totalPage / PAGELIMIT);
+  const LastGroupHead = PAGELIMIT * (groupLength - 1);
 
   const pageNumberList = createPageNumberList(currentPage, totalPage);
 
@@ -87,12 +94,14 @@ export function Pagination({
 
       <button
         className="flex h-7 w-7 items-center justify-center"
-        disabled={currentPage === totalPage}
-        onClick={handleLastPage}
+        disabled={currentPage === groupLength}
+        onClick={() => {
+          handleLastPage(LastGroupHead + 1);
+        }}
       >
         <RiArrowRightDoubleLine
           size={18}
-          className={currentPage === totalPage ? "text-gray-300" : "text-main"}
+          className={currentPage === groupLength ? "text-gray-300" : "text-main"}
         />
       </button>
     </div>

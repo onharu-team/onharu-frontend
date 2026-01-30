@@ -4,7 +4,7 @@ export default async function MyPageLayout({ children }: { children: React.React
   const user = { role: "owner" as const };
 
   return (
-    <div className="wrapper flex min-h-screen">
+    <div className="wrapper flex min-h-screen flex-col lg:flex-row">
       <Sidebar role={user.role} />
       <main className="flex-1 p-6">{children}</main>
     </div>

@@ -9,7 +9,7 @@ export const NavItems = [
   },
   {
     id: 2,
-    pathname: "/",
+    pathname: "/nearby",
     title: "지도",
     requireAuth: false,
   },

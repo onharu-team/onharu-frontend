@@ -26,7 +26,7 @@ export const Map = ({ type, address, category }: MapProps) => {
 
       if (type === "detail") await getStorePosition(map, address, category);
       else if (type === "search") {
-        //await moveToCurrentLocation(map); //map center 순서보장을 위해
+        await moveToCurrentLocation(map); //map center 순서보장을 위해
       }
 
       //searchNearbyStores(map, '동물병원')

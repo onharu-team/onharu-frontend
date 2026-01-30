@@ -13,15 +13,36 @@ export async function moveToCurrentLocation(map: kakao.maps.Map): Promise<void> 
     const latlng = new window.kakao.maps.LatLng(latitude, longitude);
     map.setCenter(latlng);
 
-    const ImageSrc = "/images/my-marker.svg";
-    const ImageSize = new kakao.maps.Size(48, 62);
-    const MarkerImage = new kakao.maps.MarkerImage(ImageSrc, ImageSize);
+    const overlayContent = `
+    <div class="relative w-[12px] h-[12px]">
+      <span
+        class="absolute inset-0 rounded-full bg-red-500 opacity-40
+              animate-ping"
+      ></span>
+      <span
+        class="absolute inset-0 rounded-full bg-red-500"
+      ></span>
+    </div>
+  `;
 
-    const myMarker = new window.kakao.maps.Marker({
-      map,
+    const myLocationOverlay = new kakao.maps.CustomOverlay({
       position: latlng,
-      image: MarkerImage,
+      content: overlayContent,
+      xAnchor: 0.5,
+      yAnchor: 0.5,
     });
+
+    // const ImageSrc = "/images/my-marker.svg";
+    // const ImageSize = new kakao.maps.Size(48, 62);
+    // const MarkerImage = new kakao.maps.MarkerImage(ImageSrc, ImageSize);
+
+    // const myMarker = new window.kakao.maps.Marker({
+    //   map,
+    //   position: latlng,
+    //   image: MarkerImage,
+    // });
+
+    myLocationOverlay.setMap(map);
 
     // useLocationStore.getState().setMarkers(myMarker);
   } catch (err) {

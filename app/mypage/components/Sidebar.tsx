@@ -32,7 +32,7 @@ export default function Sidebar({ role }: { role: "owner" | "child" }) {
   }, [mobileMenuOpen]);
 
   return (
-    <div className="sticky top-0 z-50 w-full border-b bg-white lg:w-115 lg:border-b-0 lg:bg-transparent">
+    <div className="sticky top-0 z-30 w-full border-b bg-white lg:w-115 lg:border-b-0 lg:bg-transparent">
       {/* 모바일 헤더 */}
       <div className="flex items-center justify-between p-4 lg:hidden">
         <h2 className="text-base font-bold sm:text-xl">마이페이지</h2>

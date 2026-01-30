@@ -30,7 +30,7 @@ export default function Input({
   isVerified = false,
 }: InputProps) {
   return (
-    <div className="relative flex w-full flex-col text-base">
+    <div className="relative flex w-full flex-col text-sm sm:text-base">
       <label htmlFor={id} className="text-text mb-1.25 font-medium">
         {label} {isRequired && <span className="text-danger">*</span>}
       </label>
@@ -48,18 +48,18 @@ export default function Input({
           "border-border placeholder:text-subtle h-11.25 rounded-[10px] border px-2.5 transition-all duration-150 ease-in-out outline-none",
           disabled
             ? "text-text-secondary bg-[#EEEEEE]"
-            : "hover:border-main focus:border-main text-text active:border-main focus:border-2"
+            : "hover:border-main focus:border-main text-text active:border-main bg-white focus:border-2"
         )}
       />
 
       {error && (
-        <div id={`${id}-error`} className="text-danger mt-2.5 text-sm">
+        <div id={`${id}-error`} className="text-danger mt-2.5 text-xs sm:text-sm">
           {error.message}
         </div>
       )}
 
       {!error && isVerified && (
-        <div id={`${id}-verified`} className="text-main-500 mt-2.5 text-sm">
+        <div id={`${id}-verified`} className="text-main-500 mt-2.5 text-xs sm:text-sm">
           인증 완료!
         </div>
       )}

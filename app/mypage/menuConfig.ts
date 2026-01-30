@@ -50,7 +50,7 @@ export const childMenu = [
     items: [
       { label: "회원정보 수정", href: "/mypage/account/edit" },
       { label: "비밀번호 변경", href: "/mypage/account/password" },
-      { label: "증명서류 보기", href: "/mypage/account/documents" },
+      { label: "증명서류 보기", href: "/mypage/account/proof-documents" },
       { label: "회원탈퇴", href: "/mypage/account/withdraw" },
     ],
   },

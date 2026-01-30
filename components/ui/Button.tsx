@@ -28,7 +28,7 @@ const WidthClasses = {
   xs: "min-w-[90px]",
   sm: "min-w-[100px]",
   md: "min-w-[140px]",
-  lg: "min-w-[100%]",
+  lg: "w-full min-w-0",
 };
 
 const VarientClasses = {

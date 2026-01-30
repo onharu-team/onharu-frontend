@@ -1,7 +1,10 @@
+import { PageSection } from "../../components/PageSection";
+import PasswordConfirmPage from "./components/PasswordConfirm";
+
 export default function EditAccountPage() {
   return (
-    <div>
-      <h1>Edit Account Page</h1>
-    </div>
+    <PageSection title="회원정보 수정">
+      <PasswordConfirmPage />
+    </PageSection>
   );
 }

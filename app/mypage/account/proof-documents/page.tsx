@@ -3,7 +3,7 @@ import { PageSection } from "../../components/PageSection";
 
 export default function ProofDocumentsPage() {
   return (
-    <PageSection title="증명서류 보기">
+    <PageSection title="증명서류 보기" className="p-4 sm:p-8">
       <div className="flex items-center justify-center">
         <Image
           src="/image/page/proof-test-image.png"

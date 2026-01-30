@@ -9,8 +9,8 @@ interface PageSectionProps {
 export function PageSection({ title, children, className }: PageSectionProps) {
   return (
     <div>
-      <h3 className="mb-8 text-lg font-bold">{title}</h3>
-      <div className={clsx("bg-secondary rounded-[10px] p-8", className)}>{children}</div>
+      <h3 className="mb-4 text-lg font-bold sm:mb-8">{title}</h3>
+      <div className={clsx("bg-secondary rounded-[10px]", className)}>{children}</div>
     </div>
   );
 }

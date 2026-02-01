@@ -29,6 +29,7 @@ type MapProps = DetailMapProps | SearchMapProps;
 export const Map = (props: MapProps) => {
   const { type, address, category } = props;
   const mapRef = useRef<HTMLDivElement>(null);
+  const CurrentOverlayRef = useRef<kakao.maps.CustomOverlay | null>(null);
   const locationRef = useRef<kakao.maps.Map | null>(null);
   const markersRef = useRef<kakao.maps.Marker[]>([]);
   const overLayRef = useRef<kakao.maps.CustomOverlay[]>([]);
@@ -69,7 +70,7 @@ export const Map = (props: MapProps) => {
 
   useEffect(() => {
     if (props.type !== "search" || !mylocation || !locationRef.current) return;
-    moveToCurrentLocation(locationRef.current, mylocation.lat, mylocation.lng); //map center 순서보장을 위해
+    moveToCurrentLocation(locationRef.current, CurrentOverlayRef, mylocation.lat, mylocation.lng);
     NearbyStoreMarker(
       locationRef.current,
       stores,

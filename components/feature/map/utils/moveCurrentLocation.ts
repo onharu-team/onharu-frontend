@@ -7,10 +7,13 @@ import { getCurrentPosition } from "./getCurrentPositin";
 
 export async function moveToCurrentLocation(
   map: kakao.maps.Map,
+  CurrentOverlayRef: React.MutableRefObject<kakao.maps.CustomOverlay | null>,
   latitude: number,
   longitude: number
 ): Promise<void> {
   try {
+    CurrentOverlayRef.current?.setMap(null);
+    CurrentOverlayRef.current = null;
     const latlng = new window.kakao.maps.LatLng(latitude, longitude);
     map.setCenter(latlng);
 
@@ -33,9 +36,8 @@ export async function moveToCurrentLocation(
       yAnchor: 0.5,
     });
 
-    myLocationOverlay.setMap(map);
-
-    // useLocationStore.getState().setMarkers(myMarker);
+    CurrentOverlayRef.current = myLocationOverlay;
+    CurrentOverlayRef.current.setMap(map);
   } catch (err) {
     // 실패해도 시 기본위치 유지
   }

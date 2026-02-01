@@ -21,7 +21,7 @@ export const ownerMenu = [
     items: [
       { label: "나눔 등록", href: "/mypage/sharing/create" },
       { label: "나눔 내역", href: "/mypage/sharing/history" },
-      { label: "예약 내역", href: "/mypage/sharing/reservations" },
+      { label: "예약 내역", href: "/mypage/reservations" },
     ],
   },
   {

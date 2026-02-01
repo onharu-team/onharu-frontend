@@ -48,6 +48,21 @@
   .wrapper {
     @apply max-w-wrapper px-wrapper mx-auto;
   }
+  .customoverlay {
+    @apply bg-main-500 absolute -top-28 -left-5 min-w-28 rounded-md px-2 py-1.5 text-white;
+  }
+  .customoverlay > div {
+    @apply relative;
+  }
+  .customoverlay .arrow {
+    @apply border-t-main-500 absolute -bottom-3 h-0 w-0 border-t-9 border-r-8 border-l-8 border-r-transparent border-l-transparent;
+  }
+  .customoverlay p {
+    @apply text-sm font-bold;
+  }
+  .customoverlay button {
+    @apply text-main-hover cursor-pointer rounded-xs bg-gray-100 px-1 text-xs;
+  }
 }
 
 @theme inline {

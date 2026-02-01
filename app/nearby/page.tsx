@@ -23,7 +23,7 @@ import { CardSkeleton } from "@/components/ui/card/CardSkeleton";
 import { OperatingBedge } from "@/components/ui/card/OperatingBedge";
 import { Thumbnail } from "@/components/ui/card/Thumbnail";
 import { StoreAddress } from "@/components/ui/card/StoreAddress";
-import { searchStores } from "@/components/feature/map/searchStore";
+import { searchStores } from "@/components/feature/search/searchStore";
 import { Button } from "@/components/ui/Button";
 
 import { Modal } from "@/components/ui/Modal";
@@ -114,6 +114,7 @@ export default function Nearby() {
               stores.map(store => (
                 <Card
                   key={store.id}
+                  storeId={store.id}
                   storelink="/"
                   storeThumnail={
                     <Thumbnail

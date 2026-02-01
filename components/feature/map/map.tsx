@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from "react";
 import { MapLoading } from "./MapLoading";
 import { InitMap } from "./initMap";
 import { moveToCurrentLocation } from "./utils/moveCurrentLocation";
-import { getStorePosition } from "./getStorePosition";
+import { getStorePosition } from "./utils/getStorePosition";
 import { CategoryName } from "../category/data";
 import { NearbyStore } from "@/app/nearby/type/type";
 import { NearbyStoreMarker } from "./utils/NearByStoreMarker";
@@ -30,6 +30,7 @@ export const Map = (props: MapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const locationRef = useRef<kakao.maps.Map | null>(null);
   const markersRef = useRef<kakao.maps.Marker[]>([]);
+  const overLayRef = useRef<kakao.maps.CustomOverlay[]>([]);
   const [mapReady, setMapReady] = useState<boolean>(false);
   const stores = type === "search" ? props.store : null;
   const mylocation = type === "search" ? props.mylocation : null;
@@ -60,7 +61,7 @@ export const Map = (props: MapProps) => {
   useEffect(() => {
     if (!mylocation || !locationRef.current) return;
     moveToCurrentLocation(locationRef.current, mylocation.lat, mylocation.lng); //map center 순서보장을 위해
-    NearbyStoreMarker(locationRef.current, stores, markersRef);
+    NearbyStoreMarker(locationRef.current, stores, markersRef, overLayRef);
     setMapReady(true);
   }, [mylocation]);
 
@@ -69,7 +70,7 @@ export const Map = (props: MapProps) => {
     if (!locationRef.current) return;
     if (!props.store?.length) return;
 
-    NearbyStoreMarker(locationRef.current, stores, markersRef);
+    NearbyStoreMarker(locationRef.current, stores, markersRef, overLayRef);
   }, [type, stores]);
 
   return (

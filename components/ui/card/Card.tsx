@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Like } from "../../feature/StoreLike";
 
 interface CardProps {
+  storeId: string;
   storelink: string;
   storeThumnail: React.ReactNode;
   storename: string;
@@ -38,6 +39,7 @@ interface CardProps {
 */
 
 export const Card = ({
+  storeId,
   storelink,
   storeThumnail,
   storename,
@@ -51,6 +53,7 @@ export const Card = ({
   return (
     <Link
       href={storelink}
+      id={storeId}
       className="inline-block h-full duration-300 ease-in-out hover:-translate-y-1.5"
     >
       <div className="h-full overflow-hidden rounded-md border border-gray-300">

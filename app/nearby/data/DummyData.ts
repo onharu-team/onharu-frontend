@@ -8,7 +8,7 @@ export function DummyData(baseLat: number, baseLng: number): NearbyStore[] {
   return [
     // 식당
     {
-      id: 1,
+      id: "1",
       name: "온정식당",
       category: "식당",
       lat: baseLat + randomOffset(),
@@ -20,7 +20,7 @@ export function DummyData(baseLat: number, baseLng: number): NearbyStore[] {
       hasSharing: true,
     },
     {
-      id: 2,
+      id: "2",
       name: "행복분식",
       category: "식당",
       lat: baseLat + randomOffset(),
@@ -34,7 +34,7 @@ export function DummyData(baseLat: number, baseLng: number): NearbyStore[] {
 
     // 카페
     {
-      id: 3,
+      id: "3",
       name: "마음카페",
       category: "카페",
       lat: baseLat + randomOffset(),
@@ -46,7 +46,7 @@ export function DummyData(baseLat: number, baseLng: number): NearbyStore[] {
       hasSharing: true,
     },
     {
-      id: 4,
+      id: "4",
       name: "오늘의 커피",
       category: "카페",
       lat: baseLat + randomOffset(),
@@ -60,7 +60,7 @@ export function DummyData(baseLat: number, baseLng: number): NearbyStore[] {
 
     // 의료
     {
-      id: 5,
+      id: "5",
       name: "세지로 한의원",
       category: "의료",
       lat: baseLat + randomOffset(),
@@ -72,7 +72,7 @@ export function DummyData(baseLat: number, baseLng: number): NearbyStore[] {
       hasSharing: true,
     },
     {
-      id: 6,
+      id: "6",
       name: "권선 우리병원",
       category: "의료",
       lat: baseLat + randomOffset(),
@@ -86,7 +86,7 @@ export function DummyData(baseLat: number, baseLng: number): NearbyStore[] {
 
     // 교육
     {
-      id: 7,
+      id: "7",
       name: "희망 공부방",
       category: "교육",
       lat: baseLat + randomOffset(),
@@ -98,7 +98,7 @@ export function DummyData(baseLat: number, baseLng: number): NearbyStore[] {
       hasSharing: false,
     },
     {
-      id: 8,
+      id: "8",
       name: "꿈나무 피아노교실",
       category: "교육",
       lat: baseLat + randomOffset(),
@@ -112,7 +112,7 @@ export function DummyData(baseLat: number, baseLng: number): NearbyStore[] {
 
     // 생활
     {
-      id: 9,
+      id: "9",
       name: "행복 세탁소",
       category: "생활",
       lat: baseLat + randomOffset(),
@@ -124,7 +124,7 @@ export function DummyData(baseLat: number, baseLng: number): NearbyStore[] {
       hasSharing: true,
     },
     {
-      id: 10,
+      id: "10",
       name: "우리동네 문구점",
       category: "생활",
       lat: baseLat + randomOffset(),

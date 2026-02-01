@@ -1,7 +1,7 @@
 import { CategoryName } from "@/components/feature/category/data";
 
 export interface NearbyStore {
-  id: number;
+  id: string;
   name: string;
   category: CategoryName;
   lat: number;

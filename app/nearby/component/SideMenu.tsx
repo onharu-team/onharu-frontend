@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { RiArrowLeftSLine } from "@remixicon/react";
-import clsx from "clsx";
 import { cn } from "@/lib/utils";
 
-export const SideMenu = ({ children }: { children: React.ReactNode }) => {
+export const SideMenu = ({
+  isReady,
+  children,
+}: {
+  isReady: boolean;
+  children: React.ReactNode;
+}) => {
   const [open, setOpen] = useState(true);
 
   return (
@@ -18,7 +23,10 @@ export const SideMenu = ({ children }: { children: React.ReactNode }) => {
         <button
           onClick={() => setOpen(!open)}
           aria-label="사이드바 메뉴를 열고 닫을 수 있습니다."
-          className="absolute top-[50%] -right-[35px] z-52 -translate-y-[50%] cursor-pointer rounded-r-lg border border-gray-300 bg-white px-[2.5px] py-4 shadow-xl"
+          className={cn(
+            "absolute top-[50%] -right-[35px] z-52 -translate-y-[50%] cursor-pointer rounded-r-lg border border-gray-300 bg-white px-[2.5px] py-4 shadow-xl",
+            !isReady && "-z-10 opacity-0"
+          )}
         >
           <RiArrowLeftSLine size={30} className={cn(!open && "rotate-180")} />
         </button>

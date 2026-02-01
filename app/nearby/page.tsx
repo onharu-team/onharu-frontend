@@ -17,6 +17,8 @@ import { LocationSearch } from "./component/LocationSearch";
 import { DummyData } from "./data/DummyData";
 import { NearbyStore } from "./type/type";
 import { CardSkeleton } from "@/components/ui/card/CardSkeleton";
+import { LocationSearchSkeleton } from "./component/LocationSearchSkeleton";
+import { cn } from "@/lib/utils";
 
 export default function Nearby() {
   const [allStores, setAllStores] = useState<NearbyStore[]>([]);
@@ -24,6 +26,8 @@ export default function Nearby() {
   const { inputValue, setInputValue, keyword, setKeyword, handleSearch, handleInputChange } =
     useSearch();
   const { category, setCategory, filterByCategory } = useCategoryFilter();
+
+  const isReady = mylocation.lat !== 0;
 
   useEffect(() => {
     if (mylocation.lat === 0) return;
@@ -72,15 +76,22 @@ export default function Nearby() {
     <section>
       <h2 className="sr-only">내 주변 착한가게를 찾을 수 있습니다.</h2>
       <div className="flex h-[100vh]">
-        <SideMenu>
+        <SideMenu isReady={isReady}>
           <MyAddress mylocation={mylocation} />
-          <LocationSearch value={inputValue} onChange={handleInputChange} onSearch={handleSearch} />
+          {!isReady && <LocationSearchSkeleton />}
+          {isReady && (
+            <LocationSearch
+              value={inputValue}
+              onChange={handleInputChange}
+              onSearch={handleSearch}
+            />
+          )}
+
           <DevideBar />
           <div className="scrollbar-thin grid flex-1 grid-cols-1 gap-8 overflow-y-scroll p-7.5">
-            {mylocation.lat === 0 &&
-              Array.from({ length: 3 }).map((_, idx) => <CardSkeleton key={idx} />)}
+            {!isReady && Array.from({ length: 3 }).map((_, idx) => <CardSkeleton key={idx} />)}
 
-            {mylocation.lat !== 0 &&
+            {isReady &&
               stores.map(store => (
                 <Card
                   key={store.id}
@@ -97,7 +108,7 @@ export default function Nearby() {
                 />
               ))}
           </div>
-          <div className="absolute top-5 -right-[155%] z-50">
+          <div className={cn("absolute top-5 -right-[155%] z-50", !isReady && "-z-10 opacity-0")}>
             <Navigation
               value={category}
               onChange={setCategory}

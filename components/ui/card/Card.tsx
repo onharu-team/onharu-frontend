@@ -1,33 +1,9 @@
 import Link from "next/link";
 import { Like } from "../../feature/StoreLike";
+import { CardProps } from "./type/type";
 import { cn } from "@/lib/utils";
 
-interface DefaultCard {
-  storeId: string;
-  storelink: string;
-  storeThumnail: React.ReactNode;
-  storename: string;
-  storeIntroduce: string;
-}
-
-interface CharityCard extends DefaultCard {
-  type: "charity";
-  category: React.ReactNode;
-  hashtags: React.ReactNode;
-}
-
-interface NearbyCard extends DefaultCard {
-  type: "nearby";
-  operating: React.ReactNode;
-  storeAddress: React.ReactNode;
-  reservation: React.ReactNode;
-  activeId: string;
-}
-
-type CardProps = CharityCard | NearbyCard;
-
 /**
- * props에 대한 설명입니다.
  * @param storelink - 상세페이지 이동 url (공통)
  * @param storeSrc - 매장 썸네일 src (공통)
  * @param storename - 가게 이름 (공통)
@@ -37,19 +13,7 @@ type CardProps = CharityCard | NearbyCard;
  * @param storeAddress - 가게주소 (지도에만 사용, 별도의 컴포넌트로 받아옴)
  * @param hashtags - 해쉬태그 (선택, 메인에만 사용, 별도의 컴포넌트로 받아옴)
  * @param reservation - 예약 버튼 (지도에만 사용, 부모에서 별도의 컴포넌트로 받아옴)
- *
- * 지도에서 사용 예시는 다음과 같습니다.
- * @example
- * <Card
-      category={<Category category="식당" />}
-      storeAddress={<StoreAddress address={"서울시 강남대로 123"} />
-      reservation={
-        <Button varient="default" fontSize="md" width="lg" height="md">
-          예약 하러가기
-        </Button>
-      }
-    />
-*/
+ */
 
 export const Card = (props: CardProps) => {
   const activeId = props.type === "nearby" ? props.activeId : "";

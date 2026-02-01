@@ -68,7 +68,7 @@ export const Card = ({
           <div className="absolute top-2 right-5">
             <Like isLiked={false} />
           </div>
-          <p className="md:text-md flex items-center gap-1 pr-6 text-base font-bold">
+          <p className="md:text-md flex items-center gap-2 pr-6 text-base font-bold">
             <span className="line-clamp-1">{storename}</span>
             {operating}
           </p>

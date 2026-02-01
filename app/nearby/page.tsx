@@ -9,6 +9,7 @@ import { useCategoryFilter } from "@/components/feature/category/useCategoryFilt
 import { useSearch } from "@/components/feature/map/hooks/useSearch";
 import { MyAddress } from "./component/MyAddress";
 import { Card } from "@/components/ui/card/Card";
+import { OperatingBedge } from "@/components/ui/card/OperatingBedge";
 import { StoreAddress } from "@/components/ui/card/StoreAddress";
 import { searchStores } from "@/components/feature/map/searchStore";
 import { Button } from "@/components/ui/Button";
@@ -100,9 +101,12 @@ export default function Nearby() {
                   storename={store.name}
                   storeAddress={<StoreAddress address={store.address} />}
                   storeIntroduce={store.description}
+                  operating={
+                    <OperatingBedge openTime={store.openTime} closeTime={store.closeTime} />
+                  }
                   reservation={
                     <Button varient="default" width="lg" height="md" fontSize="md">
-                      예약하기
+                      나눔 예약하기
                     </Button>
                   }
                 />

@@ -4,7 +4,7 @@ import { childItems, ownerItems } from "./data/mockData";
 
 const role = "owner";
 
-export default function ReservationPageServer() {
+export default function ReservationPage() {
   const itemsForRole = ownerItems.filter(item => item.role === role);
 
   return (

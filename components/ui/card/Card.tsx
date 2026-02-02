@@ -29,7 +29,7 @@ export const Card = (props: CardProps) => {
       id={props.storeId}
       className={cn(
         "inline-block h-full duration-300 ease-in-out hover:-translate-y-1.5",
-        props.type === "nearby" && "h-fit"
+        props.type === "nearby" && "h-fit w-full"
       )}
     >
       <div

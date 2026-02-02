@@ -38,7 +38,7 @@ export default function Nearby() {
   const { inputValue, setInputValue, keyword, setKeyword, handleSearch, handleInputChange } =
     useSearch();
   const { category, setCategory, filterByCategory } = useCategoryFilter();
-  const { activeId, setActiveId, handleActiveCard } = useActiveCard();
+  const { activeId, handleActiveCard, cardRefs } = useActiveCard();
   const { open, handleOpenModal, handleCloseModal } = useModal();
 
   const isReady = mylocation.lat !== 0;
@@ -116,39 +116,46 @@ export default function Nearby() {
             {isReady &&
               stores.length > 0 &&
               stores.map(store => (
-                <Card
-                  type="nearby"
+                <div
                   key={store.id}
-                  storeId={store.id}
-                  storelink="/"
-                  storeThumnail={
-                    <Thumbnail
-                      src={""}
-                      openTime={store.openTime}
-                      closeTime={store.closeTime}
-                      hasSharing={store.hasSharing}
-                    />
-                  }
-                  storename={store.name}
-                  storeAddress={<StoreAddress address={store.address} />}
-                  storeIntroduce={store.description}
-                  operating={
-                    <OperatingBedge openTime={store.openTime} closeTime={store.closeTime} />
-                  }
-                  reservation={
-                    <Button
-                      varient="default"
-                      width="lg"
-                      height="md"
-                      fontSize="md"
-                      disabled={!store.hasSharing}
-                      onClick={handleReservation}
-                    >
-                      {store.hasSharing ? "나눔 예약하기" : "나눔 준비중"}
-                    </Button>
-                  }
-                  activeId={activeId}
-                />
+                  className="w-full"
+                  ref={el => {
+                    cardRefs.current[store.id] = el;
+                  }}
+                >
+                  <Card
+                    type="nearby"
+                    storeId={store.id}
+                    storelink="/"
+                    storeThumnail={
+                      <Thumbnail
+                        src={""}
+                        openTime={store.openTime}
+                        closeTime={store.closeTime}
+                        hasSharing={store.hasSharing}
+                      />
+                    }
+                    storename={store.name}
+                    storeAddress={<StoreAddress address={store.address} />}
+                    storeIntroduce={store.description}
+                    operating={
+                      <OperatingBedge openTime={store.openTime} closeTime={store.closeTime} />
+                    }
+                    reservation={
+                      <Button
+                        varient="default"
+                        width="lg"
+                        height="md"
+                        fontSize="md"
+                        disabled={!store.hasSharing}
+                        onClick={handleReservation}
+                      >
+                        {store.hasSharing ? "나눔 예약하기" : "나눔 준비중"}
+                      </Button>
+                    }
+                    activeId={activeId}
+                  />
+                </div>
               ))}
 
             {isReady && stores.length === 0 && <SearchNoResult />}

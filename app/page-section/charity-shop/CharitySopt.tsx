@@ -17,6 +17,8 @@ export const CharityShop = () => {
             {CardData.map(items => (
               <Card
                 key={items.id}
+                type="charity"
+                storeId={items.id}
                 storelink={items.storelink}
                 storeThumnail={
                   <Thumbnail

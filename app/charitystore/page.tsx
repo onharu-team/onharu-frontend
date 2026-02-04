@@ -66,7 +66,9 @@ export default function CharityStore() {
         <div className="mt-4 grid grid-cols-2 gap-4 md:mt-8 lg:grid-cols-4">
           {paginatedStores.map(item => (
             <Card
-              key={item.id}
+              type="charity"
+              key={item.storeId}
+              storeId={item.storeId}
               storelink={item.storelink}
               storeThumnail={
                 <Thumbnail

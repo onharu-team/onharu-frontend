@@ -43,7 +43,7 @@ export const LocationSearch = ({
 
   return (
     <>
-      <p className="text-md text-center font-bold md:text-2xl">
+      <p className="text-md f-gmks text-center leading-tight font-bold md:text-2xl">
         위치정보 <br />
         직접 검색해볼까요?
       </p>

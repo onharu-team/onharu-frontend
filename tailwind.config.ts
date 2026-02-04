@@ -83,6 +83,7 @@ const config: Config = {
       },
       fontFamily: {
         pretendard: ["var(--font-pretendard)"],
+        gmarketsans: ["var(--font-gmarketsans)"],
       },
     },
   },

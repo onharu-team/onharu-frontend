@@ -11,6 +11,12 @@ const pretendard = localFont({
   weight: "100 900",
   variable: "--font-pretendard",
 });
+const gmarketsans = localFont({
+  src: "../fonts/gmarketsans/GmarketSansBold.woff2",
+  display: "swap",
+  weight: "700",
+  variable: "--font-gmarketsans",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,8 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={`${pretendard.variable}`}>
-      <body className={pretendard.variable}>
+    <html lang="ko" className={`${pretendard.variable} ${gmarketsans.variable}`}>
+      <body className={`${pretendard.variable} ${gmarketsans.variable}`}>
         <Header />
         <ToastContainerCustom />
         {children}

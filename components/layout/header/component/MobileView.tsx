@@ -20,7 +20,10 @@ export const MobileView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
         </button>
       </div>
       <div
-        className={cn("fixed inset-0 z-100 bg-black opacity-6", !open && "-z-1 opacity-0")}
+        className={cn(
+          "fixed inset-0 z-100 bg-black opacity-6",
+          !open && "pointer-events-none opacity-0"
+        )}
         onClick={() => setOpen(false)}
       />
       <div

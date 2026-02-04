@@ -3,8 +3,8 @@ import FindIdForm from "./FindIdForm";
 
 export default function FindIdPage() {
   return (
-    <div className="flex min-h-screen justify-center">
-      <div className="my-auto w-full">
+    <div className="wrapper flex min-h-screen items-center justify-center">
+      <div className="w-full max-w-115">
         <FormLayout title="아이디 찾기">
           <FindIdForm />
         </FormLayout>

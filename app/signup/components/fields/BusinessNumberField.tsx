@@ -37,7 +37,7 @@ export default function BusinessNumberField({
         />
       </div>
 
-      <div className="absolute right-0 mt-7">
+      <div className="absolute right-0 bottom-0">
         <Button
           type="button"
           varient="default"

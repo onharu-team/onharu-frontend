@@ -139,9 +139,11 @@ export default function ChildSignupForm() {
       {/* 이용 약관 */}
       <TermsField register={register} errors={errors} />
 
-      <Button type="submit" varient="default" width="lg" height="md" fontSize="md">
-        회원가입
-      </Button>
+      <div className="mt-2.5 sm:mt-7.5">
+        <Button type="submit" varient="default" width="lg" height="md" fontSize="md">
+          회원가입
+        </Button>
+      </div>
     </form>
   );
 }

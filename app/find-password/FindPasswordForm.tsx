@@ -79,9 +79,11 @@ export default function FindPasswordForm() {
         onCodeSentChange={setIsCodeSent}
       />
 
-      <Button type="submit" varient="default" width="lg" height="md" fontSize="md">
-        비밀번호 찾기
-      </Button>
+      <div className="mt-2.5 sm:mt-7.5">
+        <Button type="submit" varient="default" width="lg" height="md" fontSize="md">
+          비밀번호 찾기
+        </Button>
+      </div>
     </form>
   );
 }

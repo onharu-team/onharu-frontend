@@ -30,7 +30,7 @@ export default function FormPageLayout({
   showActions = true,
 }: FormPageLayoutProps) {
   return (
-    <div className="mx-auto flex max-w-md flex-col gap-6">
+    <div className="mx-auto flex max-w-md flex-col gap-2 sm:gap-5">
       {/* 상단 안내 문구 */}
       {title && <div className="sm:text-md text-center text-sm font-medium">{title}</div>}
 
@@ -39,7 +39,7 @@ export default function FormPageLayout({
 
       {/* 버튼 영역 */}
       {showActions && (
-        <div className="grid grid-cols-2 gap-2 sm:gap-5">
+        <div className="mt-5.5 grid grid-cols-2 gap-2 sm:mt-7.5 sm:gap-5">
           <Button onClick={onCancel} varient="light" fontSize="md" width="lg" height="md">
             {cancelText}
           </Button>

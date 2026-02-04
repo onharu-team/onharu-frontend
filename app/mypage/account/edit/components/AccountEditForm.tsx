@@ -42,7 +42,7 @@ export default function AccountEditForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-11 flex flex-col gap-4">
+      <div className="mb-7.5 flex flex-col gap-2 sm:mb-12.5 sm:gap-5">
         <Input label="이메일" id="email" placeholder="test@test.com" disabled />
 
         <Input

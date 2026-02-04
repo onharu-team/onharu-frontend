@@ -28,7 +28,7 @@ export const ownerMenu = [
     title: "가게 관리",
     icon: RiHandHeartLine,
     items: [
-      { label: "가게 등록", href: "/mypage/store/create" },
+      { label: "가게 등록", href: "/mypage/store" },
       { label: "내가 받은 감사카드", href: "/mypage/reviews" },
       // { label: "1:1 문의하기", href: "/mypage/inquiry" },
     ],

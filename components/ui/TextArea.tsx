@@ -3,11 +3,13 @@
 import clsx from "clsx";
 
 interface Props extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  name: string;
   maxLength?: number;
   showCount?: boolean;
 }
 
 export default function Textarea({
+  name,
   maxLength,
   showCount = false,
   className,
@@ -20,10 +22,11 @@ export default function Textarea({
     <div className="w-full">
       <textarea
         {...props}
+        name={name}
         value={value}
         maxLength={maxLength}
         className={clsx(
-          "border-border mt-2 min-h-37.5 resize-none rounded-[10px] border bg-white p-4 text-sm transition outline-none sm:text-base",
+          "border-border min-h-37 resize-none rounded-[10px] border bg-white p-4 text-sm transition outline-none sm:text-base",
           "hover:border-main focus:border-main active:border-main focus:border-2",
           className
         )}

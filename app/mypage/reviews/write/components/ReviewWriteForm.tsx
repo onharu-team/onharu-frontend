@@ -48,11 +48,12 @@ export default function ReviewWriteForm({ stores }: Props) {
         className="mt-2 max-w-[320px]"
       />
 
-      <div className="mb-10 flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
         <div className="sm:text-md text-base">사장님께 쓰는 편지</div>
 
         <Textarea
           className="w-full"
+          name="content"
           value={content}
           onChange={e => setContent(e.target.value)}
           placeholder={`진심을 담은 편지로 감사 인사를 전달해보세요!\n실명은 공개되지 않으며, 닉네임으로 전달됩니다.`}

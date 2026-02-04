@@ -6,7 +6,7 @@ import { FieldError, UseFormRegisterReturn } from "react-hook-form";
 type InputType = React.HTMLInputTypeAttribute;
 
 interface InputProps {
-  label: string;
+  label?: string;
   id: string;
   type?: InputType;
   placeholder?: string;
@@ -41,10 +41,15 @@ export default function Input({
   const inputProps = register ? register : { onChange };
 
   return (
-    <div className="relative flex w-full flex-col text-sm sm:text-base">
-      <label htmlFor={id} className="text-text mb-1.25 font-medium">
-        {label} {isRequired && <span className="text-danger">*</span>}
-      </label>
+    <div className="relative flex w-full flex-col">
+      {label && (
+        <label
+          htmlFor={id}
+          className="text-text sm:text-md mb-1.25 text-base font-medium sm:mb-2.5"
+        >
+          {label} {isRequired && <span className="text-danger">*</span>}
+        </label>
+      )}
 
       <input
         id={id}
@@ -57,7 +62,7 @@ export default function Input({
         aria-describedby={describedBy}
         {...inputProps}
         className={clsx(
-          "border-border placeholder:text-subtle h-11.25 rounded-[10px] border px-2.5 transition-all duration-150 ease-in-out outline-none",
+          "border-border placeholder:text-subtle h-11.25 rounded-[10px] border px-2.5 text-sm transition-all duration-150 ease-in-out outline-none sm:text-base",
           disabled
             ? "text-text-secondary bg-[#EEEEEE]"
             : "hover:border-main focus:border-main text-text active:border-main bg-white focus:border-2"

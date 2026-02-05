@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import PhoneAuthField from "@/components/feature/PhoneAuthField";
 import { Button } from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import EmailAuthField from "@/components/feature/EmailAuthField";
 
 type FindPasswordFormValues = {
   name: string;
-  userId: string;
+  email: string;
   phone: string;
   authCode: string;
 };
@@ -25,15 +25,15 @@ export default function FindPasswordForm() {
   } = useForm<FindPasswordFormValues>({ mode: "onSubmit" });
 
   const [isCodeSent, setIsCodeSent] = useState(false);
-  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
 
   const onSubmit = (data: FindPasswordFormValues) => {
     if (!isCodeSent) {
-      setError("phone", { type: "manual", message: "연락처 인증을 진행해주세요." });
+      setError("email", { type: "manual", message: "이메일 인증을 진행해주세요." });
       return;
     }
 
-    if (!isPhoneVerified) {
+    if (!isEmailVerified) {
       setError("authCode", { type: "manual", message: "인증 확인을 완료해 주세요." });
       return;
     }
@@ -53,30 +53,35 @@ export default function FindPasswordForm() {
         error={errors.name}
       />
 
-      {/* 아이디 */}
-      <Input
-        label="아이디"
-        id="userId"
-        placeholder="아이디를 입력해 주세요."
-        isRequired
-        register={register("userId", {
-          required: "아이디는 필수입니다.",
-        })}
-        error={errors.userId}
-      />
-
-      {/* 연락처 인증 */}
-      <PhoneAuthField<FindPasswordFormValues>
+      {/* 이메일 */}
+      <EmailAuthField<FindPasswordFormValues>
         register={register}
         errors={errors}
         setError={setError}
         clearErrors={clearErrors}
         trigger={trigger}
         watch={watch}
-        phoneName="phone"
+        emailName="email"
         codeName="authCode"
-        onVerifiedChange={setIsPhoneVerified}
+        onVerifiedChange={setIsEmailVerified}
         onCodeSentChange={setIsCodeSent}
+      />
+
+      {/* 연락처  */}
+      <Input
+        label="연락처"
+        id="phone"
+        type="tel"
+        placeholder="연락처를 입력해 주세요."
+        isRequired
+        register={register("phone", {
+          required: "연락처는 필수입니다.",
+          pattern: {
+            value: /^01[016789]\d{7,8}$/,
+            message: "올바른 전화번호 형식이 아닙니다.",
+          },
+        })}
+        error={errors.phone}
       />
 
       <div className="mt-2.5 sm:mt-7.5">

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
 import { RiCameraLine, RiDeleteBinLine } from "@remixicon/react";
 import Image from "next/image";
-import { SignupFormValues } from "@/app/signup/data/signup";
+import { SignupFormValues } from "@/app/signup/types";
 
 type InitialFile = {
   name: string;

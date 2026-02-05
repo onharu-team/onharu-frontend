@@ -1,5 +1,5 @@
 export type SignupFormValues = {
-  userId: string;
+  email: string;
   password: string;
   passwordConfirm: string;
   name?: string;

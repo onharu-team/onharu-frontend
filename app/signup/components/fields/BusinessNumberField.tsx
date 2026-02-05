@@ -1,7 +1,8 @@
 import { FieldErrors, UseFormRegister, UseFormTrigger } from "react-hook-form";
-import { SignupFormValues } from "@/app/signup/data/signup";
+import { SignupFormValues } from "@/app/signup/types";
 import Input from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import clsx from "clsx";
 
 type BusinessNumberFieldProps = {
   register: UseFormRegister<SignupFormValues>;
@@ -37,7 +38,7 @@ export default function BusinessNumberField({
         />
       </div>
 
-      <div className="absolute right-0 bottom-0">
+      <div className={clsx("absolute right-0 bottom-0", errors.businessNumber && "mb-8")}>
         <Button
           type="button"
           varient="default"

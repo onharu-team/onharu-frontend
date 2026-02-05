@@ -7,7 +7,7 @@ import Input from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import Checkbox from "@/components/ui/Checkbox";
 import KakaoLoginButton from "./KakaoLoginButton";
-import { LoginFormValues } from "../data/login";
+import { LoginFormValues } from "../types";
 
 export default function LoginForm() {
   const {
@@ -22,28 +22,28 @@ export default function LoginForm() {
   const onSubmit = (data: LoginFormValues) => {
     console.log("로그인 데이터:", data);
 
-    if (data.userId !== "test" || data.password !== "1234") {
-      setLoginError("아이디 또는 비밀번호를 잘못 입력하셨습니다.");
+    if (data.email !== "test" || data.password !== "1234") {
+      setLoginError("이메일 또는 비밀번호를 잘못 입력하셨습니다.");
       return;
     }
 
     setLoginError("");
 
-    // 아이디 기억하기
-    if (data.rememberId) {
-      localStorage.setItem("rememberedUserId", data.userId);
+    // 이메일 기억하기
+    if (data.rememberEmail) {
+      localStorage.setItem("rememberedEmail", data.email);
     } else {
-      localStorage.removeItem("rememberedUserId");
+      localStorage.removeItem("rememberedEmail");
     }
 
     alert("로그인 성공!");
   };
 
   useEffect(() => {
-    const savedId = localStorage.getItem("rememberedUserId");
+    const savedId = localStorage.getItem("rememberedEmail");
     if (savedId) {
-      setValue("userId", savedId);
-      setValue("rememberId", true);
+      setValue("email", savedId);
+      setValue("rememberEmail", true);
     }
   }, [setValue]);
 
@@ -53,11 +53,11 @@ export default function LoginForm() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex w-full max-w-sm flex-col gap-5">
         <Input
-          label="아이디"
-          id="userId"
-          placeholder="아이디를 입력해 주세요."
-          register={register("userId", { required: "아이디를 입력해주세요." })}
-          error={errors.userId}
+          label="이메일"
+          id="email"
+          placeholder="이메일을 입력해 주세요."
+          register={register("email", { required: "이메일을 입력해주세요." })}
+          error={errors.email}
         />
 
         <Input
@@ -71,7 +71,7 @@ export default function LoginForm() {
           }
         />
 
-        <Checkbox label="아이디 기억하기" {...register("rememberId")} />
+        <Checkbox label="이메일 기억하기" {...register("rememberEmail")} />
 
         <Button type="submit" varient="default" width="lg" height="md" fontSize="md">
           로그인
@@ -79,7 +79,7 @@ export default function LoginForm() {
 
         <div className="text-text-secondary flex items-center justify-center text-sm">
           <Link href="/find-id" className="hover:text-main">
-            아이디 찾기
+            이메일 찾기
           </Link>
 
           <Link href="/find-password" className="hover:text-main relative flex items-center">

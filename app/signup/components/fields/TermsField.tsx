@@ -1,5 +1,5 @@
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import { SignupFormValues } from "@/app/signup/data/signup";
+import { SignupFormValues } from "@/app/signup/types";
 import TermsItem from "./TermsItem";
 
 type TermsFieldProps = {

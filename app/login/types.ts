@@ -1,5 +1,5 @@
 export type LoginFormValues = {
-  userId: string;
+  email: string;
   password: string;
-  rememberId: boolean;
+  rememberEmail: boolean;
 };

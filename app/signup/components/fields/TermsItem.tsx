@@ -2,7 +2,7 @@ import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { RiCheckLine } from "@remixicon/react";
 import clsx from "clsx";
 import TermsDetailButton from "./TermsDetailButton";
-import { SignupFormValues } from "@/app/signup/data/signup";
+import { SignupFormValues } from "@/app/signup/types";
 
 type TermsItemProps = {
   name: keyof Pick<SignupFormValues, "agreeTerms" | "agreePrivacy">;

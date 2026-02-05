@@ -4,10 +4,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Input from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { SignupFormValues } from "@/app/signup/data/signup";
-import PhoneAuthField from "@/components/feature/PhoneAuthField";
+import { SignupFormValues } from "@/app/signup/types";
 import DocumentUploadField from "@/components/feature/DocumentUploadField";
 import TermsField from "../components/fields/TermsField";
+import EmailAuthField from "@/components/feature/EmailAuthField";
 
 export default function ChildSignupForm() {
   const {
@@ -21,24 +21,18 @@ export default function ChildSignupForm() {
   } = useForm<SignupFormValues>({ mode: "onSubmit" });
 
   const [isCodeSent, setIsCodeSent] = useState(false);
-  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
 
   const passwordValue = watch("password");
 
   const onSubmit = (data: SignupFormValues) => {
     if (!isCodeSent) {
-      setError("phone", { type: "manual", message: "연락처 인증을 진행해주세요." });
+      setError("email", { type: "manual", message: "이메일 인증을 진행해주세요." });
       return;
     }
 
-    if (!isPhoneVerified) {
+    if (!isEmailVerified) {
       setError("authCode", { type: "manual", message: "인증 확인을 완료해 주세요." });
-      return;
-    }
-
-    if (data.userId === "test") {
-      // 이미 존재하는 아이디일 때 에러 표시
-      setError("userId", { type: "manual", message: "이미 존재하는 아이디입니다." });
       return;
     }
 
@@ -47,17 +41,18 @@ export default function ChildSignupForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
-      {/* 아이디 */}
-      <Input
-        label="아이디"
-        id="userId"
-        placeholder="아이디를 입력해 주세요."
-        isRequired
-        register={register("userId", {
-          required: "아이디는 필수입니다.",
-          minLength: { value: 4, message: "아이디는 4자 이상 입력해 주세요." },
-        })}
-        error={errors.userId}
+      {/* 이메일 */}
+      <EmailAuthField<SignupFormValues>
+        register={register}
+        errors={errors}
+        setError={setError}
+        clearErrors={clearErrors}
+        trigger={trigger}
+        watch={watch}
+        emailName="email"
+        codeName="authCode"
+        onVerifiedChange={setIsEmailVerified}
+        onCodeSentChange={setIsCodeSent}
       />
 
       {/* 비밀번호 */}
@@ -115,17 +110,20 @@ export default function ChildSignupForm() {
       />
 
       {/* 연락처 */}
-      <PhoneAuthField<SignupFormValues>
-        register={register}
-        errors={errors}
-        setError={setError}
-        clearErrors={clearErrors}
-        trigger={trigger}
-        watch={watch}
-        phoneName="phone"
-        codeName="authCode"
-        onVerifiedChange={setIsPhoneVerified}
-        onCodeSentChange={setIsCodeSent}
+      <Input
+        label="연락처"
+        id="phone"
+        type="tel"
+        placeholder="연락처를 입력해 주세요."
+        isRequired
+        register={register("phone", {
+          required: "연락처는 필수입니다.",
+          pattern: {
+            value: /^01[016789]\d{7,8}$/,
+            message: "올바른 전화번호 형식이 아닙니다.",
+          },
+        })}
+        error={errors.phone}
       />
 
       {/* 증명 서류 */}

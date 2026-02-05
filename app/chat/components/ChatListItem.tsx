@@ -17,13 +17,14 @@ export function ChatListItem({ chat, isSelected, onSelect }: Props) {
           : "border-border hover:border-main focus:border-main active:border-main"
       }`}
     >
-      <Image
-        src="/image/page/default-profile.svg"
-        alt="프로필 기본 이미지"
-        width={60}
-        height={60}
-        className="h-auto w-10 sm:w-15"
-      />
+      <div className="relative h-7.5 w-7.5 sm:h-15 sm:w-15">
+        <Image
+          src="/image/page/default-profile.svg"
+          alt="프로필 기본 이미지"
+          fill
+          className="object-contain"
+        />
+      </div>
 
       <div className="min-w-0 flex-1">
         <div className="sm:text-md mb-1.25 font-semibold">{chat.sender}</div>

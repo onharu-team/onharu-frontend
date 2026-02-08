@@ -47,23 +47,26 @@ export const LocationSearch = ({
         위치정보 <br />
         직접 검색해볼까요?
       </p>
-      <div className="relative">
-        <div className="absolute -top-12 left-0 h-22.5 w-22.5 -rotate-6">
-          <Image
-            src={"/image/character/squirrel-wink.png"}
-            fill
-            alt=""
-            style={{ objectFit: "cover" }}
+      {!coordopen && (
+        <div className="relative">
+          <div className="absolute -top-12 left-0 h-22.5 w-22.5 -rotate-6">
+            <Image
+              src={"/image/character/squirrel-wink.png"}
+              fill
+              alt=""
+              style={{ objectFit: "cover" }}
+            />
+          </div>
+          <input
+            readOnly
+            value={address}
+            placeholder="주소를 입력해주세요."
+            className="mt-6 h-12.5 w-full rounded-md border border-gray-300 px-2.5"
+            onFocus={() => setCoordOpen(true)}
           />
         </div>
-        <input
-          readOnly
-          value={address}
-          placeholder="주소를 입력해주세요."
-          className="mt-6 h-12.5 w-full rounded-md border border-gray-300 px-2.5"
-          onFocus={() => setCoordOpen(true)}
-        />
-      </div>
+      )}
+
       {coordopen && (
         <>
           <div className="mt-4">
@@ -75,7 +78,7 @@ export const LocationSearch = ({
           </div>
         </>
       )}
-      {!coordopen && address && (
+      {address && (
         <>
           <p className="md:text-md mt-8 text-center text-base font-semibold">
             선택한 주소 : {address}

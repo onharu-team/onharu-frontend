@@ -82,7 +82,7 @@ export const DesktopView = () => {
           <div
             className={cn(
               "flex h-full flex-col items-center justify-center gap-9",
-              smallDesktopQuery && "gap-4"
+              smallDesktopQuery && "gap-2"
             )}
           >
             <motion.div
@@ -93,8 +93,12 @@ export const DesktopView = () => {
               <Image
                 src={"/image/banner/letter-1.svg"}
                 alt="오늘 하루를 온전히 지켜주는 동네의 따뜻한 도움"
-                width={smallDesktopQuery ? 300 : 534}
-                height={smallDesktopQuery ? 80 : 100}
+                width={534}
+                height={100}
+                style={{
+                  width: smallDesktopQuery ? 320 : 534,
+                  height: "auto",
+                }}
               />
             </motion.div>
             <motion.div
@@ -193,8 +197,12 @@ export const DesktopView = () => {
             <Image
               src={"/image/banner/seed.svg"}
               alt=""
-              width={smallDesktopQuery ? 180 : 252}
-              height={smallDesktopQuery ? 180 : 252}
+              width={352}
+              height={213}
+              style={{
+                width: smallDesktopQuery ? 180 : 252,
+                height: "auto",
+              }}
             />
           </motion.div>
         </div>

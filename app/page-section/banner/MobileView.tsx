@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 export const MobileView = () => {
   return (
     <>
-      <div className="mobile:px-15 absolute inset-0 flex items-center justify-center px-10">
+      <div className="absolute inset-0 flex items-center justify-center">
         <div className="relative">
           <motion.div
             initial={{ y: 0 }}
@@ -34,6 +34,12 @@ export const MobileView = () => {
               alt="돌봄이 필요한 아이들을 위해 책한 가게를 한눈에 "
               width={946}
               height={324}
+              style={{
+                width: "600px",
+                maxWidth: "calc(100% - 40px)",
+                height: "auto",
+                margin: "auto",
+              }}
             />
           </motion.div>
         </div>

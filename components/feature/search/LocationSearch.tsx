@@ -5,18 +5,35 @@ import DaumPostcode from "react-daum-postcode";
 import { Button } from "@/components/ui/Button";
 import { getCoord } from "@/components/feature/map/utils/getCoord";
 import { Toast } from "@/components/feature/toast/Toast";
+import { cn } from "@/lib/utils";
 
-interface LocationSearchProps {
-  open: boolean;
+interface BaseType {
+  title: React.ReactNode;
+  imageOn: boolean;
   handleCloseModal: () => void;
+}
+
+interface NearbyProps extends BaseType {
+  type: "nearby";
   handleMyLocation: (lat: number, lng: number) => void;
 }
 
-export const LocationSearch = ({
-  open,
-  handleCloseModal,
-  handleMyLocation,
-}: LocationSearchProps) => {
+interface MypageProps extends BaseType {
+  type: "mapage";
+}
+
+type LocationSearchProps = NearbyProps | MypageProps;
+
+export const LocationSearch = (
+  // type,
+  // title,
+  // imageOn,
+  // handleCloseModal,
+  // handleMyLocation,
+  props: LocationSearchProps
+) => {
+  const { type, title, imageOn, handleCloseModal } = props;
+  const handleMyLocation = type === "nearby" ? props.handleMyLocation : null;
   const [coordopen, setCoordOpen] = useState(false);
   const [address, setAddress] = useState("");
   const coordinateRef = useRef("");
@@ -33,25 +50,36 @@ export const LocationSearch = ({
     } else {
       const newCoord = await getCoord(address);
       if (!newCoord) {
-        Toast("error", "위치 정보 반영에 실패했습니다.", "다시 한 번 시도해 주세요.");
+        Toast("error", "주소 반영에 실패했습니다.", "다시 한 번 시도해 주세요.");
         return;
       }
-      handleMyLocation(newCoord.lat, newCoord.lng);
+
+      if (type === "nearby" && handleMyLocation) {
+        handleMyLocation(newCoord.lat, newCoord.lng);
+      }
+
       handleCloseModal();
     }
   };
 
   return (
     <>
-      <p className="text-md f-gmks text-center leading-tight font-bold md:text-2xl">
-        위치정보 <br />
-        직접 검색해볼까요?
+      <p
+        id="modal-title"
+        className="text-md f-gmks text-center leading-tight font-bold md:text-2xl"
+      >
+        {title}
       </p>
       {!coordopen && (
         <div className="relative">
-          <div className="absolute -top-12 left-0 h-22.5 w-22.5 -rotate-6">
+          <div
+            className={cn(
+              "absolute -top-12 left-0 h-22.5 w-22.5 -rotate-6 opacity-0",
+              imageOn && "opacity-100"
+            )}
+          >
             <Image
-              src={"/image/character/squirrel-wink.png"}
+              src={"/image/character/squirrel-wink.svg"}
               fill
               alt=""
               style={{ objectFit: "cover" }}

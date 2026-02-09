@@ -22,7 +22,7 @@ export default function ChatPage() {
       {loading ? (
         <ChatListSkeleton />
       ) : chatList.length > 0 ? (
-        <div className="mt-section-sm-top mb-section-sm-bottom md:mt-section-lg-top md:mb-section-lg-bottom wrapper min-h-screen">
+        <div className="mt-section-sm-top mb-section-sm-bottom md:mt-section-lg-top md:mb-section-lg-bottom wrapper overflow-hidden">
           <ChatList name="코끼리땃쥐" chatList={chatList} />
         </div>
       ) : (

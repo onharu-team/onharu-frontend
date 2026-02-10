@@ -12,7 +12,11 @@ export const ThanksCard = () => {
             src={"/image/page/thanks-letter.svg"}
             alt="아이의 오늘을 지켜준 따뜻한 손길, 그 마음 그대로 전합니다."
             width={426}
-            height={110}
+            height={95}
+            style={{
+              width: "426px",
+              height: "auto",
+            }}
           />
           <Image
             src={"/image/page/thanks-image.png"}

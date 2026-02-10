@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/Button";
@@ -13,11 +14,13 @@ export const DesktopView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const router = useRouter();
   const pathname = usePathname();
   return (
-    <header className="bg-white">
+    <header className="border border-b-gray-200 bg-white">
       <div className="wrapper m-auto flex w-full items-center justify-between">
         <div className="flex items-center gap-24">
           <Link href={"/"}>
-            <h1 className="bg-main-100 h-[80px] w-[138px]">로고</h1>
+            <h1 className="relative h-[80px] w-[150px]">
+              <Image src={"/image/icon/logo.svg"} fill alt="" style={{ objectFit: "contain" }} />
+            </h1>
           </Link>
           <LayoutGroup>
             <nav>
@@ -40,7 +43,7 @@ export const DesktopView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                           animate={{ scaleX: isActive ? 1 : 0 }}
                           transition={{ duration: 0.3, ease: "easeInOut" }}
                           style={{ originX: 0.5 }}
-                          className="bg-main absolute -bottom-[20px] h-[3px] w-full"
+                          className="bg-main absolute -bottom-[30px] h-[3px] w-full"
                         />
                       </Link>
                     </li>

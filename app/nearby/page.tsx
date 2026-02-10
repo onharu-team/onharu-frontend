@@ -142,7 +142,14 @@ export default function Nearby() {
       {open && (
         <Modal onClick={handleCloseModal}>
           <LocationSearch
-            open={open}
+            type="nearby"
+            title={
+              <>
+                위치정보 <br />
+                직접 검색해볼까요?
+              </>
+            }
+            imageOn={true}
             handleCloseModal={handleCloseModal}
             handleMyLocation={handleMyLocation}
           />

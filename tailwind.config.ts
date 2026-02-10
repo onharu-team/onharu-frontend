@@ -9,8 +9,13 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        mobile: "600px",
+        tablet: "1010px",
+        desktopSmall: "1410px",
+      },
       maxWidth: {
-        wrapper: "1470px",
+        wrapper: "1200px",
       },
       padding: {
         wrapper: "15px",

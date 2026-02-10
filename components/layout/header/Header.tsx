@@ -1,5 +1,4 @@
 "use client";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { MobileView } from "./component/MobileView";
 import { DesktopView } from "./component/DesktopView";
 
@@ -12,12 +11,15 @@ export const Header = () => {
    */
   //
   const isLoggedIn = false;
-  const isMobile = useMediaQuery("(max-width: 767px)");
 
   return (
     <>
-      {isMobile && <MobileView isLoggedIn={isLoggedIn} />}
-      {isMobile === false && <DesktopView isLoggedIn={isLoggedIn} />}
+      <div className="hidden md:block">
+        <DesktopView isLoggedIn={isLoggedIn} />
+      </div>
+      <div className="block md:hidden">
+        <MobileView isLoggedIn={isLoggedIn} />
+      </div>
     </>
   );
 };

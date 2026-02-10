@@ -15,7 +15,7 @@ export const Thumbnail = ({ src, openTime, closeTime, hasSharing }: ThumbnailPro
   const imageSrc = src || "/image/page/no-image.svg";
 
   return (
-    <>
+    <div className="relative h-full w-full">
       {realStatus === "영업종료" && hasSharing && (
         <div className="text-md f-gmks absolute inset-0 z-20 flex items-center justify-center bg-gray-200/85 text-center font-bold md:text-xl">
           영업종료
@@ -37,6 +37,6 @@ export const Thumbnail = ({ src, openTime, closeTime, hasSharing }: ThumbnailPro
       )}
 
       <Image src={imageSrc} fill alt="" style={{ objectFit: "cover" }} />
-    </>
+    </div>
   );
 };

@@ -1,20 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { NavItems } from "../data";
-import { RiMenu3Line, RiNotification3Line, RiCloseLine } from "@remixicon/react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
-import Link from "next/link";
+import { RiMenu3Line, RiNotification3Line, RiCloseLine } from "@remixicon/react";
 
 export const MobileView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+
+    document.body.style.overflow = "hidden";
+    window.history.pushState({ modal: true }, "");
+
+    return () => {
+      document.body.style.removeProperty("overflow");
+    };
+  }, [open]);
+
   return (
     <header className="sticky top-0 z-100 border-b border-b-gray-200 bg-white">
       <div className="wrapper relative">
-        <h1 className="bg-main-200 m-auto h-12.5 w-20">로고</h1>
+        <h1 className="relative m-auto h-12.5 w-20">
+          <Image src={"/image/icon/logo.svg"} alt="" fill style={{ objectFit: "contain" }} />
+        </h1>
         <button className="absolute top-3 right-3" onClick={() => setOpen(true)}>
           <RiMenu3Line />
         </button>
@@ -28,8 +42,8 @@ export const MobileView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
       />
       <div
         className={cn(
-          "fixed top-0 right-0 z-101 h-full w-[60vw] min-w-[320px] border-l bg-white duration-200",
-          !open && "translate-x-100"
+          "fixed top-0 right-0 z-101 h-full w-[60vw] min-w-[320px] border-l bg-white duration-250",
+          !open && "w-0 translate-x-100"
         )}
       >
         <div className="relative h-12.5">

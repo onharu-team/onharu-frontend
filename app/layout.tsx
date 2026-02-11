@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Providers from "./provider";
 import { ToastContainerCustom } from "@/components/feature/toast/ToastContainerCustom";
 import { Header } from "@/components/layout/header/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -33,7 +34,7 @@ export default function RootLayout({
       <body className={`${pretendard.variable} ${gmarketsans.variable}`}>
         <Header />
         <ToastContainerCustom />
-        {children}
+        <Providers>{children}</Providers>
         <Footer />
       </body>
     </html>

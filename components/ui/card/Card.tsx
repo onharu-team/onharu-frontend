@@ -44,7 +44,7 @@ export const Card = (props: CardProps) => {
           {category}
         </div>
         <div className="relative bg-white p-2.5 md:p-4">
-          <div className="absolute top-2 right-5">
+          <div className="absolute top-2 right-5 z-5">
             <Like isLiked={false} />
           </div>
           <p className="md:text-md flex items-center gap-2 pr-6 text-base font-bold">

@@ -10,33 +10,19 @@ import {
 } from "@remixicon/react";
 
 interface PaginationProps {
-  handleFirstPage: () => void;
-  handlePrevPage: () => void;
-  handleNextPage: () => void;
-  handleLastPage: (page: number) => void;
   currentPage: number;
-  setCurrentPage: (page: number) => void;
   totalDataCount: number;
-  perPageDataCount: number;
+  handlePageChange: (page: number) => void;
 }
 
-export function Pagination({
-  handleFirstPage,
-  handlePrevPage,
-  handleLastPage,
-  handleNextPage,
-  currentPage,
-  setCurrentPage,
-  totalDataCount,
-  perPageDataCount,
-}: PaginationProps) {
+export function Pagination({ currentPage, totalDataCount, handlePageChange }: PaginationProps) {
   /**
    * @param totalPage 총 페이지 갯수 = 총 데이터갯수 / 한 페이지당 허용 데이터갯수
    * @param groupLength 그룹 갯수 = 총 페이지 / 5
    * @param LastGroupHead 마지막 그룹의 첫번째 페이지 넘버
    */
 
-  const totalPage = Math.ceil(totalDataCount / perPageDataCount);
+  const totalPage = totalDataCount;
   const groupLength = Math.ceil(totalPage / PAGELIMIT);
   const LastGroupHead = PAGELIMIT * (groupLength - 1);
 
@@ -47,7 +33,9 @@ export function Pagination({
       <button
         className="flex h-7 w-7 items-center justify-center"
         disabled={currentPage === 1}
-        onClick={handleFirstPage}
+        onClick={() => {
+          handlePageChange(1);
+        }}
       >
         <RiArrowLeftDoubleLine
           size={18}
@@ -58,7 +46,9 @@ export function Pagination({
       <button
         className="flex h-7 w-7 items-center justify-center"
         disabled={currentPage === 1}
-        onClick={handlePrevPage}
+        onClick={() => {
+          handlePageChange(currentPage - 1);
+        }}
       >
         <RiArrowLeftSLine size={18} className={currentPage === 1 ? "text-gray-300" : "text-main"} />
       </button>
@@ -67,7 +57,9 @@ export function Pagination({
         {pageNumberList.map(item => (
           <li
             key={item}
-            onClick={() => setCurrentPage(item)}
+            onClick={() => {
+              handlePageChange(item);
+            }}
             className={clsx(
               "flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-sm",
               {
@@ -84,7 +76,9 @@ export function Pagination({
       <button
         className="flex h-7 w-7 items-center justify-center"
         disabled={currentPage === totalPage}
-        onClick={handleNextPage}
+        onClick={() => {
+          handlePageChange(currentPage + 1);
+        }}
       >
         <RiArrowRightSLine
           size={18}
@@ -96,7 +90,7 @@ export function Pagination({
         className="flex h-7 w-7 items-center justify-center"
         disabled={currentPage === groupLength}
         onClick={() => {
-          handleLastPage(LastGroupHead + 1);
+          handlePageChange(LastGroupHead + 1);
         }}
       >
         <RiArrowRightDoubleLine

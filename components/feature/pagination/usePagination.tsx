@@ -1,20 +1,8 @@
 "use client";
 import { useState } from "react";
 
-export function usePagination({
-  totalDataCount,
-  perPageDataCount,
-}: {
-  totalDataCount: number;
-  perPageDataCount: number;
-}) {
+export function usePagination() {
   const [currentPage, setCurrentPage] = useState<number>(1);
-
-  const totalPage = Math.ceil(totalDataCount / perPageDataCount);
-
-  console.log(totalDataCount + ":totla Data Count");
-  console.log(perPageDataCount + ":per Page DAta");
-  console.log(totalPage + ": totalpage");
 
   const handleFirstPage = () => {
     //무조건 첫번째 페이지로 이동합니다

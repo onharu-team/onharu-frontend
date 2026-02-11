@@ -1,11 +1,13 @@
-export interface CardProps {
+export interface CharityMain {
   id: string;
   storelink: string;
-  storename: string;
-  storeIntroduce: string;
-  category: string;
+  images: [];
+  name: string;
+  introduction: string;
+  categoryName: string;
   tags?: string[];
-  openTime: string;
-  closeTime: string;
+  openTime: string; //delete?
+  closeTime: string; //delete?
+  isOpen: boolean;
   hasSharing: boolean;
 }

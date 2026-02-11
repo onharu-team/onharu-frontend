@@ -3,7 +3,8 @@ import { RiPokerHeartsFill } from "@remixicon/react";
 export const Like = ({ isLiked = false }: { isLiked: boolean }) => {
   return (
     <button
-      onClick={() => {
+      onClick={e => {
+        e.preventDefault();
         console.log("like");
       }}
     >

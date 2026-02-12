@@ -9,7 +9,7 @@ export default function UserProfileCard({ user }: { user: User }) {
   const router = useRouter();
 
   return (
-    <div className="bg-secondary flex flex-col justify-between rounded-[10px] p-5 md:w-95 md:min-w-82.5 lg:p-7">
+    <div className="bg-secondary flex flex-col justify-between rounded-[10px] p-5 md:min-w-75 lg:p-7">
       <div className="text-md mb-8 font-bold sm:text-xl">
         <div className="flex items-center justify-between">
           <p>반갑습니다 :{")"}</p>

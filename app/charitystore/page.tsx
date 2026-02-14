@@ -46,12 +46,13 @@ export default function CharityStore() {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["stores", page, 16],
-    queryFn: () => GetStores(page, 16),
+    queryFn: () => GetStores(page, 16, "전체"),
   });
 
   const stores: CharityMain[] = data?.data?.stores ?? [];
 
-  const filterStore = filterByCategory(stores);
+  //const filterStore = filterByCategory(stores);
+
   /**
    * 현재 filter 로직은 카테고리별 정렬만 구현한 상태입니다.
    * 추천순, 인기순, 거리순 관련 정보를 어떻게 표현할지 기능 완성 후 고도화시킬 예정
@@ -92,7 +93,7 @@ export default function CharityStore() {
           )}
           {!isLoading && (
             <>
-              {filterStore.map(items => (
+              {stores.map(items => (
                 <Card
                   key={items.id}
                   type="charity"
@@ -118,11 +119,7 @@ export default function CharityStore() {
         </div>
 
         <div className="mt-section-sm-top md:mt-section-lg-top flex justify-center">
-          <Pagination
-            currentPage={page}
-            totalPage={data?.data?.totalPages}
-            handlePageChange={handlePageChange}
-          />
+          <Pagination totalPage={data?.data?.totalPages} handlePageChange={handlePageChange} />
         </div>
       </div>
     </section>

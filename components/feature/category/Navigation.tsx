@@ -1,7 +1,9 @@
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { CategoryData } from "./data";
 import clsx from "clsx";
 import { CategoryName } from "./data";
+import { useSearch } from "../search/useSearch";
 
 interface NavigatinProps {
   value: CategoryName;
@@ -10,6 +12,7 @@ interface NavigatinProps {
 }
 
 export const Navigation = ({ value, onChange, InitializePage }: NavigatinProps) => {
+  const searchParams = useSearchParams();
   const categoryBaseClasses =
     "flex cursor-pointer bg-white items-center gap-1 md:gap-2 rounded-full border border-gray-300 px-4.5 py-1 shadow-md";
 

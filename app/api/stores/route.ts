@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { CategoryKey } from "@/types/store/detail/CategoryKet";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

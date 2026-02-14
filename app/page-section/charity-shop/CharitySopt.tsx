@@ -11,8 +11,8 @@ import { CardSkeleton } from "@/components/ui/card/CardSkeleton";
 
 export const CharityShop = () => {
   const { data, isLoading, error } = useQuery({
-    queryKey: ["stores", 1, 4],
-    queryFn: () => GetStores(1, 4),
+    queryKey: ["stores", 1, 4, 0],
+    queryFn: () => GetStores(1, 4, 0),
   });
 
   if (isLoading) {
@@ -38,7 +38,6 @@ export const CharityShop = () => {
   }
 
   const stores: CharityMain[] = data?.data?.stores ?? [];
-  console.log(stores);
 
   return (
     <>

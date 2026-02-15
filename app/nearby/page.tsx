@@ -1,5 +1,4 @@
 "use client";
-import { useEffect, useState, useMemo } from "react";
 import { LocationSearch } from "./component";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
@@ -12,31 +11,25 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Map } from "@/components/feature/map/map";
 import { useMyLocation } from "@/components/feature/map/hooks/useMyLocation";
 import { useSearch } from "@/components/feature/search/useSearch";
-import { getCurrentPosition } from "@/components/feature/map/utils/getCurrentPositin";
 import { useActiveCard } from "@/components/feature/search/useActiveCard";
 
 import { Modal } from "@/components/ui/Modal";
-import useModal from "@/hooks/useModal";
+import useModal from "@/hooks/ui/useModal";
 import { DesktopView } from "./component/DesktopView";
 import { MobileView } from "./component/MobileView";
-import { Toast } from "@/components/feature/toast/Toast";
+
+import { useStoreFilter } from "@/hooks/store/useStoreFilter";
 
 export default function Nearby() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { filters, isLocationReady, OriginLocationRef, handleCategoryCahnge, handleMyLocation } =
+    useStoreFilter({
+      pathname: "nearby",
+      sort: "distance",
+      direction: "asc",
+    });
 
-  const filters = {
-    pageNum: Number(searchParams.get("pageNum")) || 1,
-    perPage: Number(searchParams.get("perPage")) || 16,
-    lat: Number(searchParams.get("lat")) || 0,
-    lng: Number(searchParams.get("lng")) || 0,
-    categoryId: Number(searchParams.get("categoryId")) || 0,
-    sortField: searchParams.get("sortField") || "distance",
-    sortDirection: searchParams.get("sortDirection") || "asc",
-  };
-
-  const [isLocationReady, setIsLocationReady] = useState(false);
-  const { OriginLocationRef } = useMyLocation();
   const { inputValue, setInputValue, keyword, setKeyword, handleInputChange } = useSearch();
   const { activeId, handleActiveCard, cardRefs } = useActiveCard();
   const { open, handleOpenModal, handleCloseModal } = useModal();
@@ -44,33 +37,6 @@ export default function Nearby() {
   const isCategoryQuery = useMediaQuery("(max-width: 1150px)");
   const isSidemenuQuery = useMediaQuery("(max-width:820px)");
   const isMobile = useMediaQuery("(max-width: 767px)");
-
-  useEffect(() => {
-    (async () => {
-      const pos = await getCurrentPosition();
-      let lat = 37.5665;
-      let lng = 126.978;
-      if (!pos) {
-        Toast(
-          "info",
-          "위치 접근을 허용하지 않았습니다.",
-          "위치 변경을 통해 내 주소를 검색해보세요."
-        );
-      } else {
-        lat = pos.coords.latitude;
-        lng = pos.coords.longitude;
-      }
-
-      OriginLocationRef.current = { lat, lng };
-
-      const params = new URLSearchParams(searchParams);
-      params.set("lat", String(lat));
-      params.set("lng", String(lng));
-
-      router.replace(`/nearby?${params.toString()}`);
-      setIsLocationReady(true);
-    })();
-  }, []);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["stores", filters],
@@ -83,21 +49,6 @@ export default function Nearby() {
 
   const stores: CharityMain[] = data?.data?.stores ?? [];
   const mylocation = { lat: filters.lat, lng: filters.lng };
-
-  const handleMyLocation = (lat: number, lng: number) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("lat", String(lat));
-    params.set("lng", String(lng));
-    params.set("categoryId", "0");
-    router.push(`/nearby?${params.toString()}`);
-  };
-
-  const handleCategoryChange = (value: number) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("categoryId", String(value));
-    params.set("pageNum", "1");
-    router.push(`/nearby?${params.toString()}`);
-  };
 
   const handleSearch = () => {};
 
@@ -115,7 +66,7 @@ export default function Nearby() {
     onOpenModal: handleOpenModal,
     onInputChange: handleInputChange,
     onSearch: handleSearch,
-    onCategoryChange: handleCategoryChange,
+    onCategoryChange: handleCategoryCahnge,
     onReservation: handleReservation,
   };
 

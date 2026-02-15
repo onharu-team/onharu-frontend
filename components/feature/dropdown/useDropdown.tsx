@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 
-type OptionsProps = { options: { value: string; label: string }[] };
+type OptionsProps = { options: { value: string; direction: string; label: string }[] };
 
 export function useDropdown({ options }: OptionsProps) {
   const [open, setOpen] = useState(false);

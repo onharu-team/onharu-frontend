@@ -8,7 +8,7 @@ import { StoreCardList } from "./StoreCardList";
 
 interface MobileViewProps {
   isReady: boolean;
-  mylocation: { lat: number; lng: number };
+  mylocation: { lat: number | null; lng: number | null };
   inputValue: string;
   stores: any;
   activeId: string;

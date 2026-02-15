@@ -3,11 +3,12 @@ import { RiArrowDownSLine, RiCheckLine } from "@remixicon/react";
 import clsx from "clsx";
 
 interface DropdownProps {
-  options: { value: string; label: string }[];
+  options: { value: string; direction: string; label: string }[];
   open: boolean;
   selected: string;
   highlightedIndex: number;
   setSelected: (label: string) => void;
+  setSortChange: (sort: string, direction: string) => void;
   setHighlightedIndex: (index: number) => void;
   handleOpen: () => void;
   handleClose: () => void;
@@ -22,6 +23,7 @@ export const BgrDropdown = ({
   selected,
   highlightedIndex,
   setSelected,
+  setSortChange,
   setHighlightedIndex,
   handleOpen,
   handleClose,
@@ -65,6 +67,7 @@ export const BgrDropdown = ({
               onMouseEnter={() => setHighlightedIndex(index)}
               onClick={() => {
                 setSelected(data.label);
+                setSortChange(data.value, data.direction);
                 handleClose();
               }}
             >

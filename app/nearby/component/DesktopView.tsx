@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 
 interface DesktopViewProps {
   isReady: boolean;
-  mylocation: { lat: number; lng: number };
+  mylocation: { lat: number | null; lng: number | null };
   inputValue: string;
   stores: any;
   activeId: string;

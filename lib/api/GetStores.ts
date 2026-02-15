@@ -3,10 +3,8 @@ export async function GetStores(filters: any) {
 
   Object.entries(filters).forEach(([key, value]) => {
     if (value === null || value === "" || value === undefined) return;
-
-    // categoryId가 0이면 제외
+    // categoryId가 전체일 때 return
     if (key === "categoryId" && Number(value) === 0) return;
-
     params.append(key, String(value));
   });
 

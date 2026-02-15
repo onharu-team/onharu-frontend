@@ -7,7 +7,6 @@ import { moveToCurrentLocation } from "./utils/moveCurrentLocation";
 import { getStorePosition } from "./utils/getStorePosition";
 import { NearbyStoreMarker } from "./utils/NearByStoreMarker";
 import { CategoryName } from "../category/data";
-import { NearbyStore } from "@/app/nearby/type/type";
 import { useZoomControl } from "./hooks/useZoomControl";
 import { MyLocation } from "./MyLocation";
 
@@ -23,9 +22,9 @@ interface DetailMapProps extends BaseMapProps {
 interface SearchMapProps extends BaseMapProps {
   type: "search";
   store: any;
-  handleMyLocation: (lat: number, lng: number) => void;
-  OriginLocationRef: RefObject<{ lat: number; lng: number }>;
-  mylocation: { lat: number; lng: number };
+  handleMyLocation: (lat: number | null, lng: number | null) => void;
+  OriginLocationRef: RefObject<{ lat: number | null; lng: number | null }>;
+  mylocation: { lat: number | null; lng: number | null };
   handleActiveCard: (id: string) => void;
 }
 
@@ -71,7 +70,7 @@ export const Map = (props: MapProps) => {
 
   useEffect(() => {
     if (props.type !== "search" || !mylocation || !locationRef.current) return;
-    if (mylocation.lat === 0) return;
+    if (!mylocation.lat || !mylocation.lng) return;
 
     moveToCurrentLocation(locationRef.current, CurrentOverlayRef, mylocation.lat, mylocation.lng);
     NearbyStoreMarker(
@@ -87,7 +86,7 @@ export const Map = (props: MapProps) => {
 
   if (addressError) {
     return (
-      <div className="font-gmarketsans flex h-full w-full items-center justify-center text-4xl">
+      <div className="font-gmarketsans flex h-full w-full items-center justify-center text-2xl">
         지도에 등록되지 않은 주소입니다.
       </div>
     );
@@ -102,6 +101,8 @@ export const Map = (props: MapProps) => {
           <MapLoading ready={mapReady} />
           <MapZoom handleZoomIn={handleZoomIn} handleZoomOut={handleZoomOut} mapReady={mapReady} />
           <MyLocation
+            map={locationRef.current}
+            CurrentOverlayRef={CurrentOverlayRef}
             handleMyLocation={handleMyLocation}
             originLocation={originLocation}
             mapReady={mapReady}

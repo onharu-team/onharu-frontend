@@ -6,9 +6,11 @@
 export async function moveToCurrentLocation(
   map: kakao.maps.Map,
   CurrentOverlayRef: React.MutableRefObject<kakao.maps.CustomOverlay | null>,
-  latitude: number,
-  longitude: number
+  latitude: number | null,
+  longitude: number | null
 ): Promise<void> {
+  if (!latitude || !longitude) return;
+
   try {
     CurrentOverlayRef.current?.setMap(null);
     CurrentOverlayRef.current = null;

@@ -1,14 +1,17 @@
 export const SelectData = [
   {
-    value: "recommand",
+    value: "id",
+    direction: "asc",
+    label: "기본순",
+  },
+  {
+    value: "favoriteCount",
+    direction: "desc",
     label: "추천순",
   },
   {
-    value: "wish",
-    label: "인기순",
-  },
-  {
-    value: "distance",
-    label: "거리순",
+    value: "name",
+    direction: "asc",
+    label: "이름순",
   },
 ];

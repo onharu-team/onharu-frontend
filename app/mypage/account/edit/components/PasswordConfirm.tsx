@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import Input from "@/components/ui/Input";
 import AccountEditForm, { EditForm, UserRole } from "./AccountEditForm";
-import useModal from "@/hooks/useModal";
+import useModal from "@/hooks/ui/useModal";
 import FormPageLayout from "../../components/FormPageLayout";
 
 interface PasswordConfirmForm {

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { PageSection } from "../../components/PageSection";
 import { Button } from "@/components/ui/Button";
-import useModal from "@/hooks/useModal";
+import useModal from "@/hooks/ui/useModal";
 import { useCalendarSelect } from "@/components/feature/calendar/useCalendarSelect";
 import { useReservationTime } from "@/components/feature/reservation/useReservationTime";
 import { SharingFormHeader } from "./components/SharingFormHeader";

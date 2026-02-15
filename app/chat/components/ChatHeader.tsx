@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/Button";
 import { RiArrowLeftSLine } from "@remixicon/react";
 import { Modal } from "@/components/ui/Modal";
-import useModal from "@/hooks/useModal";
+import useModal from "@/hooks/ui/useModal";
 
 interface Props {
   sender: string;

@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import useModal from "@/hooks/useModal";
+import useModal from "@/hooks/ui/useModal";
 import FormPageLayout from "../components/FormPageLayout";
 import { FIELD_CONFIG } from "@/components/form-fields/fieldConfig";
 import { FormField } from "@/components/form-fields/FormField";

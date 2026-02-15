@@ -4,12 +4,16 @@ import { RiCrosshairLine } from "@remixicon/react";
 import { RefObject } from "react";
 
 export const MyLocation = ({
+  map,
+  CurrentOverlayRef,
   originLocation,
   handleMyLocation,
   mapReady,
 }: {
-  originLocation: RefObject<{ lat: number; lng: number }> | null;
-  handleMyLocation: ((lat: number, lng: number) => void) | null;
+  map: kakao.maps.Map | null;
+  CurrentOverlayRef: React.MutableRefObject<kakao.maps.CustomOverlay | null>;
+  originLocation: RefObject<{ lat: number | null; lng: number | null }> | null;
+  handleMyLocation: ((lat: number | null, lng: number | null) => void) | null;
   mapReady: boolean;
 }) => {
   const BaseClassess =
@@ -21,6 +25,13 @@ export const MyLocation = ({
     if (!originLocation || !handleMyLocation) return;
 
     handleMyLocation(originLocation.current.lat, originLocation.current.lng);
+    if (!map) return;
+    moveToCurrentLocation(
+      map,
+      CurrentOverlayRef,
+      originLocation.current.lat,
+      originLocation.current.lng
+    );
   };
 
   return (

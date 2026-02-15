@@ -60,17 +60,17 @@ export const CharityShop = () => {
               storelink={String(items.id)}
               storeThumnail={
                 <Thumbnail
-                  src={""}
-                  openTime={items.openTime}
-                  closeTime={items.closeTime}
+                  src={items.images}
+                  // openTime={items.openTime}
+                  // closeTime={items.closeTime}
                   isOpen={items.isOpen}
-                  hasSharing={items.hasSharing}
+                  hasSharing={items.isSharing}
                 />
               }
               storename={items.name}
               storeIntroduce={items.introduction}
               category={<Category category={items.categoryName} />}
-              hashtags={<HashTag tags={items.tags || []} />}
+              hashtags={<HashTag tags={items.tagNames || []} />}
             />
           ))}
         </div>

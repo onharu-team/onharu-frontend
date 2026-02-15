@@ -49,7 +49,7 @@ export const Card = (props: CardProps) => {
           </div>
           <p className="md:text-md flex items-center gap-2 pr-6 text-base font-bold">
             <span className="line-clamp-1">{props.storename}</span>
-            {/* {operating} */}
+            {operating}
           </p>
           {storeAddress}
           <p className="text-text mt-2 line-clamp-2 text-sm md:text-base">{props.storeIntroduce}</p>

@@ -9,21 +9,18 @@ import { StoreCardList } from "./StoreCardList";
 import { SearchNoResult } from "./SearchNoResult";
 import { Navigation } from "@/components/feature/category/Navigation";
 import { cn } from "@/lib/utils";
-import { CategoryName } from "@/components/feature/category/data";
 
 interface DesktopViewProps {
   isReady: boolean;
   mylocation: { lat: number; lng: number };
   inputValue: string;
   stores: any;
-  category: CategoryName;
   activeId: string;
   cardRefs: React.MutableRefObject<Record<string, HTMLDivElement | null>>;
   onOpenModal: () => void;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSearch: () => void;
-  onCategoryChange: (value: CategoryName) => void;
-  onCategoryInit: () => void;
+  onCategoryChange: (value: any) => void;
   onReservation: (e: MouseEvent) => void;
   isCategoryQuery: boolean | null;
   isSidemenuQuery: boolean | null;
@@ -34,14 +31,12 @@ export function DesktopView({
   mylocation,
   inputValue,
   stores,
-  category,
   activeId,
   cardRefs,
   onOpenModal,
   onInputChange,
   onSearch,
   onCategoryChange,
-  onCategoryInit,
   onReservation,
   isCategoryQuery,
   isSidemenuQuery,
@@ -76,7 +71,7 @@ export function DesktopView({
           isSidemenuQuery && "left-[350px] min-w-80"
         )}
       >
-        <Navigation value={category} onChange={onCategoryChange} InitializePage={onCategoryInit} />
+        <Navigation onChange={onCategoryChange} />
       </div>
     </SideMenu>
   );

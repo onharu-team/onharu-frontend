@@ -11,14 +11,12 @@ interface MobileViewProps {
   mylocation: { lat: number; lng: number };
   inputValue: string;
   stores: any;
-  category: CategoryName;
   activeId: string;
   cardRefs: React.MutableRefObject<Record<string, HTMLDivElement | null>>;
   onOpenModal: () => void;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSearch: () => void;
-  onCategoryChange: (value: CategoryName) => void;
-  onCategoryInit: () => void;
+  onCategoryChange: (value: any) => void;
   onReservation: (e: MouseEvent) => void;
 }
 
@@ -27,14 +25,12 @@ export function MobileView({
   mylocation,
   inputValue,
   stores,
-  category,
   activeId,
   cardRefs,
   onOpenModal,
   onInputChange,
   onSearch,
   onCategoryChange,
-  onCategoryInit,
   onReservation,
 }: MobileViewProps) {
   if (!isReady) return null;
@@ -46,7 +42,7 @@ export function MobileView({
       </div>
 
       <div className="fixed top-38 z-50 w-full">
-        <Navigation value={category} onChange={onCategoryChange} InitializePage={onCategoryInit} />
+        <Navigation onChange={onCategoryChange} />
       </div>
 
       <BottomSheet open={isReady} onClose={() => {}}>

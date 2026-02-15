@@ -97,7 +97,6 @@ export const Map = (props: MapProps) => {
       props.handleActiveCard
     );
   }, [stores]);
-
   if (addressError) {
     return (
       <div className="font-gmarketsans flex h-full w-full items-center justify-center text-4xl">

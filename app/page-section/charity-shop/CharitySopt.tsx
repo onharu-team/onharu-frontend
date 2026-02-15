@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { GetStores } from "@/lib/api/GetStores";
 import { CharityShopWrapper } from "./CharityShopWrapper";
@@ -10,9 +11,17 @@ import { CharityMain } from "../../../types/store/type";
 import { CardSkeleton } from "@/components/ui/card/CardSkeleton";
 
 export const CharityShop = () => {
+  const [filters, setFilters] = useState({
+    pageNum: 1,
+    perPage: 4,
+    lat: 37.5665,
+    lng: 126.978,
+    categoryId: 0,
+  });
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ["stores", 1, 4, 0],
-    queryFn: () => GetStores(1, 4, 0),
+    queryKey: ["stores", filters],
+    queryFn: () => GetStores(filters),
   });
 
   if (isLoading) {

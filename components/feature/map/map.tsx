@@ -83,20 +83,8 @@ export const Map = (props: MapProps) => {
       props.handleActiveCard
     );
     setMapReady(true);
-  }, [mylocation, isMapInitialized]);
+  }, [stores, isMapInitialized]);
 
-  useEffect(() => {
-    if (props.type !== "search" || !locationRef.current || !props.store.length) return;
-
-    NearbyStoreMarker(
-      locationRef.current,
-      stores,
-      markersRef,
-      overLayRef,
-      activeOverlayRef,
-      props.handleActiveCard
-    );
-  }, [stores]);
   if (addressError) {
     return (
       <div className="font-gmarketsans flex h-full w-full items-center justify-center text-4xl">

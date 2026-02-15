@@ -25,14 +25,16 @@ export default function Nearby() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [filters, setFilters] = useState({
+  const filters = {
     pageNum: Number(searchParams.get("pageNum")) || 1,
     perPage: Number(searchParams.get("perPage")) || 16,
     lat: Number(searchParams.get("lat")) || 0,
     lng: Number(searchParams.get("lng")) || 0,
     categoryId: Number(searchParams.get("categoryId")) || 0,
-    sortField: "distance",
-  });
+    sortField: searchParams.get("sortField") || "distance",
+    sortDirection: searchParams.get("sortDirection") || "asc",
+  };
+
   const [isLocationReady, setIsLocationReady] = useState(false);
   const { OriginLocationRef } = useMyLocation();
   const { inputValue, setInputValue, keyword, setKeyword, handleInputChange } = useSearch();
@@ -46,27 +48,26 @@ export default function Nearby() {
   useEffect(() => {
     (async () => {
       const pos = await getCurrentPosition();
+      let lat = 37.5665;
+      let lng = 126.978;
       if (!pos) {
         Toast(
           "info",
           "위치 접근을 허용하지 않았습니다.",
           "위치 변경을 통해 내 주소를 검색해보세요."
         );
-        setFilters(prev => ({
-          ...prev,
-          lat: 37.5665,
-          lng: 126.978,
-        }));
-        OriginLocationRef.current = { lat: 37.5665, lng: 126.978 };
       } else {
-        const { latitude, longitude } = pos.coords;
-        setFilters(prev => ({
-          ...prev,
-          lat: latitude,
-          lng: longitude,
-        }));
-        OriginLocationRef.current = { lat: latitude, lng: longitude };
+        lat = pos.coords.latitude;
+        lng = pos.coords.longitude;
       }
+
+      OriginLocationRef.current = { lat, lng };
+
+      const params = new URLSearchParams(searchParams);
+      params.set("lat", String(lat));
+      params.set("lng", String(lng));
+
+      router.replace(`/nearby?${params.toString()}`);
       setIsLocationReady(true);
     })();
   }, []);
@@ -84,26 +85,17 @@ export default function Nearby() {
   const mylocation = { lat: filters.lat, lng: filters.lng };
 
   const handleMyLocation = (lat: number, lng: number) => {
-    setFilters(prev => ({
-      ...prev,
-      categoryId: 0,
-      lat: lat,
-      lng: lng,
-    }));
     const params = new URLSearchParams(searchParams);
+    params.set("lat", String(lat));
+    params.set("lng", String(lng));
     params.set("categoryId", "0");
     router.push(`/nearby?${params.toString()}`);
   };
 
   const handleCategoryChange = (value: number) => {
-    setFilters(prev => ({
-      ...prev,
-      pageNum: 1,
-      categoryId: value,
-    }));
     const params = new URLSearchParams(searchParams);
-    params.set("pageNum", "1");
     params.set("categoryId", String(value));
+    params.set("pageNum", "1");
     router.push(`/nearby?${params.toString()}`);
   };
 

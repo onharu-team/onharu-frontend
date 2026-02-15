@@ -15,7 +15,7 @@ interface DesktopViewProps {
   isReady: boolean;
   mylocation: { lat: number; lng: number };
   inputValue: string;
-  stores: NearbyStore[];
+  stores: any;
   category: CategoryName;
   activeId: string;
   cardRefs: React.MutableRefObject<Record<string, HTMLDivElement | null>>;

@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card/Card";
 import { Category } from "@/components/ui/card/Category";
 import { HashTag } from "@/components/ui/card/HashTag";
 import { Thumbnail } from "@/components/ui/card/Thumbnail";
-import { CharityMain } from "./data/type";
+import { CharityMain } from "../../../types/store/type";
 import { CardSkeleton } from "@/components/ui/card/CardSkeleton";
 
 export const CharityShop = () => {

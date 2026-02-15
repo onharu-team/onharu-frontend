@@ -3,6 +3,11 @@ import { useEffect, useState, useMemo } from "react";
 import { LocationSearch } from "./component";
 import { DummyData } from "./data/DummyData";
 import { NearbyStore } from "./type/type";
+import { useQuery } from "@tanstack/react-query";
+import { GetStores } from "@/lib/api/GetStores";
+import { CharityMain } from "@/types/store/type";
+
+import { useSearchParams } from "next/navigation";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Map } from "@/components/feature/map/map";
@@ -20,13 +25,23 @@ import { MobileView } from "./component/MobileView";
 import { Toast } from "@/components/feature/toast/Toast";
 
 export default function Nearby() {
-  const [allStores, setAllStores] = useState<NearbyStore[]>([]);
+  //const [allStores, setAllStores] = useState<NearbyStore[]>([]);
+  const [filters, setFilters] = useState({
+    page: 1,
+    categoryId: 0,
+    keyword: "",
+    lat: 0,
+    lng: 0,
+  });
   const { OriginLocationRef, mylocation, handleMyLocation } = useMyLocation();
   const { inputValue, setInputValue, keyword, setKeyword, handleSearch, handleInputChange } =
     useSearch();
   const { category, setCategory, filterByCategory } = useCategoryFilter();
   const { activeId, handleActiveCard, cardRefs } = useActiveCard();
   const { open, handleOpenModal, handleCloseModal } = useModal();
+
+  const searchParams = useSearchParams();
+  const categoryId = Number(searchParams.get("categoryId") ?? 0);
 
   const isReady = mylocation.lat !== 0;
 
@@ -43,53 +58,66 @@ export default function Nearby() {
           "위치 접근을 허용하지 않았습니다.",
           "위치 변경을 통해 내 주소를 검색해보세요."
         );
-        handleMyLocation(37.5665, 126.978);
+        //handleMyLocation(37.5665, 126.978);
+        setFilters(prev => ({
+          ...prev,
+          lat: 37.5665,
+          lng: 126.978,
+        }));
         OriginLocationRef.current = { lat: 37.5665, lng: 126.978 };
       } else {
         const { latitude, longitude } = pos.coords;
-        handleMyLocation(latitude, longitude);
+        setFilters(prev => ({
+          ...prev,
+          lat: latitude,
+          lng: longitude,
+        }));
         OriginLocationRef.current = { lat: latitude, lng: longitude };
       }
     })();
   }, []);
 
-  useEffect(() => {
-    if (mylocation.lat === 0) return;
-    setAllStores(DummyData(mylocation.lat, mylocation.lng));
-  }, [mylocation]);
+  const page = 1;
 
-  const stores = useMemo(() => {
-    let result = allStores;
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["stores", filters],
+    queryFn: () => GetStores(filters),
+  });
 
-    if (keyword) {
-      result = searchStores({ stores: result, keyword: keyword });
-    } else if (category !== "전체") {
-      result = filterByCategory(result);
-    }
+  const stores: CharityMain[] = data?.data?.stores ?? [];
 
-    return result;
-  }, [allStores, keyword, category, filterByCategory]);
+  // const stores = useMemo(() => {
+  //   let result = allStores;
+
+  //   if (keyword) {
+  //     result = searchStores({ stores: result, keyword: keyword });
+  //   } else if (category !== "전체") {
+  //     result = filterByCategory(result);
+  //   }
+
+  //   return result;
+  // }, [allStores, keyword, category, filterByCategory]);
 
   // 검색 결과에 따라 카테고리 자동 변경
-  useEffect(() => {
-    if (!keyword) return; // 검색어 없으면 무시
+  // useEffect(() => {
+  //   if (!keyword) return; // 검색어 없으면 무시
 
-    if (stores.length > 0) {
-      const categories = stores.map(store => store.category);
-      const uniqueCategories = [...new Set(categories)];
+  //   if (stores.length > 0) {
+  //     const categories = stores.map(store => store.category);
+  //     const uniqueCategories = [...new Set(categories)];
 
-      if (uniqueCategories.length === 1) {
-        const resultCategory = uniqueCategories[0];
-        if (category !== resultCategory) {
-          setCategory(resultCategory);
-        }
-      } else {
-        if (category !== "전체") {
-          setCategory("전체");
-        }
-      }
-    }
-  }, [keyword, stores, category, setCategory]);
+  //     if (uniqueCategories.length === 1) {
+  //       const resultCategory = uniqueCategories[0];
+  //       if (category !== resultCategory) {
+  //         setCategory(resultCategory);
+  //       }
+  //     } else {
+  //       if (category !== "전체") {
+  //         setCategory("전체");
+  //       }
+  //     }
+  //   }
+  // }, [keyword, stores, category, setCategory]);
 
   const handleCategoryChange = () => {
     setKeyword("");

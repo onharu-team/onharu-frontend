@@ -22,7 +22,7 @@ interface DetailMapProps extends BaseMapProps {
 
 interface SearchMapProps extends BaseMapProps {
   type: "search";
-  store: NearbyStore[];
+  store: any;
   handleMyLocation: (lat: number, lng: number) => void;
   OriginLocationRef: RefObject<{ lat: number; lng: number }>;
   mylocation: { lat: number; lng: number };

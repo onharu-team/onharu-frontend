@@ -1,7 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import { GetStores } from "@/lib/api/GetStores";
-import { CharityMain } from "../page-section/charity-shop/data/type";
+import { CharityMain } from "../../types/store/type";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 
@@ -15,19 +15,31 @@ import { Pagination } from "@/components/feature/pagination/Pagination";
 import { useDropdown } from "@/components/feature/dropdown/useDropdown";
 import { SelectData } from "./data/dropdown";
 import { Thumbnail } from "@/components/ui/card/Thumbnail";
+import { useState } from "react";
 
 export default function CharityStore() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [filters, setFilters] = useState({
+    pageNum: Number(searchParams.get("pageNum")) || 1,
+    perPage: Number(searchParams.get("perPage")) || 16,
+    lat: Number(searchParams.get("lat")) || 37.5665,
+    lng: Number(searchParams.get("lng")) || 126.978,
+    categoryId: Number(searchParams.get("categoryId")) || 0,
+  });
 
-  const page = Number(searchParams.get("pageNum") ?? 1);
-  const categoryId = Number(searchParams.get("categoryId") ?? 0);
+  //const categoryId = Number(searchParams.get("categoryId") ?? 0);
 
   const handlePageChange = (nextPage: number) => {
+    setFilters(prev => ({
+      ...prev,
+      pageNum: nextPage,
+    }));
+
     const params = new URLSearchParams(searchParams);
     params.set("pageNum", String(nextPage));
-    params.set("categoryId", String(categoryId));
-    router.push(`charitystore?${params.toString()}`);
+    params.set("categoryId", String(filters.categoryId));
+    router.push(`/charitystore?${params.toString()}`);
   };
 
   const {
@@ -44,28 +56,24 @@ export default function CharityStore() {
   } = useDropdown({ options: SelectData });
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["stores", page, 16, categoryId],
-    queryFn: () => GetStores(page, 16, categoryId),
+    queryKey: ["stores", filters],
+    queryFn: () => GetStores(filters),
   });
-
-  console.log(data);
 
   const filterByCategory = (value: number) => {
     //value : 전체,식당,카페...
+    setFilters(prev => ({
+      ...prev,
+      pageNum: 1,
+      categoryId: value,
+    }));
     const params = new URLSearchParams(searchParams);
     params.set("categoryId", String(value));
-    params.set("page", "1");
-    router.push(`charitystore?${params.toString()}`);
+    params.set("pageNum", "1");
+    router.push(`/charitystore?${params.toString()}`);
   };
   const stores: CharityMain[] = data?.data?.stores ?? [];
-
-  //const filterStore = filterByCategory(stores);
-  /**
-   * 현재 filter 로직은 카테고리별 정렬만 구현한 상태입니다.
-   * 추천순, 인기순, 거리순 관련 정보를 어떻게 표현할지 기능 완성 후 고도화시킬 예정
-   * 현재 드롭다운 셀렉트 기능만 구현된 상태
-   * **/
-  //const paginatedStores = paginate(stores, currentPage, 16);
+  const storeLength = data?.data?.totalCount;
 
   return (
     <section className="mt-section-sm-top md:mt-section-lg-top mb-section-sm-bottom md:mb-section-lg-bottom">
@@ -85,17 +93,19 @@ export default function CharityStore() {
           containerRef={containerRef}
           listboxRef={listboxRef}
         />
-        <div className="mt-4 grid grid-cols-2 gap-4 md:mt-8 lg:grid-cols-4">
-          {error && <>데이터 로드에 실패했습니다.</>}
-          {isLoading && (
-            <>
-              {Array.from({ length: 16 }).map((_, i) => (
-                <CardSkeleton key={i} />
-              ))}
-            </>
-          )}
-          {!isLoading && (
-            <>
+        {isLoading && (
+          <div className="mt-4 grid grid-cols-2 gap-4 md:mt-8 lg:grid-cols-4">
+            {Array.from({ length: 16 }).map((_, i) => (
+              <CardSkeleton key={i} />
+            ))}
+          </div>
+        )}
+        {error && (
+          <p className="font-gmarketsans text-center text-xl">데이터 로드에 실패했습니다.</p>
+        )}
+        {!isLoading && !error && storeLength > 0 && (
+          <>
+            <div className="mt-4 grid grid-cols-2 gap-4 md:mt-8 lg:grid-cols-4">
               {stores.map(items => (
                 <Card
                   key={items.id}
@@ -117,13 +127,15 @@ export default function CharityStore() {
                   hashtags={<HashTag tags={items.tags || []} />}
                 />
               ))}
-            </>
-          )}
-        </div>
-
-        <div className="mt-section-sm-top md:mt-section-lg-top flex justify-center">
-          <Pagination totalPage={data?.data?.totalPages} handlePageChange={handlePageChange} />
-        </div>
+            </div>
+            <div className="mt-section-sm-top md:mt-section-lg-top flex justify-center">
+              <Pagination totalPage={data?.data?.totalPages} handlePageChange={handlePageChange} />
+            </div>
+          </>
+        )}
+        {!isLoading && !error && storeLength === 0 && (
+          <p className="font-gmarketsans text-center text-xl">결과가 없습니다.</p>
+        )}
       </div>
     </section>
   );

@@ -1,10 +1,11 @@
 import { NearbyStore } from "@/app/nearby/type/type";
+import { CharityMain } from "@/types/store/type";
 import { MarkerCustom } from "./markerCustom";
 import { RiCloseLine } from "@remixicon/react";
 
 export function NearbyStoreMarker(
   map: kakao.maps.Map,
-  stores: NearbyStore[] | null,
+  stores: CharityMain[] | null,
   markersRef: React.MutableRefObject<kakao.maps.Marker[]>,
   overLayRef: React.MutableRefObject<kakao.maps.CustomOverlay[]>,
   activeOverlayRef: React.MutableRefObject<kakao.maps.CustomOverlay | null>,
@@ -19,8 +20,8 @@ export function NearbyStoreMarker(
   overLayRef.current = [];
 
   stores.forEach(store => {
-    const position = new kakao.maps.LatLng(store.lat, store.lng);
-    const CustomMarkers = MarkerCustom(store.category);
+    const position = new kakao.maps.LatLng(Number(store.lat), Number(store.lng));
+    const CustomMarkers = MarkerCustom(store.categoryName);
     const content = `
       <div class="customoverlay">
         <div>

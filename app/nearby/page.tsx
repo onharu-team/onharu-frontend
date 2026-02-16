@@ -9,7 +9,6 @@ import { useSearchParams } from "next/navigation";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Map } from "@/components/feature/map/map";
-import { useMyLocation } from "@/components/feature/map/hooks/useMyLocation";
 import { useSearch } from "@/components/feature/search/useSearch";
 import { useActiveCard } from "@/components/feature/search/useActiveCard";
 
@@ -21,16 +20,20 @@ import { MobileView } from "./component/MobileView";
 import { useStoreFilter } from "@/hooks/store/useStoreFilter";
 
 export default function Nearby() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const { filters, isLocationReady, OriginLocationRef, handleCategoryCahnge, handleMyLocation } =
-    useStoreFilter({
-      pathname: "nearby",
-      sort: "distance",
-      direction: "asc",
-    });
+  const {
+    filters,
+    isLocationReady,
+    OriginLocationRef,
+    handleCategoryCahnge,
+    handleSearch,
+    handleMyLocation,
+  } = useStoreFilter({
+    pathname: "nearby",
+    sort: "distance",
+    direction: "asc",
+  });
 
-  const { inputValue, setInputValue, keyword, setKeyword, handleInputChange } = useSearch();
+  const { inputValue, handleInputChange } = useSearch();
   const { activeId, handleActiveCard, cardRefs } = useActiveCard();
   const { open, handleOpenModal, handleCloseModal } = useModal();
 
@@ -49,8 +52,6 @@ export default function Nearby() {
 
   const stores: CharityMain[] = data?.data?.stores ?? [];
   const mylocation = { lat: filters.lat, lng: filters.lng };
-
-  const handleSearch = () => {};
 
   const handleReservation = (e: MouseEvent) => {
     e.preventDefault();

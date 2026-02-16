@@ -70,9 +70,8 @@ export const Map = (props: MapProps) => {
 
   useEffect(() => {
     if (props.type !== "search" || !mylocation || !locationRef.current) return;
-    if (!mylocation.lat || !mylocation.lng) return;
+    console.log("실행???");
 
-    moveToCurrentLocation(locationRef.current, CurrentOverlayRef, mylocation.lat, mylocation.lng);
     NearbyStoreMarker(
       locationRef.current,
       stores,
@@ -81,12 +80,14 @@ export const Map = (props: MapProps) => {
       activeOverlayRef,
       props.handleActiveCard
     );
+    if (!mylocation.lat || !mylocation.lng) return;
+    moveToCurrentLocation(locationRef.current, CurrentOverlayRef, mylocation.lat, mylocation.lng);
     setMapReady(true);
   }, [stores, isMapInitialized]);
 
   if (addressError) {
     return (
-      <div className="font-gmarketsans flex h-full w-full items-center justify-center text-2xl">
+      <div className="font-gmarketsans flex h-full w-full items-center justify-center text-xl">
         지도에 등록되지 않은 주소입니다.
       </div>
     );

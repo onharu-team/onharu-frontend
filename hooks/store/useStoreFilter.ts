@@ -27,6 +27,7 @@ export const useStoreFilter = ({
     categoryId: Number(searchParams.get("categoryId")) || 0,
     sortField: searchParams.get("sortField") || sort,
     sortDirection: searchParams.get("sortDirection") || direction,
+    keyword: searchParams.get("keyword") || "",
   };
 
   useEffect(() => {
@@ -79,6 +80,7 @@ export const useStoreFilter = ({
     params.set("lat", "");
     params.set("lng", "");
     params.set("sortDirection", direction);
+    params.delete("keyword");
     router.push(`/${pathname}?${params.toString()}`);
   };
 
@@ -87,6 +89,31 @@ export const useStoreFilter = ({
     params.set("lat", String(lat));
     params.set("lng", String(lng));
     params.set("categoryId", "0");
+
+    params.delete("keyword");
+
+    router.push(`/${pathname}?${params.toString()}`);
+  };
+
+  const handleSearch = (value: string) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (value.trim().length === 0) {
+      Toast("info", "검색어는 두 글자 이상 입력해 주세요.");
+      return;
+    }
+
+    if (value.trim()) {
+      params.set("keyword", value.trim());
+    } else {
+      params.delete("keyword");
+    }
+
+    params.set("pageNum", "1");
+    params.set("categoryId", "0");
+    params.set("sortField", "id");
+    params.delete("lat");
+    params.delete("lng");
     router.push(`/${pathname}?${params.toString()}`);
   };
 
@@ -98,5 +125,6 @@ export const useStoreFilter = ({
     handlePageChange,
     handleSortChange,
     handleMyLocation,
+    handleSearch,
   };
 };

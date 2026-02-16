@@ -15,7 +15,7 @@ interface MobileViewProps {
   cardRefs: React.MutableRefObject<Record<string, HTMLDivElement | null>>;
   onOpenModal: () => void;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSearch: () => void;
+  onSearch: (value: string) => void;
   onCategoryChange: (value: any) => void;
   onReservation: (e: MouseEvent) => void;
 }

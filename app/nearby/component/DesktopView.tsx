@@ -1,4 +1,3 @@
-import { NearbyStore } from "../type/type";
 import { SideMenu } from "./SideMenu";
 import { MyAddress } from "./MyAddress";
 import { StoreSearchSkeleton } from "./StoreSearchSkeleton";
@@ -19,7 +18,7 @@ interface DesktopViewProps {
   cardRefs: React.MutableRefObject<Record<string, HTMLDivElement | null>>;
   onOpenModal: () => void;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSearch: () => void;
+  onSearch: (value: string) => void;
   onCategoryChange: (value: any) => void;
   onReservation: (e: MouseEvent) => void;
   isCategoryQuery: boolean | null;

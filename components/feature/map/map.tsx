@@ -71,7 +71,6 @@ export const Map = (props: MapProps) => {
 
   useEffect(() => {
     if (props.type !== "search" || !mylocation || !locationRef.current) return;
-    console.log("실행???");
 
     NearbyStoreMarker(
       locationRef.current,

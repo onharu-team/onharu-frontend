@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { GetStores } from "@/lib/api/GetStores";
 import { CharityShopWrapper } from "./CharityShopWrapper";
@@ -6,13 +7,21 @@ import { Card } from "@/components/ui/card/Card";
 import { Category } from "@/components/ui/card/Category";
 import { HashTag } from "@/components/ui/card/HashTag";
 import { Thumbnail } from "@/components/ui/card/Thumbnail";
-import { CharityMain } from "./data/type";
+import { CharityMain } from "../../../types/store/type";
 import { CardSkeleton } from "@/components/ui/card/CardSkeleton";
 
 export const CharityShop = () => {
+  const [filters, setFilters] = useState({
+    pageNum: 1,
+    perPage: 4,
+    lat: 37.5665,
+    lng: 126.978,
+    categoryId: 0,
+  });
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ["stores", 1, 4],
-    queryFn: () => GetStores(1, 4),
+    queryKey: ["stores", filters],
+    queryFn: () => GetStores(filters),
   });
 
   if (isLoading) {
@@ -51,17 +60,17 @@ export const CharityShop = () => {
               storelink={String(items.id)}
               storeThumnail={
                 <Thumbnail
-                  src={""}
-                  openTime={items.openTime}
-                  closeTime={items.closeTime}
+                  src={items.images}
+                  // openTime={items.openTime}
+                  // closeTime={items.closeTime}
                   isOpen={items.isOpen}
-                  hasSharing={items.hasSharing}
+                  hasSharing={items.isSharing}
                 />
               }
               storename={items.name}
               storeIntroduce={items.introduction}
               category={<Category category={items.categoryName} />}
-              hashtags={<HashTag tags={items.tags || []} />}
+              hashtags={<HashTag tags={items.tagNames || []} />}
             />
           ))}
         </div>

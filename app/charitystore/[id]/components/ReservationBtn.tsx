@@ -19,7 +19,7 @@ export const ReservationBtn = ({ data }: { data: StoreSchedules[] | null }) => {
         width="md"
         height="md"
         onClick={() => {
-          router.push(`/reservation/"${data[0].id}`);
+          router.push(`/reservation/"${data[0].storeId}`);
         }}
       >
         예약하기

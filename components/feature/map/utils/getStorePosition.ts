@@ -1,5 +1,5 @@
 import { MarkerCustom } from "./markerCustom";
-import { CategoryName } from "../category/data";
+import { CategoryName } from "../../category/data";
 /**
  * 상세페이지에서 매장 위치를 주소 기준으로 검색하는 함수입니다.
  * @param map - InitMap 함수를 통해 가져온 map
@@ -11,10 +11,13 @@ export async function getStorePosition(
   map: kakao.maps.Map,
   address: string | null,
   category: CategoryName | null
-): Promise<void> {
-  const geocoder = new kakao.maps.services.Geocoder();
-  try {
-    if (!address || !category) return;
+): Promise<"OK" | "ZERO_RESULT" | "ERROR"> {
+  return new Promise(resolve => {
+    if (!address || !category) {
+      resolve("ERROR");
+      return;
+    }
+    const geocoder = new kakao.maps.services.Geocoder();
     geocoder.addressSearch(address, (results, status) => {
       if (status === kakao.maps.services.Status.OK) {
         const center = new kakao.maps.LatLng(Number(results[0].y), Number(results[0].x));
@@ -27,10 +30,16 @@ export async function getStorePosition(
         });
 
         map.setCenter(center);
+        resolve("OK");
+        return;
       }
+
+      if (status === kakao.maps.services.Status.ZERO_RESULT) {
+        resolve("ZERO_RESULT");
+        return;
+      }
+
+      resolve("ERROR");
     });
-  } catch (err) {
-    //실패 시 기본 위치 노출
-    console.log("error :" + err);
-  }
+  });
 }

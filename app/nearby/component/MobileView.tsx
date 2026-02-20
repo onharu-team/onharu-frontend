@@ -1,44 +1,40 @@
-import { NearbyStore } from "../type/type";
 import { StoreSearch } from "./StoreSearch";
 import { Navigation } from "@/components/feature/category/Navigation";
-import { CategoryName } from "@/components/feature/category/data";
+import { CharityMain } from "@/types/store/type";
 import { BottomSheet } from "@/components/feature/bottomsheet/Bottomsheet";
 import { MyAddress } from "./MyAddress";
 import { StoreCardList } from "./StoreCardList";
+import { SearchNoResult } from "./SearchNoResult";
 
 interface MobileViewProps {
   isReady: boolean;
-  mylocation: { lat: number; lng: number };
+  error: Error | null;
+  mylocation: { lat: number | null; lng: number | null };
   inputValue: string;
-  stores: NearbyStore[];
-  category: CategoryName;
+  stores: CharityMain[];
   activeId: string;
   cardRefs: React.MutableRefObject<Record<string, HTMLDivElement | null>>;
   onOpenModal: () => void;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSearch: () => void;
-  onCategoryChange: (value: CategoryName) => void;
-  onCategoryInit: () => void;
+  onSearch: (value: string) => void;
+  onCategoryChange: (value: number) => void;
   onReservation: (e: MouseEvent) => void;
 }
 
 export function MobileView({
   isReady,
+  error,
   mylocation,
   inputValue,
   stores,
-  category,
   activeId,
   cardRefs,
   onOpenModal,
   onInputChange,
   onSearch,
   onCategoryChange,
-  onCategoryInit,
   onReservation,
 }: MobileViewProps) {
-  if (!isReady) return null;
-
   return (
     <>
       <div className="fixed top-16 left-[50%] z-50 w-full -translate-x-[50%]">
@@ -46,7 +42,7 @@ export function MobileView({
       </div>
 
       <div className="fixed top-38 z-50 w-full">
-        <Navigation value={category} onChange={onCategoryChange} InitializePage={onCategoryInit} />
+        <Navigation onChange={onCategoryChange} />
       </div>
 
       <BottomSheet open={isReady} onClose={() => {}}>
@@ -60,6 +56,8 @@ export function MobileView({
               onReservation={onReservation}
             />
           )}
+          {stores.length === 0 && <SearchNoResult />}
+          {error && <>데이터를 읽을 수 없습니다.</>}
         </div>
       </BottomSheet>
     </>

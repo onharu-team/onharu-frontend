@@ -8,7 +8,5 @@ export const createPageNumberList = (currentPage: number, totalPage: number): nu
   // startPage는 6
   // endPage는 10 또는 마지막페이지 중 작은쪽
 
-  console.log(pageGroup + ":page group");
-
   return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 };

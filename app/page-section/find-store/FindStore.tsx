@@ -1,7 +1,7 @@
 import { SectionTitle } from "../shared/SectionTitle";
 import Image from "next/image";
 import Link from "next/link";
-import { StoreMenu } from "./data/data";
+import { CategoryData } from "@/components/feature/category/data";
 
 export const FindStore = () => {
   return (
@@ -9,18 +9,18 @@ export const FindStore = () => {
       <div className="wrapper">
         <SectionTitle title="동네 속 나눔가게 찾기" />
         <div className="tablet:gap-15 flex flex-wrap justify-center gap-3">
-          {StoreMenu.map(items => (
+          {CategoryData.filter(item => item.id > 0).map(items => (
             <Link
-              href={items.link}
+              href={`charitystore/?categoryId=${items.id}&page=1`}
               key={items.id}
               className="group flex flex-col items-center gap-2"
             >
               <div className="bg-sub-sub-100 mobile:w-[103px] mobile:p-1 flex aspect-square w-[58px] items-center justify-center rounded-md p-2">
                 <Image
-                  src={items.image.src}
+                  src={items.icon}
                   alt={`${items.name} 카테고리로 검색하기`}
-                  width={items.image.width}
-                  height={items.image.height}
+                  width={items.iconSize.width}
+                  height={items.iconSize.height}
                   className="duration-200 group-hover:scale-95"
                 />
               </div>

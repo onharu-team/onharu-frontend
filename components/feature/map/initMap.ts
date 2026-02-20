@@ -8,7 +8,7 @@ export async function InitMap(container: HTMLElement) {
 
   const map = new window.kakao.maps.Map(container, {
     center: new window.kakao.maps.LatLng(37.5665, 126.978),
-    level: 5,
+    level: 7,
   });
 
   return map;

@@ -1,6 +1,6 @@
 "use client";
 
-import { paginate } from "@/components/feature/pagination/utils/paginate";
+// import { paginate } from "@/components/feature/pagination/utils/paginate";
 import { StoreItem } from "../types";
 import ButtonGroup from "./ButtonGroup";
 import LikeButton from "./LikeButton";
@@ -15,16 +15,16 @@ interface InterestsCardProps {
 export default function InterestsCard({ items }: InterestsCardProps) {
   const perPageDataCount = 4;
 
-  const {
-    currentPage,
-    setCurrentPage,
-    handleFirstPage,
-    handlePrevPage,
-    handleLastPage,
-    handleNextPage,
-  } = usePagination({ totalDataCount: items.length, perPageDataCount });
+  // const {
+  //   currentPage,
+  //   setCurrentPage,
+  //   handleFirstPage,
+  //   handlePrevPage,
+  //   handleLastPage,
+  //   handleNextPage,
+  // } = usePagination({ totalDataCount: items.length, perPageDataCount });
 
-  const paginatedItems = paginate(items, currentPage, perPageDataCount);
+  // const paginatedItems = paginate(items, currentPage, perPageDataCount);
 
   if (!items.length)
     return (
@@ -35,7 +35,7 @@ export default function InterestsCard({ items }: InterestsCardProps) {
 
   return (
     <div className="flex flex-col gap-4 sm:gap-6">
-      {paginatedItems.map(item => {
+      {/* {paginatedItems.map(item => {
         const isPreparing = item.status === "PREPARING";
 
         return (
@@ -66,10 +66,10 @@ export default function InterestsCard({ items }: InterestsCardProps) {
             </div>
           </div>
         );
-      })}
+      })} */}
 
       <div className="mt-10 flex justify-center">
-        <Pagination
+        {/* <Pagination
           handleFirstPage={handleFirstPage}
           handlePrevPage={handlePrevPage}
           handleLastPage={handleLastPage}
@@ -78,7 +78,7 @@ export default function InterestsCard({ items }: InterestsCardProps) {
           setCurrentPage={setCurrentPage}
           totalDataCount={items.length}
           perPageDataCount={perPageDataCount}
-        />
+        /> */}
       </div>
     </div>
   );

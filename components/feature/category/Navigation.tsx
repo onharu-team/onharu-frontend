@@ -1,15 +1,16 @@
 import Image from "next/image";
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { CategoryData } from "./data";
 import clsx from "clsx";
-import { CategoryName } from "./data";
-
 interface NavigatinProps {
-  value: CategoryName;
-  onChange: (category: CategoryName) => void;
-  InitializePage: () => void;
+  onChange: (category: number) => void;
 }
 
-export const Navigation = ({ value, onChange, InitializePage }: NavigatinProps) => {
+export const Navigation = ({ onChange }: NavigatinProps) => {
+  const searchParams = useSearchParams();
+  const category = searchParams.get("categoryId") ?? "0";
+
   const categoryBaseClasses =
     "flex cursor-pointer bg-white items-center gap-1 md:gap-2 rounded-full border border-gray-300 px-4.5 py-1 shadow-md";
 
@@ -19,12 +20,11 @@ export const Navigation = ({ value, onChange, InitializePage }: NavigatinProps) 
         <button
           key={item.id}
           onClick={() => {
-            onChange(item.name);
-            InitializePage();
+            onChange(item.id);
           }}
           className={clsx(
             categoryBaseClasses,
-            value === item.name && "!bg-main !border-main text-white"
+            category === String(item.id) && "!bg-main !border-main text-white"
           )}
         >
           <div className="relative h-4 w-4 md:h-6 md:w-6">

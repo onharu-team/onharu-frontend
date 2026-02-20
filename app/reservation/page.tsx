@@ -17,7 +17,7 @@ import { handleSubmit } from "./utils/ReservationSubmit";
 import { DummyDate } from "./data/data";
 import { useState } from "react";
 import { Modal } from "@/components/ui/Modal";
-import useModal from "@/hooks/useModal";
+import useModal from "@/hooks/ui/useModal";
 /**
  * 모든 하위 컴포넌트의 기능은 커스텀 훅으로 작동하고 있습니다.
  * 조립하는 최상위 컴포넌트 page.tsx에서는 use-* 커스텀 훅으로 예약 관련 기능을 불러와 데이터를 전달합니다.

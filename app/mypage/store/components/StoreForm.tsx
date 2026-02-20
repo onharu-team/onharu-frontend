@@ -9,7 +9,7 @@ import { SelectButton } from "../../sharing/create/components/SelectButton";
 import DocumentUploadField from "@/components/feature/DocumentUploadField";
 import { useStoreForm } from "./useStoreForm";
 import type { StoreInitialData } from "../types";
-import useModal from "@/hooks/useModal";
+import useModal from "@/hooks/ui/useModal";
 import { Modal } from "@/components/ui/Modal";
 
 type StoreFormProps = {

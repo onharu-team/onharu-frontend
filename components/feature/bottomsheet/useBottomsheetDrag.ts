@@ -79,7 +79,7 @@ export function useBottomSheetDrag({ open }: { open: boolean }) {
     };
 
     const handleMouseUp = () => {
-      if (!isDragging.current) return;
+      if (!isDragging.current || !ScrollRef.current) return;
 
       isDragging.current = false;
       setPhase("settling");
@@ -97,12 +97,15 @@ export function useBottomSheetDrag({ open }: { open: boolean }) {
         if (currentHeight > (half + full) / 2) {
           targetState = "full";
           targetHeight = full;
+          ScrollRef.current.style.overflowY = "auto";
         } else if (currentHeight > (hidden + half) / 2) {
           targetState = "half";
           targetHeight = half;
+          ScrollRef.current.style.overflowY = "auto";
         } else {
           targetState = "hidden";
           targetHeight = hidden;
+          ScrollRef.current.style.overflowY = "hidden";
         }
       }
 
@@ -179,7 +182,6 @@ export function useBottomSheetDrag({ open }: { open: boolean }) {
 
     isDragging.current = false;
     setPhase("settling");
-    ScrollRef.current.style.overflowY = "auto";
 
     const { hidden, half, full } = metrics.current;
     const currentHeight = height;
@@ -194,12 +196,15 @@ export function useBottomSheetDrag({ open }: { open: boolean }) {
       if (currentHeight > (half + full) / 2) {
         targetState = "full";
         targetHeight = full;
+        ScrollRef.current.style.overflowY = "auto";
       } else if (currentHeight > (hidden + half) / 2) {
         targetState = "half";
         targetHeight = half;
+        ScrollRef.current.style.overflowY = "auto";
       } else {
         targetState = "hidden";
         targetHeight = hidden;
+        ScrollRef.current.style.overflowY = "hidden";
       }
     }
 

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
-  const { id } = await context.params; // 👈 여기 await
+  const { id } = await context.params;
 
   const res = await fetch(`http://onharu-api.votex.co.kr:15080/api/stores/${id}`, {
     headers: {

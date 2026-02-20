@@ -1,11 +1,14 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 
-type OptionsProps = { options: { value: string; label: string }[] };
-
-export function useDropdown({ options }: OptionsProps) {
+type DropdownOption = {
+  value: string;
+  direction: string;
+  label: string;
+};
+export function useDropdown<T extends readonly DropdownOption[]>({ options }: { options: T }) {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState("추천순");
+  const [selected, setSelected] = useState(options[1].label);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const listboxRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);

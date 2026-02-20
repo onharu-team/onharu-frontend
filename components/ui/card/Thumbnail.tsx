@@ -1,21 +1,19 @@
 import Image from "next/image";
-import { Operating } from "@/utils/Operating";
 
 interface ThumbnailProps {
-  src?: string;
+  src: string[];
   openTime?: string;
   closeTime?: string;
   isOpen: boolean;
   hasSharing: boolean;
 }
 
-export const Thumbnail = ({ src, openTime, closeTime, isOpen, hasSharing }: ThumbnailProps) => {
+export const Thumbnail = ({ src, isOpen, hasSharing }: ThumbnailProps) => {
   //const status = Operating({ openTime: openTime, closeTime: closeTime });
   // const realStatus =
   //   status.openMinutes < status.closeMinutes ? status.midnightStatus : status.status;
-  const imageSrc = src || "/image/page/no-image.svg";
-
-  const status = isOpen;
+  //const imageSrc = src || "/image/page/no-image.svg";
+  const imageSrc = src.length > 0 ? src[0] : "/image/page/no-image.svg";
 
   return (
     <div className="relative h-full w-full">

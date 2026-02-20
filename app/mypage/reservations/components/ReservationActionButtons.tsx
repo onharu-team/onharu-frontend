@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/Button";
 import { CancelModalType, ReservationStatus } from "../types";
-import useModal from "@/hooks/useModal";
+import useModal from "@/hooks/ui/useModal";
 import ReservationModal from "./ReservationModal";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

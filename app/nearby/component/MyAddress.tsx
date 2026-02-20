@@ -6,7 +6,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { cn } from "@/lib/utils";
 
 interface MyAddressProps {
-  mylocation: { lat: number; lng: number };
+  mylocation: { lat: number | null; lng: number | null };
   handleOpenModal: () => void;
 }
 

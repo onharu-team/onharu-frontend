@@ -1,29 +1,27 @@
-import { NearbyStore } from "../type/type";
 import { SideMenu } from "./SideMenu";
 import { MyAddress } from "./MyAddress";
-import { StoreSearchSkeleton } from "./StoreSearchSkeleton";
 import { StoreSearch } from "./StoreSearch";
+import { StoreSearchSkeleton } from "./StoreSearchSkeleton";
 import { DevideBar } from "./DevideBar";
 import { CardSkeleton } from "@/components/ui/card/CardSkeleton";
 import { StoreCardList } from "./StoreCardList";
 import { SearchNoResult } from "./SearchNoResult";
 import { Navigation } from "@/components/feature/category/Navigation";
 import { cn } from "@/lib/utils";
-import { CategoryName } from "@/components/feature/category/data";
+import { CharityMain } from "@/types/store/type";
 
 interface DesktopViewProps {
   isReady: boolean;
-  mylocation: { lat: number; lng: number };
+  error: Error | null;
+  mylocation: { lat: number | null; lng: number | null };
   inputValue: string;
-  stores: NearbyStore[];
-  category: CategoryName;
+  stores: CharityMain[];
   activeId: string;
   cardRefs: React.MutableRefObject<Record<string, HTMLDivElement | null>>;
   onOpenModal: () => void;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSearch: () => void;
-  onCategoryChange: (value: CategoryName) => void;
-  onCategoryInit: () => void;
+  onSearch: (value: string) => void;
+  onCategoryChange: (value: number) => void;
   onReservation: (e: MouseEvent) => void;
   isCategoryQuery: boolean | null;
   isSidemenuQuery: boolean | null;
@@ -31,17 +29,16 @@ interface DesktopViewProps {
 
 export function DesktopView({
   isReady,
+  error,
   mylocation,
   inputValue,
   stores,
-  category,
   activeId,
   cardRefs,
   onOpenModal,
   onInputChange,
   onSearch,
   onCategoryChange,
-  onCategoryInit,
   onReservation,
   isCategoryQuery,
   isSidemenuQuery,
@@ -66,6 +63,7 @@ export function DesktopView({
           />
         )}
         {isReady && stores.length === 0 && <SearchNoResult />}
+        {isReady && error && <>데이터를 읽을 수 없습니다.</>}
       </div>
 
       <div
@@ -76,7 +74,7 @@ export function DesktopView({
           isSidemenuQuery && "left-[350px] min-w-80"
         )}
       >
-        <Navigation value={category} onChange={onCategoryChange} InitializePage={onCategoryInit} />
+        <Navigation onChange={onCategoryChange} />
       </div>
     </SideMenu>
   );

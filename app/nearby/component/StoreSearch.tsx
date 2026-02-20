@@ -1,16 +1,16 @@
-import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEvent } from "react";
 import { RiSearch2Line } from "@remixicon/react";
 
 interface StoreSearchSearchProps {
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  onSearch: () => void;
+  onSearch: (value: string) => void;
 }
 
 export const StoreSearch = ({ value, onChange, onSearch }: StoreSearchSearchProps) => {
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      onSearch();
+      onSearch(value);
     }
   };
 
@@ -24,7 +24,7 @@ export const StoreSearch = ({ value, onChange, onSearch }: StoreSearchSearchProp
           onKeyDown={handleKeyDown}
           className="flex-1 focus:outline-none"
         />
-        <button onClick={onSearch} type="button">
+        <button onClick={() => onSearch(value)} type="button">
           <RiSearch2Line size={24} />
         </button>
       </div>

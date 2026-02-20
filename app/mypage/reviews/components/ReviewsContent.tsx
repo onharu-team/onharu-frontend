@@ -5,7 +5,7 @@ import { ReviewItem } from "../types";
 import { Button } from "@/components/ui/Button";
 import { Pagination } from "@/components/feature/pagination/Pagination";
 import { usePagination } from "@/components/feature/pagination/usePagination";
-import { paginate } from "@/components/feature/pagination/utils/paginate";
+// import { paginate } from "@/components/feature/pagination/utils/paginate";
 import Link from "next/link";
 
 interface Props {
@@ -18,16 +18,16 @@ export default function ReviewsContent({ items, role, hasUsed = false }: Props) 
   const isOwner = role === "owner";
   const perPageDataCount = 5;
 
-  const {
-    currentPage,
-    setCurrentPage,
-    handleFirstPage,
-    handlePrevPage,
-    handleLastPage,
-    handleNextPage,
-  } = usePagination({ totalDataCount: items.length, perPageDataCount });
+  // const {
+  //   currentPage,
+  //   setCurrentPage,
+  //   handleFirstPage,
+  //   handlePrevPage,
+  //   handleLastPage,
+  //   handleNextPage,
+  // } = usePagination({ totalDataCount: items.length, perPageDataCount });
 
-  const paginatedItems = paginate(items, currentPage, perPageDataCount);
+  // const paginatedItems = paginate(items, currentPage, perPageDataCount);
 
   if (!items.length) {
     if (!isOwner && hasUsed) {
@@ -84,7 +84,7 @@ export default function ReviewsContent({ items, role, hasUsed = false }: Props) 
         )}
       </div>
 
-      {paginatedItems.map(item => (
+      {/* {paginatedItems.map(item => (
         <div key={item.id} className="bg-secondary mb-2 rounded-[10px] p-4 sm:mb-5 sm:p-8">
           <div className="flex items-center gap-5">
             <div className="relative h-6.25 w-7.5 sm:h-10.75 sm:w-12.5">
@@ -116,10 +116,10 @@ export default function ReviewsContent({ items, role, hasUsed = false }: Props) 
 
           <p className="sm:text-md mt-2 text-xs font-medium break-keep sm:mt-5">{item.content}</p>
         </div>
-      ))}
+      ))} */}
 
       <div className="mt-10 flex justify-center">
-        <Pagination
+        {/* <Pagination
           handleFirstPage={handleFirstPage}
           handlePrevPage={handlePrevPage}
           handleLastPage={handleLastPage}
@@ -128,7 +128,7 @@ export default function ReviewsContent({ items, role, hasUsed = false }: Props) 
           setCurrentPage={setCurrentPage}
           totalDataCount={items.length}
           perPageDataCount={perPageDataCount}
-        />
+        /> */}
       </div>
     </>
   );

@@ -7,9 +7,9 @@ import { moveToCurrentLocation } from "./utils/moveCurrentLocation";
 import { getStorePosition } from "./utils/getStorePosition";
 import { NearbyStoreMarker } from "./utils/NearByStoreMarker";
 import { CategoryName } from "../category/data";
-import { NearbyStore } from "@/app/nearby/type/type";
 import { useZoomControl } from "./hooks/useZoomControl";
 import { MyLocation } from "./MyLocation";
+import { CharityMain } from "@/types/store/type";
 
 interface BaseMapProps {
   address?: string | null;
@@ -22,10 +22,10 @@ interface DetailMapProps extends BaseMapProps {
 
 interface SearchMapProps extends BaseMapProps {
   type: "search";
-  store: NearbyStore[];
-  handleMyLocation: (lat: number, lng: number) => void;
-  OriginLocationRef: RefObject<{ lat: number; lng: number }>;
-  mylocation: { lat: number; lng: number };
+  store: CharityMain[];
+  handleMyLocation: (lat: number | null, lng: number | null) => void;
+  OriginLocationRef: RefObject<{ lat: number | null; lng: number | null }>;
+  mylocation: { lat: number | null; lng: number | null };
   handleActiveCard: (id: string) => void;
 }
 
@@ -39,6 +39,7 @@ export const Map = (props: MapProps) => {
   const markersRef = useRef<kakao.maps.Marker[]>([]);
   const overLayRef = useRef<kakao.maps.CustomOverlay[]>([]);
   const activeOverlayRef = useRef<kakao.maps.CustomOverlay | null>(null);
+  const [addressError, setAddressError] = useState(false);
   const [isMapInitialized, setIsMapInitialized] = useState(false);
   const [mapReady, setMapReady] = useState<boolean>(false);
   const { handleZoomIn, handleZoomOut } = useZoomControl(locationRef);
@@ -53,8 +54,9 @@ export const Map = (props: MapProps) => {
       const map = await InitMap(mapRef.current);
       locationRef.current = map;
       setIsMapInitialized(true);
-      if (!address || !category) return;
-      await getStorePosition(map, address, category);
+      if (!address || !category) return; // type detail에서만 적용됩니다
+      const storePosition = await getStorePosition(map, address, category);
+      setAddressError(storePosition === "ZERO_RESULT");
     };
 
     mapload();
@@ -69,41 +71,39 @@ export const Map = (props: MapProps) => {
 
   useEffect(() => {
     if (props.type !== "search" || !mylocation || !locationRef.current) return;
-    if (mylocation.lat === 0) return;
 
+    NearbyStoreMarker(
+      locationRef.current,
+      stores,
+      markersRef,
+      overLayRef,
+      activeOverlayRef,
+      props.handleActiveCard
+    );
+    if (!mylocation.lat || !mylocation.lng) return;
     moveToCurrentLocation(locationRef.current, CurrentOverlayRef, mylocation.lat, mylocation.lng);
-    NearbyStoreMarker(
-      locationRef.current,
-      stores,
-      markersRef,
-      overLayRef,
-      activeOverlayRef,
-      props.handleActiveCard
-    );
     setMapReady(true);
-  }, [mylocation, isMapInitialized]);
+  }, [stores, isMapInitialized]);
 
-  useEffect(() => {
-    if (props.type !== "search" || !locationRef.current || !props.store.length) return;
-
-    NearbyStoreMarker(
-      locationRef.current,
-      stores,
-      markersRef,
-      overLayRef,
-      activeOverlayRef,
-      props.handleActiveCard
+  if (addressError) {
+    return (
+      <div className="font-gmarketsans flex h-full w-full items-center justify-center text-xl">
+        지도에 등록되지 않은 주소입니다.
+      </div>
     );
-  }, [stores]);
+  }
 
   return (
     <>
       <div className="h-full w-full" ref={mapRef} />
+
       {type === "search" && (
         <>
           <MapLoading ready={mapReady} />
           <MapZoom handleZoomIn={handleZoomIn} handleZoomOut={handleZoomOut} mapReady={mapReady} />
           <MyLocation
+            map={locationRef.current}
+            CurrentOverlayRef={CurrentOverlayRef}
             handleMyLocation={handleMyLocation}
             originLocation={originLocation}
             mapReady={mapReady}

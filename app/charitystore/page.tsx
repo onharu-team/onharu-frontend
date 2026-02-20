@@ -1,35 +1,27 @@
 "use client";
-
 import { useQuery } from "@tanstack/react-query";
 import { GetStores } from "@/lib/api/GetStores";
-import { CharityMain } from "../page-section/charity-shop/data/type";
-import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
+import { CharityMain } from "../../types/store/type";
 
 import { Navigation } from "@/components/feature/category/Navigation";
 import { BgrDropdown } from "@/components/feature/dropdown/Dropdown";
-import { useCategoryFilter } from "@/components/feature/category/useCategoryFilter";
 import { Card } from "@/components/ui/card/Card";
 import { CardSkeleton } from "@/components/ui/card/CardSkeleton";
 import { Category } from "@/components/ui/card/Category";
 import { HashTag } from "@/components/ui/card/HashTag";
 import { Pagination } from "@/components/feature/pagination/Pagination";
-import { dummyStores } from "./data/data";
 import { useDropdown } from "@/components/feature/dropdown/useDropdown";
-import { SelectData } from "./data/dropdown";
+import { SelectData } from "@/components/feature/dropdown/data/DropdownData";
 import { Thumbnail } from "@/components/ui/card/Thumbnail";
 
+import { useStoreFilter } from "@/hooks/store/useStoreFilter";
+
 export default function CharityStore() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const page = Number(searchParams.get("page") ?? 1);
-
-  const handlePageChange = (nextPage: number) => {
-    router.push(`/charitystore?page=${nextPage}`);
-  };
-
-  const { category, setCategory, filterByCategory } = useCategoryFilter();
+  const { filters, handlePageChange, handleCategoryCahnge, handleSortChange } = useStoreFilter({
+    pathname: "charitystore",
+    sort: "favoriteCount",
+    direction: "desc",
+  });
 
   const {
     open,
@@ -45,38 +37,27 @@ export default function CharityStore() {
   } = useDropdown({ options: SelectData });
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["stores", page, 16],
-    queryFn: () => GetStores(page, 16),
+    queryKey: ["stores", filters],
+    queryFn: ({ signal }) => GetStores(filters, signal),
+    staleTime: 1000 * 60,
+    placeholderData: previousData => previousData,
   });
 
   const stores: CharityMain[] = data?.data?.stores ?? [];
-  const storesLength = data?.totalCount ?? 16;
-
-  //const filterStore = filterByCategory(dummyStores);
-  /**
-   * 현재 filter 로직은 카테고리별 정렬만 구현한 상태입니다.
-   * 추천순, 인기순, 거리순 관련 정보를 어떻게 표현할지 기능 완성 후 고도화시킬 예정
-   * 현재 드롭다운 셀렉트 기능만 구현된 상태
-   * **/
-  //const paginatedStores = paginate(stores, currentPage, 16);
-
-  //console.log(stores);
+  const storeLength = data?.data?.totalCount;
 
   return (
     <section className="mt-section-sm-top md:mt-section-lg-top mb-section-sm-bottom md:mb-section-lg-bottom">
       <h2 className="sr-only">나눔 가게 전체 보기</h2>
       <div className="wrapper">
-        <Navigation
-          value={category}
-          onChange={setCategory}
-          InitializePage={() => handlePageChange(1)}
-        />
+        <Navigation onChange={handleCategoryCahnge} />
         <BgrDropdown
           options={SelectData}
           open={open}
           selected={selected}
           highlightedIndex={highlightedIndex}
           setSelected={setSelected}
+          setSortChange={handleSortChange}
           setHighlightedIndex={setHighlightedIndex}
           handleOpen={handleOpen}
           handleClose={handleClose}
@@ -84,17 +65,19 @@ export default function CharityStore() {
           containerRef={containerRef}
           listboxRef={listboxRef}
         />
-        <div className="mt-4 grid grid-cols-2 gap-4 md:mt-8 lg:grid-cols-4">
-          {error && <>데이터 로드에 실패했습니다.</>}
-          {isLoading && (
-            <>
-              {Array.from({ length: 16 }).map((_, i) => (
-                <CardSkeleton key={i} />
-              ))}
-            </>
-          )}
-          {!isLoading && (
-            <>
+        {isLoading && (
+          <div className="mt-4 grid grid-cols-2 gap-4 md:mt-8 lg:grid-cols-4">
+            {Array.from({ length: 16 }).map((_, i) => (
+              <CardSkeleton key={i} />
+            ))}
+          </div>
+        )}
+        {error && (
+          <p className="font-gmarketsans text-center text-xl">데이터 로드에 실패했습니다.</p>
+        )}
+        {!isLoading && !error && storeLength > 0 && (
+          <>
+            <div className="mt-4 grid grid-cols-2 gap-4 md:mt-8 lg:grid-cols-4">
               {stores.map(items => (
                 <Card
                   key={items.id}
@@ -103,30 +86,26 @@ export default function CharityStore() {
                   storelink={String(items.id)}
                   storeThumnail={
                     <Thumbnail
-                      src={""}
-                      openTime={items.openTime}
-                      closeTime={items.closeTime}
+                      src={items.images}
                       isOpen={items.isOpen}
-                      hasSharing={items.hasSharing}
+                      hasSharing={items.isSharing}
                     />
                   }
                   storename={items.name}
                   storeIntroduce={items.introduction}
                   category={<Category category={items.categoryName} />}
-                  hashtags={<HashTag tags={items.tags || []} />}
+                  hashtags={<HashTag tags={items.tagNames || []} />}
                 />
               ))}
-            </>
-          )}
-        </div>
-
-        <div className="mt-section-sm-top md:mt-section-lg-top flex justify-center">
-          <Pagination
-            currentPage={page}
-            totalDataCount={storesLength}
-            handlePageChange={handlePageChange}
-          />
-        </div>
+            </div>
+            <div className="mt-section-sm-top md:mt-section-lg-top flex justify-center">
+              <Pagination totalPage={data?.data?.totalPages} handlePageChange={handlePageChange} />
+            </div>
+          </>
+        )}
+        {!isLoading && !error && storeLength === 0 && (
+          <p className="font-gmarketsans text-center text-xl">결과가 없습니다.</p>
+        )}
       </div>
     </section>
   );

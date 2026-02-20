@@ -1,4 +1,4 @@
-import { CharityMain } from "./type";
+import { CharityMain } from "../../../../types/store/type";
 
 // export const CardData: CharityMain[] = [
 //   {

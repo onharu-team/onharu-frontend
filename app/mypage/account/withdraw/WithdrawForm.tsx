@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import Input from "@/components/ui/Input";
-import useModal from "@/hooks/useModal";
+import useModal from "@/hooks/ui/useModal";
 import FormPageLayout from "../components/FormPageLayout";
 import { useState } from "react";
 import { RiAlertFill } from "@remixicon/react";

@@ -15,7 +15,7 @@ export const DesktopView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const pathname = usePathname();
 
   return (
-    <header className="border border-b-gray-200 bg-white">
+    <header className="max-h-20 border border-b-gray-200 bg-white">
       <div className="wrapper m-auto flex w-full items-center justify-between">
         <div className="flex items-center gap-24">
           <Link href={"/"}>

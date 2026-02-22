@@ -1,5 +1,5 @@
 export const FIELD_PATTERNS = {
-  password: /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+  password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/,
   phone: /^01[016789]\d{7,8}$/,
 };
 
@@ -27,7 +27,7 @@ export const FIELD_CONFIG = {
       required: "비밀번호는 필수입니다.",
       pattern: {
         value: FIELD_PATTERNS.password,
-        message: "대,소문자 포함 8자 이상 입력해주세요.",
+        message: "대,소문자, 숫자, 특수문자 포함 8자 이상 입력해주세요.",
       },
     },
   },
@@ -57,7 +57,7 @@ export const FIELD_CONFIG = {
       required: "비밀번호는 필수입니다.",
       pattern: {
         value: FIELD_PATTERNS.password,
-        message: "대,소문자 포함 8자 이상 입력해주세요.",
+        message: "대,소문자, 숫자, 특수문자 포함 8자 이상 입력해주세요.",
       },
     },
   },

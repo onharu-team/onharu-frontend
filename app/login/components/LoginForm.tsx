@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/Button";
 import Checkbox from "@/components/ui/Checkbox";
 import KakaoLoginButton from "./KakaoLoginButton";
 import { LoginFormValues } from "../types";
+import { useLogin } from "@/hooks/useLogin";
+import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function LoginForm() {
   const {
@@ -19,24 +22,34 @@ export default function LoginForm() {
 
   const [loginError, setLoginError] = useState("");
 
+  const queryClient = useQueryClient();
+  const { mutate: login } = useLogin();
+
+  const router = useRouter();
+
   const onSubmit = (data: LoginFormValues) => {
-    console.log("로그인 데이터:", data);
+    login(
+      { loginId: data.email, password: data.password },
+      {
+        onSuccess: async () => {
+          // 이메일 기억하기
+          if (data.rememberEmail) {
+            localStorage.setItem("rememberedEmail", data.email);
+          } else {
+            localStorage.removeItem("rememberedEmail");
+          }
 
-    if (data.email !== "test" || data.password !== "1234") {
-      setLoginError("이메일 또는 비밀번호를 잘못 입력하셨습니다.");
-      return;
-    }
+          await queryClient.invalidateQueries({
+            queryKey: ["auth"],
+          });
 
-    setLoginError("");
-
-    // 이메일 기억하기
-    if (data.rememberEmail) {
-      localStorage.setItem("rememberedEmail", data.email);
-    } else {
-      localStorage.removeItem("rememberedEmail");
-    }
-
-    alert("로그인 성공!");
+          router.refresh();
+        },
+        onError: error => {
+          setLoginError("이메일 또는 비밀번호를 잘못 입력하셨습니다.");
+        },
+      }
+    );
   };
 
   useEffect(() => {
@@ -78,13 +91,13 @@ export default function LoginForm() {
         </Button>
 
         <div className="text-text-secondary flex items-center justify-center text-sm">
-          <Link href="/find-id" className="hover:text-main">
+          {/* <Link href="/find-id" className="hover:text-main">
             이메일 찾기
-          </Link>
+          </Link> */}
 
           <Link href="/find-password" className="hover:text-main relative flex items-center">
-            <span className="before:bg-text-secondary before:mx-4 before:block before:h-4 before:w-px before:content-['']" />
-            비밀번호 찾기
+            {/* <span className="before:bg-text-secondary before:mx-4 before:block before:h-4 before:w-px before:content-['']" /> */}
+            비밀번호 찾기/재설정
             <span className="after:bg-text-secondary after:mx-4 after:block after:h-4 after:w-px after:content-['']" />
           </Link>
 

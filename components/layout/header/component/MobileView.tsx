@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -6,11 +8,21 @@ import { NavItems } from "../data";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { RiMenu3Line, RiNotification3Line, RiCloseLine } from "@remixicon/react";
+import { useLogout } from "@/hooks/useLogout";
+import Link from "next/link";
 
-export const MobileView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
+export const MobileView = ({
+  isLoggedIn,
+  userName,
+}: {
+  isLoggedIn: boolean;
+  userName?: string;
+}) => {
   const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+
+  const { mutate: logout } = useLogout();
 
   useEffect(() => {
     if (!open) return;
@@ -26,9 +38,12 @@ export const MobileView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   return (
     <header className="sticky top-0 z-100 border-b border-b-gray-200 bg-white">
       <div className="wrapper relative">
-        <h1 className="relative m-auto h-12.5 w-20">
-          <Image src={"/image/icon/logo.svg"} alt="" fill style={{ objectFit: "contain" }} />
-        </h1>
+        <Link href={"/"}>
+          <h1 className="relative m-auto h-12.5 w-20">
+            <Image src={"/image/icon/logo.svg"} alt="" fill style={{ objectFit: "contain" }} />
+          </h1>
+        </Link>
+
         <button className="absolute top-3 right-3" onClick={() => setOpen(true)}>
           <RiMenu3Line />
         </button>
@@ -48,7 +63,10 @@ export const MobileView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
       >
         <div className="relative h-12.5">
           {isLoggedIn && (
-            <button className="absolute top-3.5 right-11" onClick={() => router.push("")}>
+            <button
+              className="absolute top-3.5 right-11"
+              onClick={() => router.push("/mypage/notifications")}
+            >
               <span className="relative">
                 <RiNotification3Line size={20} />
                 <span className="bg-main absolute top-0 right-0 h-2 w-2 rounded-full" />
@@ -70,7 +88,7 @@ export const MobileView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             <div className="bg-main-100 rounded-md p-3">
               환영합니다 :)
               <br />
-              <span className="text-md font-bold">피카츄</span> 님
+              <span className="text-md font-bold">{userName}</span> 님
             </div>
           )}
 
@@ -105,7 +123,7 @@ export const MobileView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                 width="sm"
                 height="md"
                 fontSize="md"
-                onClick={() => router.push("/")}
+                onClick={() => router.push("/mypage")}
               >
                 마이페이지
               </Button>
@@ -114,7 +132,7 @@ export const MobileView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                 width="sm"
                 height="md"
                 fontSize="md"
-                onClick={() => router.push("/")}
+                onClick={() => logout()}
               >
                 로그아웃
               </Button>
@@ -126,7 +144,7 @@ export const MobileView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
               width="sm"
               height="md"
               fontSize="md"
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/login")}
             >
               로그인
             </Button>

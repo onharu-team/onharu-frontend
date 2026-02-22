@@ -17,6 +17,7 @@ type DocumentUploadFieldProps = {
   watch?: UseFormWatch<SignupFormValues>;
   onFilesChange?: (files: File[]) => void;
   initialFiles?: InitialFile[];
+  maxNum?: number;
 };
 
 export default function DocumentUploadField({
@@ -25,28 +26,31 @@ export default function DocumentUploadField({
   watch,
   onFilesChange,
   initialFiles = [],
+  maxNum = 10,
 }: DocumentUploadFieldProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [customError, setCustomError] = useState<string>("");
   const [existingFiles, setExistingFiles] = useState<InitialFile[]>(initialFiles);
 
-  const MAX_NUM = 10;
-
   const watchedFiles = watch?.("document") || [];
   const displayFiles = watchedFiles.length
-    ? Array.from(watchedFiles).slice(0, MAX_NUM)
+    ? Array.from(watchedFiles).slice(0, maxNum)
     : [...existingFiles.map((f): InitialFile | File => f), ...files];
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
 
-    const selectedFiles = Array.from(e.target.files);
+    const selectedFiles = Array.from(e.target.files).map(file => {
+      const trimmedName = file.name.replace(/\s+/g, "");
+      return new File([file], trimmedName, { type: file.type });
+    });
+
     const totalCount = existingFiles.length + files.length + selectedFiles.length;
 
     let newFiles: File[];
-    if (totalCount > MAX_NUM) {
-      setCustomError("최대 10장까지만 업로드 가능합니다.");
-      const allowed = MAX_NUM - existingFiles.length - files.length;
+    if (totalCount > maxNum) {
+      setCustomError(`최대 ${maxNum}장까지만 업로드 가능합니다.`);
+      const allowed = maxNum - existingFiles.length - files.length;
       newFiles = [...files, ...selectedFiles.slice(0, allowed)];
     } else {
       newFiles = [...files, ...selectedFiles];

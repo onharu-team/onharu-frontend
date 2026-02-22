@@ -28,6 +28,10 @@ type EmailAuthFieldProps<T extends FieldValues> = {
   codeName: Path<T>;
   onVerifiedChange: (verified: boolean) => void;
   onCodeSentChange: (sent: boolean) => void;
+  isVerified: boolean;
+  setIsVerified: (v: boolean) => void;
+  isCodeSent: boolean;
+  setIsCodeSent: (v: boolean) => void;
 };
 
 export default function EmailAuthField<T extends FieldValues>({
@@ -41,9 +45,11 @@ export default function EmailAuthField<T extends FieldValues>({
   codeName,
   onVerifiedChange,
   onCodeSentChange,
+  isVerified,
+  setIsVerified,
+  isCodeSent,
+  setIsCodeSent,
 }: EmailAuthFieldProps<T>) {
-  const [isVerified, setIsVerified] = useState(false);
-  const [isCodeSent, setIsCodeSent] = useState(false);
   const [isResendMode, setIsResendMode] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
 
@@ -136,7 +142,7 @@ export default function EmailAuthField<T extends FieldValues>({
               },
             })}
             error={get(errors, emailName) as FieldError | undefined}
-            disabled={isVerified}
+            disabled={isCodeSent}
           />
         </div>
 
@@ -150,7 +156,7 @@ export default function EmailAuthField<T extends FieldValues>({
             onClick={handleSendCode}
             disabled={isVerified}
           >
-            {isVerified ? "인증 완료" : isResendMode ? "재전송" : "인증번호 전송"}
+            {isVerified ? "인증 완료" : isCodeSent && isResendMode ? "재전송" : "인증번호 전송"}
           </Button>
         </div>
       </div>

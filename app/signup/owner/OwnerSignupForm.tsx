@@ -6,11 +6,21 @@ import { Button } from "@/components/ui/Button";
 import { SignupFormValues } from "@/app/signup/types";
 import TermsField from "../components/fields/TermsField";
 import BusinessNumberField from "../components/fields/BusinessNumberField";
-import EmailAuthField from "@/components/feature/EmailAuthField";
-import { FormField } from "@/components/form-fields/FormField";
-import { FIELD_CONFIG } from "@/components/form-fields/fieldConfig";
+import { OwnerSignupFields } from "./components/OwnerSignupFields";
+import { SignupSuccessModal } from "../components/SignupSuccessModal";
+import { useRouter } from "next/navigation";
+import { useSignupOwner } from "@/hooks/useSignupOwner";
+import { Toast } from "@/components/feature/toast/Toast";
 
 export default function OwnerSignupForm() {
+  const [isCodeSent, setIsCodeSent] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const { mutate: signupMutate, isPending: isSignupPending } = useSignupOwner();
+
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -20,11 +30,6 @@ export default function OwnerSignupForm() {
     trigger,
     clearErrors,
   } = useForm<SignupFormValues>({ mode: "onSubmit" });
-
-  const [isCodeSent, setIsCodeSent] = useState(false);
-  const [isEmailVerified, setIsEmailVerified] = useState(false);
-
-  const passwordValue = watch("password");
 
   const onSubmit = (data: SignupFormValues) => {
     if (!isCodeSent) {
@@ -37,68 +42,68 @@ export default function OwnerSignupForm() {
       return;
     }
 
-    console.log("회원가입 데이터:", data);
+    signupMutate(
+      { formData: data },
+      {
+        onSuccess: () => {
+          setIsOpenModal(true);
+        },
+        onError: error => {
+          if (error?.status === 409) {
+            setIsEmailVerified(false);
+            setIsCodeSent(false);
+            clearErrors(["authCode"]);
+            setError("email", { type: "manual", message: "이미 등록된 이메일입니다." });
+          } else {
+            Toast("error", "회원가입에 실패했습니다.", "잠시 후 다시 시도해주세요.");
+          }
+        },
+      }
+    );
+  };
+
+  const handleCloseModal = () => {
+    setIsOpenModal(false);
+    router.push("/login");
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
-      {/* 이메일 */}
-      <EmailAuthField<SignupFormValues>
-        register={register}
-        errors={errors}
-        setError={setError}
-        clearErrors={clearErrors}
-        trigger={trigger}
-        watch={watch}
-        emailName="email"
-        codeName="authCode"
-        onVerifiedChange={setIsEmailVerified}
-        onCodeSentChange={setIsCodeSent}
-      />
+    <div>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <OwnerSignupFields
+          register={register}
+          errors={errors}
+          watch={watch}
+          trigger={trigger}
+          setError={setError}
+          clearErrors={clearErrors}
+          isCodeSent={isCodeSent}
+          setIsCodeSent={setIsCodeSent}
+          isEmailVerified={isEmailVerified}
+          setIsEmailVerified={setIsEmailVerified}
+        />
 
-      {/* 비밀번호 */}
-      <FormField<SignupFormValues>
-        name="password"
-        config={FIELD_CONFIG.password}
-        register={register}
-        errors={errors}
-      />
+        {/* 사업자등록번호 */}
+        <BusinessNumberField register={register} errors={errors} trigger={trigger} />
 
-      {/* 비밀번호 확인 */}
-      <FormField<SignupFormValues>
-        name="passwordConfirm"
-        config={FIELD_CONFIG.passwordConfirm(passwordValue)}
-        register={register}
-        errors={errors}
-      />
+        {/* 이용 약관 */}
+        <TermsField register={register} errors={errors} />
 
-      {/* 매장명 */}
-      <FormField<SignupFormValues>
-        name="storeName"
-        config={FIELD_CONFIG.storeName}
-        register={register}
-        errors={errors}
-      />
+        <div className="mt-2.5 sm:mt-7.5">
+          <Button
+            type="submit"
+            varient="default"
+            width="lg"
+            height="md"
+            fontSize="md"
+            disabled={isSignupPending}
+          >
+            회원가입
+          </Button>
+        </div>
+      </form>
 
-      {/* 연락처 */}
-      <FormField<SignupFormValues>
-        name="phone"
-        config={FIELD_CONFIG.phone}
-        register={register}
-        errors={errors}
-      />
-
-      {/* 사업자등록번호 */}
-      <BusinessNumberField register={register} errors={errors} trigger={trigger} />
-
-      {/* 이용 약관 */}
-      <TermsField register={register} errors={errors} />
-
-      <div className="mt-2.5 sm:mt-7.5">
-        <Button type="submit" varient="default" width="lg" height="md" fontSize="md">
-          회원가입
-        </Button>
-      </div>
-    </form>
+      <SignupSuccessModal isOpen={isOpenModal} onClose={handleCloseModal} />
+    </div>
   );
 }

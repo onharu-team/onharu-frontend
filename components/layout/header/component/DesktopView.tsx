@@ -9,10 +9,13 @@ import { NavItems } from "../data";
 import { Alert } from "./Alert";
 import { motion, LayoutGroup } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useLogout } from "@/hooks/useLogout";
 
 export const DesktopView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const router = useRouter();
   const pathname = usePathname();
+
+  const { mutate: logout } = useLogout();
 
   return (
     <header className="max-h-20 border border-b-gray-200 bg-white">
@@ -67,7 +70,7 @@ export const DesktopView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                 width="sm"
                 height="md"
                 fontSize="md"
-                onClick={() => router.push("/")}
+                onClick={() => router.push("/mypage")}
               >
                 마이페이지
               </Button>
@@ -76,7 +79,7 @@ export const DesktopView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                 width="sm"
                 height="md"
                 fontSize="md"
-                onClick={() => router.push("/")}
+                onClick={() => logout()}
               >
                 로그아웃
               </Button>
@@ -88,7 +91,7 @@ export const DesktopView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
               width="sm"
               height="md"
               fontSize="md"
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/login")}
             >
               로그인
             </Button>

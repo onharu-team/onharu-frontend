@@ -14,14 +14,7 @@ export const Alert = ({
   const router = useRouter();
   return (
     <>
-      <button className="absolute top-3.5 right-11" onClick={() => router.push("")}>
-        <span className="relative">
-          <RiNotification3Line size={20} />
-          <span className="bg-main absolute top-0 right-0 h-2 w-2 rounded-full" />
-        </span>
-      </button>
-
-      <button className={buttonClass} onClick={() => router.push("")}>
+      <button className={buttonClass} onClick={() => router.push("/mypage/notifications")}>
         <span className="relative">
           <RiNotification3Line size={iconSize} />
           {/* 아래 span은 새로운 알림이 있을 경우 조건부 노출되도록 수정해야합니다. */}

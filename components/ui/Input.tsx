@@ -67,6 +67,7 @@ export default function Input({
             ? "text-text-secondary bg-[#EEEEEE]"
             : "hover:border-main focus:border-main text-text active:border-main bg-white focus:border-2"
         )}
+        autoComplete="off"
       />
 
       {error && hasError && (

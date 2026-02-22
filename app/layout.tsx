@@ -32,10 +32,12 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`${pretendard.variable} ${gmarketsans.variable}`}>
       <body className={`${pretendard.variable} ${gmarketsans.variable}`}>
-        <Header />
-        <ToastContainerCustom />
-        <Providers>{children}</Providers>
-        <Footer />
+        <Providers>
+          <Header />
+          <ToastContainerCustom />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

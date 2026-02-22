@@ -15,7 +15,7 @@ export const NavItems = [
   },
   {
     id: 3,
-    pathname: "",
+    pathname: "/chat",
     title: "채팅",
     requireAuth: true,
   },

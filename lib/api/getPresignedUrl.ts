@@ -1,4 +1,6 @@
-export interface PresignedUrlResponse {
+import { apiClient } from "./clientApiClient";
+
+interface PresignedUrlResponse {
   success: boolean;
   data: {
     presignedUrl: string;
@@ -12,11 +14,5 @@ export const getPresignedUrl = async (
 ): Promise<PresignedUrlResponse> => {
   const params = new URLSearchParams({ fileName, contentType });
 
-  const res = await fetch(`/api/upload?${params.toString()}`);
-
-  const data = await res.json();
-
-  if (!res.ok) throw new Error("Presigned URL 발급 실패");
-
-  return data;
+  return apiClient.get<PresignedUrlResponse>(`/upload?${params.toString()}`);
 };

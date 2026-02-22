@@ -1,13 +1,15 @@
 "use client";
 
 import { SignupFormValues } from "@/app/signup/types";
-import { signupChild, SignupError, SignupChildResponse } from "@/lib/api/signup";
+import { signupChild } from "@/lib/api/auth";
+import { SignupChildResponse } from "@/lib/api/types/auth";
+import { ApiError } from "@/lib/api/types/common";
 import { useMutation } from "@tanstack/react-query";
 
 export const useSignupChild = () => {
   return useMutation<
     SignupChildResponse,
-    SignupError,
+    ApiError,
     { formData: SignupFormValues; documentUrl: string }
   >({
     mutationFn: async ({ formData, documentUrl }) => {

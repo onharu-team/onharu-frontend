@@ -1,28 +1,10 @@
-import { NextResponse } from "next/server";
+import { serverApiClient } from "@/lib/api/serverApiClient";
+import { handleApiResult } from "@/lib/api/handleApiResult";
 
 export async function POST(request: Request) {
-  try {
-    const body = await request.json();
+  const body = await request.json();
 
-    const res = await fetch(`${process.env.API_BASE_URL}/api/users/signup/owner`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
+  const result = await serverApiClient.post("/api/users/signup/owner", body);
 
-    const data = await res.json();
-
-    if (!res.ok) {
-      return NextResponse.json(
-        { message: data.message || "회원가입 실패" },
-        { status: res.status }
-      );
-    }
-
-    return NextResponse.json(data);
-  } catch (error) {
-    return NextResponse.json({ message: "서버 에러 발생" }, { status: 500 });
-  }
+  return handleApiResult(result);
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { getCurrentPosition } from "@/components/feature/map/utils/getCurrentPositin";

@@ -1,3 +1,5 @@
+"use client";
+
 import { StoreSearch } from "./StoreSearch";
 import { Navigation } from "@/components/feature/category/Navigation";
 import { CharityMain } from "@/types/store/type";

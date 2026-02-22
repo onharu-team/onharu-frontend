@@ -1,5 +1,6 @@
+"use client";
+
 import Image from "next/image";
-import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { CategoryData } from "./data";
 import clsx from "clsx";

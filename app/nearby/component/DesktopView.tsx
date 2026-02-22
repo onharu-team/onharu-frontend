@@ -1,3 +1,5 @@
+"use client";
+
 import { SideMenu } from "./SideMenu";
 import { MyAddress } from "./MyAddress";
 import { StoreSearch } from "./StoreSearch";

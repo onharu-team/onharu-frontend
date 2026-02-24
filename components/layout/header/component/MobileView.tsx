@@ -36,7 +36,7 @@ export const MobileView = ({
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-100 border-b border-b-gray-200 bg-white">
+    <header className="fixed top-0 z-100 w-full border-b border-b-gray-200 bg-white">
       <div className="wrapper relative">
         <Link href={"/"}>
           <h1 className="relative m-auto h-12.5 w-20">

@@ -15,12 +15,12 @@ export const FindStore = () => {
               key={items.id}
               className="group flex flex-col items-center gap-2"
             >
-              <div className="bg-sub-sub-100 mobile:w-[103px] mobile:p-1 flex aspect-square w-[58px] items-center justify-center rounded-md p-2">
+              <div className="bg-sub-sub-100 mobile:w-[103px] flex aspect-square w-[58px] items-center justify-center rounded-md">
                 <Image
                   src={items.icon}
                   alt={`${items.name} 카테고리로 검색하기`}
-                  width={items.iconSize.width}
-                  height={items.iconSize.height}
+                  width={103}
+                  height={103}
                   className="duration-200 group-hover:scale-95"
                 />
               </div>

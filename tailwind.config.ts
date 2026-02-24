@@ -23,7 +23,7 @@ const config: Config = {
       spacing: {
         "section-lg-top": "6.25rem",
         "section-lg-bottom": "9.375rem",
-        "section-sm-top": "2.5rem",
+        "section-sm-top": "5.5rem",
         "section-sm-bottom": "3.75rem",
       },
       fontSize: {

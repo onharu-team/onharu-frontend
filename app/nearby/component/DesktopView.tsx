@@ -70,7 +70,7 @@ export function DesktopView({
 
       <div
         className={cn(
-          "absolute top-5 left-[455px] z-50 min-w-[643px]",
+          "absolute top-5 left-[455px] z-50 min-w-[670px]",
           !isReady && "-z-10 opacity-0",
           isCategoryQuery && "left-[414px] min-w-100",
           isSidemenuQuery && "left-[350px] min-w-80"

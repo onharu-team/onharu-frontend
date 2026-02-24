@@ -7,7 +7,7 @@ export const Banner = () => {
   return (
     <div
       className={cn(
-        "desktopSmall:h-200 tablet:h-160 mobile:h-140 relative h-85 w-full overflow-hidden"
+        "desktopSmall:h-200 tablet:h-160 mobile:h-140 mobile:mt-0 relative mt-[50px] h-85 w-full overflow-hidden"
       )}
     >
       <Image

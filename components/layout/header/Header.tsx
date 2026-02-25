@@ -7,14 +7,16 @@ import { useAuth } from "@/hooks/useAuth";
 export const Header = () => {
   const { data: user } = useAuth();
 
+  console.log(user);
+
   const isLoggedIn = !!user?.success;
 
   return (
     <>
-      <div className="hidden md:block">
+      <div className="tablet:block hidden">
         <DesktopView isLoggedIn={isLoggedIn} />
       </div>
-      <div className="block md:hidden">
+      <div className="tablet:hidden block">
         <MobileView isLoggedIn={isLoggedIn} userName={user?.data?.name} />
       </div>
     </>

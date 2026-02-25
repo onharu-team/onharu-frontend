@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
-import { CardItemProps } from "../data/type";
+import { Reviews } from "@/types/reviews/type";
 
-export const MarqueeCard = ({ storename, contents, date }: CardItemProps) => {
+export const MarqueeCard = (data: Reviews) => {
   return (
     <div
       className={cn(
@@ -11,10 +11,10 @@ export const MarqueeCard = ({ storename, contents, date }: CardItemProps) => {
       <div className="text-text flex flex-row items-center gap-2">
         <div className="flex flex-col">
           <p className="md:text-md text-base">
-            <span className="text-md font-bold md:text-xl">{storename}</span> 사장님께
+            <span className="text-md font-bold md:text-xl">{data.name}</span> 사장님께
           </p>
-          <p className="mt-2 text-sm md:text-base lg:mt-4">{contents}</p>
-          <p className="mt-4 text-right text-sm md:text-base lg:mt-7">{date}</p>
+          <p className="mt-2 text-sm md:text-base lg:mt-4">{data.content}</p>
+          <p className="mt-4 text-right text-sm md:text-base lg:mt-7">{data.createAt}</p>
         </div>
       </div>
     </div>

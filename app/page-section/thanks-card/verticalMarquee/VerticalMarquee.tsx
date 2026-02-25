@@ -1,12 +1,41 @@
 "use client";
+import { Reviews } from "@/types/reviews/type";
 import { Marquee } from "@/components/ui/marquee";
 import { MarqueeCard } from "./MarqueeCard";
-import { CardItems } from "../data/data";
+import { MarqueeSkeleton } from "./MarqueeSkeleton";
 
-const firstRow = CardItems.slice(0, CardItems.length / 2);
-const secondRow = CardItems.slice(CardItems.length / 2);
+export const VerticalMarquee = ({
+  data,
+  isLoading,
+  error,
+}: {
+  data: Reviews[];
+  isLoading: boolean;
+  error: Error | null;
+}) => {
+  if (isLoading) {
+    return (
+      <div className="relative flex h-82 w-full flex-row items-center justify-center overflow-hidden lg:h-[713px]">
+        <Marquee pauseOnHover vertical className="flex-1 [--duration:20s]">
+          {Array.from({ length: 10 }, (_, i) => (
+            <MarqueeSkeleton key={i} />
+          ))}
+        </Marquee>
+        <Marquee reverse pauseOnHover vertical className="flex-1 [--duration:20s]">
+          {Array.from({ length: 10 }, (_, i) => (
+            <MarqueeSkeleton key={i} />
+          ))}
+        </Marquee>
+      </div>
+    );
+  }
 
-export const VerticalMarquee = () => {
+  if (error) {
+    return <p className="font-gmarketsans text-3xl font-bold">데이터를 불러올 수 없습니다.</p>;
+  }
+
+  const firstRow = data.slice(0, data.length / 2);
+  const secondRow = data.slice(data.length / 2);
   return (
     <div className="relative flex h-82 w-full flex-row items-center justify-center overflow-hidden lg:h-[713px]">
       <Marquee pauseOnHover vertical className="flex-1 [--duration:20s]">

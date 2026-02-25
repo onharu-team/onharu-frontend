@@ -1,6 +1,15 @@
 import { apiClient } from "./clientApiClient";
-import { ChildData, LoginReq, OwnerData, SignupReq, SignupRes, UserMeReq } from "./types/auth";
-import { SuccessResponse } from "./types/common";
+import {
+  LoginRequest,
+  LoginResponse,
+  LogoutResponse,
+  MeResponse,
+  SignupChildRequest,
+  SignupChildResponse,
+  SignupOwnerRequest,
+  SignupOwnerResponse,
+} from "./types/auth";
+import { ChildData, OwnerData } from "./types/auth";
 
 export async function login(body: LoginReq): Promise<SuccessResponse<null>> {
   return apiClient.post<SuccessResponse<null>>("/users/login", body);
@@ -19,9 +28,14 @@ export const signupChild = (body: SignupReq & ChildData): Promise<SuccessRespons
   );
 };
 
-export const signupOwner = (body: SignupReq & OwnerData): Promise<SuccessResponse<SignupRes>> => {
-  return apiClient.post<SuccessResponse<SignupRes>, SignupReq & OwnerData>(
-    "/users/signup/owner",
-    body
-  );
+export const signupOwner = (body: SignupOwnerRequest): Promise<SignupOwnerResponse> => {
+  return apiClient.post<SignupOwnerResponse, SignupOwnerRequest>("/users/signup/owner", body);
+};
+
+export const getChildProfile = (): Promise<ChildData> => {
+  return apiClient.get<ChildData>("/users/profile/child");
+};
+
+export const getOwnerProfile = (): Promise<OwnerData> => {
+  return apiClient.get<OwnerData>("/users/profile/owner");
 };

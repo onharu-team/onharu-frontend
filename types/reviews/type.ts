@@ -5,4 +5,5 @@ export interface Reviews {
   reservationId: number;
   name: string;
   content: string;
+  createAt: string;
 }

@@ -1,12 +1,14 @@
 "use client";
 
-import { User } from "../types";
 import { Button } from "@/components/ui/Button";
+import { ChildData, OwnerData } from "@/lib/api/types/auth";
 import { RiEditBoxLine } from "@remixicon/react";
 import { useRouter } from "next/navigation";
 
-export default function UserProfileCard({ user }: { user: User }) {
+export default function UserProfileCard({ user }: { user: ChildData | OwnerData }) {
   const router = useRouter();
+
+  const displayName = user.userType === "CHILD" ? user.nickname : user.name;
 
   return (
     <div className="bg-secondary flex flex-col justify-between rounded-[10px] p-5 md:min-w-75 lg:p-7">
@@ -14,11 +16,11 @@ export default function UserProfileCard({ user }: { user: User }) {
         <div className="flex items-center justify-between">
           <p>반갑습니다 :{")"}</p>
           <span className="bg-main-200 rounded-full px-5 py-2 text-sm">
-            {user.role === "owner" ? "나눔" : "아동"}회원
+            {user.userType === "OWNER" ? "나눔" : "아동"}회원
           </span>
         </div>
         <p>
-          <span className="text-main">{user.name}</span>님
+          <span className="text-main">{displayName}</span>님
         </p>
       </div>
 

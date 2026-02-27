@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/Button";
 import { useEffect } from "react";
 import { FormField } from "@/components/form-fields/FormField";
 import { FIELD_CONFIG } from "@/components/form-fields/fieldConfig";
-
-export type UserRole = "owner" | "child";
+import { UserRole } from "@/lib/api/types/auth";
 
 export interface EditForm {
+  loginId: string;
   name: string;
   nickname?: string;
   phone: string;
@@ -18,14 +18,14 @@ export interface EditForm {
 
 interface EditFormProps {
   defaultValues: EditForm;
-  userRole: UserRole;
+  userType: UserRole;
   onSubmit: SubmitHandler<EditForm>;
   serverNicknameError?: string;
 }
 
 export default function AccountEditForm({
   defaultValues,
-  userRole,
+  userType,
   onSubmit,
   serverNicknameError,
 }: EditFormProps) {
@@ -45,7 +45,7 @@ export default function AccountEditForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-7.5 flex flex-col gap-2 sm:mb-12.5 sm:gap-5">
-        <Input label="이메일" id="email" placeholder="test@test.com" disabled />
+        <Input label="이메일" id="email" placeholder={defaultValues.loginId} disabled />
 
         <FormField<EditForm>
           name="name"
@@ -54,7 +54,7 @@ export default function AccountEditForm({
           errors={errors}
         />
 
-        {userRole === "child" && (
+        {userType === "CHILD" && (
           <FormField<EditForm>
             name="nickname"
             config={FIELD_CONFIG.nickname}
@@ -70,7 +70,7 @@ export default function AccountEditForm({
           errors={errors}
         />
 
-        {userRole === "owner" && (
+        {userType === "OWNER" && (
           <Input
             label="사업자등록번호"
             id="businessNumber"

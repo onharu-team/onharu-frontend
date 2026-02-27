@@ -6,13 +6,14 @@ import { ownerMenu, childMenu } from "../menuConfig";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import { UserRole } from "@/lib/api/types/auth";
 
-export default function Sidebar({ role }: { role: "owner" | "child" }) {
+export default function Sidebar({ role }: { role: UserRole }) {
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
-  const menu = role === "owner" ? ownerMenu : childMenu;
+  const menu = role === "OWNER" ? ownerMenu : childMenu;
   const pathname = usePathname();
 
   // 모바일 메뉴 외부 클릭 시 닫기

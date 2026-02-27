@@ -1,11 +1,11 @@
-import { User } from "../types";
+import { OwnerData } from "@/lib/api/types/auth";
 import OwnerGuideCard from "./OwnerGuideCard";
 import OwnerLevelCard from "./OwnerLevelCard";
 import OwnerReservationCard from "./OwnerReservationCard";
 import UserProfileCard from "./UserProfileCard";
 import { ownerActive } from "../data/mockData";
 
-export function OwnerMyPage({ user }: { user: User & { role: "owner" } }) {
+export function OwnerMyPage({ user }: { user: OwnerData }) {
   const { hasStore, shareCount, reservations } = ownerActive;
 
   return (

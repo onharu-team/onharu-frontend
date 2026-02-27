@@ -7,6 +7,10 @@ import useModal from "@/hooks/ui/useModal";
 import FormPageLayout from "../components/FormPageLayout";
 import { useState } from "react";
 import { RiAlertFill } from "@remixicon/react";
+import { useValidatePassword } from "@/hooks/useValidatePw";
+import { useWithdraw } from "@/hooks/useWithdraw";
+import { useLogout } from "@/hooks/useLogout";
+import { useAuthProfile } from "@/hooks/useAuth";
 
 interface PasswordConfirmForm {
   password: string;
@@ -16,6 +20,11 @@ export default function WithdrawFormPage() {
   const [serverError, setServerError] = useState("");
   const router = useRouter();
   const { open, handleOpenModal, handleCloseModal } = useModal();
+
+  const { data: profileData } = useAuthProfile();
+  const { mutate: validatePassword } = useValidatePassword();
+  const { mutate: withdraw } = useWithdraw();
+  const { mutate: logout } = useLogout();
 
   const {
     register,
@@ -27,19 +36,35 @@ export default function WithdrawFormPage() {
   const handleModalConfirm = () => {
     handleCloseModal();
     reset();
+    logout();
     router.push("/");
   };
 
-  const onSubmitPassword = async (data: PasswordConfirmForm) => {
+  const onSubmitPassword = (data: PasswordConfirmForm) => {
     setServerError("");
 
-    if (data.password === "1234") {
-      console.log("회원 탈퇴 요청");
+    validatePassword(
+      { password: data.password },
+      {
+        onSuccess: () => {
+          handleWithdrawConfirm();
+        },
+        onError: () => {
+          setServerError("비밀번호가 일치하지 않습니다.");
+        },
+      }
+    );
+  };
 
-      handleOpenModal();
-    } else {
-      setServerError("비밀번호가 일치하지 않습니다.");
-    }
+  const handleWithdrawConfirm = () => {
+    withdraw(undefined, {
+      onSuccess: () => {
+        handleOpenModal();
+      },
+      onError: () => {
+        setServerError("탈퇴 처리 중 오류가 발생했습니다.");
+      },
+    });
   };
 
   return (
@@ -57,7 +82,7 @@ export default function WithdrawFormPage() {
       modalMessage="회원탈퇴가 완료되었습니다."
       onModalConfirm={handleModalConfirm}
     >
-      <Input label="이메일" id="email" placeholder="test@test.com" disabled />
+      <Input label="이메일" id="email" placeholder={profileData?.loginId} disabled />
 
       <Input
         label="비밀번호"

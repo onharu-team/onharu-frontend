@@ -1,14 +1,4 @@
-import { Reservation, User } from "../types";
-
-export const ownerUser: User = {
-  name: "홍길동",
-  role: "owner",
-};
-
-export const childUser: User = {
-  name: "김철수",
-  role: "child",
-};
+import { Reservation } from "../types";
 
 /** Owner 시나리오 */
 // 가게 등록 전

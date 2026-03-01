@@ -14,5 +14,5 @@ export function handleApiResult<T>(result: ApiResult<T>) {
     );
   }
 
-  return NextResponse.json(result.data);
+  return NextResponse.json(result);
 }

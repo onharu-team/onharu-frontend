@@ -21,10 +21,8 @@ export default function LoginForm() {
   } = useForm<LoginFormValues>();
 
   const [loginError, setLoginError] = useState("");
-
   const queryClient = useQueryClient();
   const { mutate: login } = useLogin();
-
   const router = useRouter();
 
   const onSubmit = (data: LoginFormValues) => {
@@ -39,13 +37,11 @@ export default function LoginForm() {
             localStorage.removeItem("rememberedEmail");
           }
 
-          await queryClient.invalidateQueries({
-            queryKey: ["auth"],
-          });
+          await queryClient.invalidateQueries({ queryKey: ["auth"] });
 
           router.refresh();
         },
-        onError: error => {
+        onError: () => {
           setLoginError("이메일 또는 비밀번호를 잘못 입력하셨습니다.");
         },
       }
@@ -91,12 +87,7 @@ export default function LoginForm() {
         </Button>
 
         <div className="text-text-secondary flex items-center justify-center text-sm">
-          {/* <Link href="/find-id" className="hover:text-main">
-            이메일 찾기
-          </Link> */}
-
           <Link href="/find-password" className="hover:text-main relative flex items-center">
-            {/* <span className="before:bg-text-secondary before:mx-4 before:block before:h-4 before:w-px before:content-['']" /> */}
             비밀번호 찾기/재설정
             <span className="after:bg-text-secondary after:mx-4 after:block after:h-4 after:w-px after:content-['']" />
           </Link>

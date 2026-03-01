@@ -21,14 +21,6 @@ class ApiClient {
       throw { status: res.status, message: data.message ?? res.statusText };
     }
 
-    // 200이지만 서버 내부 에러 응답인 경우
-    if (typeof data.status === "number" && data.status < 0) {
-      throw {
-        status: data.status,
-        message: data.title || data.message || "알 수 없는 오류입니다.",
-      };
-    }
-
     return data as T;
   }
 

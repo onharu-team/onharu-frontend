@@ -1,6 +1,6 @@
 import "server-only";
 import { cookies } from "next/headers";
-import { ApiResult, ApiError } from "./types/common";
+import { ApiResult, ApiError, SuccessResponse } from "./types/common";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -83,7 +83,7 @@ export class ServerApiClient {
 
     return {
       success: true,
-      data: data as T,
+      data: (data as SuccessResponse<T>).data,
       headers: res.headers,
     };
   }

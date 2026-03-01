@@ -38,11 +38,11 @@ export const MobileView = ({
   return (
     <header className="fixed top-0 z-100 w-full border-b border-b-gray-200 bg-white">
       <div className="wrapper relative">
-        <Link href={"/"}>
-          <h1 className="relative m-auto h-12.5 w-20">
+        <h1 className="relative m-auto h-12.5 w-20">
+          <Link href={"/"}>
             <Image src={"/image/icon/logo.svg"} alt="" fill style={{ objectFit: "contain" }} />
-          </h1>
-        </Link>
+          </Link>
+        </h1>
 
         <button className="absolute top-3 right-3" onClick={() => setOpen(true)}>
           <RiMenu3Line />

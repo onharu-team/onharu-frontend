@@ -25,7 +25,6 @@ export type ApiResult<T> =
 export interface SuccessResponse<T> {
   success: true;
   data: T;
-  isAuthenticated?: boolean;
 }
 
 export interface ErrorResponse {

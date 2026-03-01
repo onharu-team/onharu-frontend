@@ -2,13 +2,13 @@
 
 import { SignupFormValues } from "@/app/signup/types";
 import { signupChild } from "@/lib/api/auth";
-import { ChildData, ImageInfo, SignupReq, SignupRes } from "@/lib/api/types/auth";
-import { ApiError, SuccessResponse } from "@/lib/api/types/common";
+import { ChildReq, ImageInfo, SignupReq, SignupRes } from "@/lib/api/types/auth";
+import { ApiError, ApiResponse } from "@/lib/api/types/common";
 import { useMutation } from "@tanstack/react-query";
 
 export const useSignupChild = () => {
   return useMutation<
-    SuccessResponse<SignupRes>,
+    ApiResponse<SignupRes>,
     ApiError,
     { formData: SignupFormValues; documentUrl: string }
   >({
@@ -21,7 +21,7 @@ export const useSignupChild = () => {
         },
       ];
 
-      const payload: SignupReq & ChildData = {
+      const payload: SignupReq & ChildReq = {
         loginId: formData.email,
         password: formData.password,
         passwordConfirm: formData.passwordConfirm,

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { serverApiClient } from "@/lib/api/serverApiClient";
-import { SuccessResponse } from "@/lib/api/types/common";
+import { ApiResponse } from "@/lib/api/types/common";
 import { UserMeReq } from "@/lib/api/types/auth";
 
 export async function GET() {
@@ -10,23 +10,30 @@ export async function GET() {
   const hasSession = cookieStore.has("JSESSIONID");
 
   if (!hasSession) {
-    return NextResponse.json({ success: false, isAuthenticated: false, data: null });
+    return NextResponse.json({
+      success: false,
+      data: null,
+    });
   }
 
-  const result = await serverApiClient.get<SuccessResponse<UserMeReq>>("/api/users/me");
+  const result = await serverApiClient.get<ApiResponse<UserMeReq>>("/api/users/me");
 
   if (!result.success) {
     return NextResponse.json({
       success: false,
-      isAuthenticated: false,
       data: null,
     });
   }
-  const { success, data } = result.data;
+
+  if ("status" in result.data && result.data.status === -500) {
+    throw NextResponse.json({
+      success: false,
+      data: null,
+    });
+  }
 
   return NextResponse.json({
-    success,
-    isAuthenticated: true,
-    data,
+    success: true,
+    data: result.data,
   });
 }

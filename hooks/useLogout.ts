@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { ApiError, SuccessResponse } from "@/lib/api/types/common";
+import { ApiError, ApiResponse } from "@/lib/api/types/common";
 import { logout } from "@/lib/api/auth";
 
 export const useLogout = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  return useMutation<SuccessResponse<null>, ApiError>({
+  return useMutation<ApiResponse<null>, ApiError>({
     mutationFn: logout,
     onSuccess: async () => {
-      queryClient.setQueryData(["auth"], null);
+      queryClient.clear();
 
       router.push("/");
       router.refresh();

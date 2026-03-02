@@ -8,6 +8,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { UserRole } from "@/lib/api/types/auth";
 import { ReservationStatus } from "@/lib/api/types/reservation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { childReservationCancel } from "@/lib/api/childrens";
+import { changeOwnerReservationStatus } from "@/lib/api/owners";
 
 interface Props {
   role: UserRole;
@@ -42,13 +45,62 @@ export default function ReservationActionButtons({
 
   const { open, handleOpenModal, handleCloseModal } = useModal();
 
+  const queryClient = useQueryClient();
+
+  const cancelChildMutation = useMutation({
+    mutationFn: ({ id, reason }: { id: string; reason: string }) =>
+      childReservationCancel(id, reason),
+  });
+
+  const approveMutation = useMutation({
+    mutationFn: (id: string) => changeOwnerReservationStatus(id, "approve"),
+  });
+
+  const rejectMutation = useMutation({
+    mutationFn: ({ id, reason }: { id: string; reason: string }) =>
+      changeOwnerReservationStatus(id, "reject", { rejectReason: reason }),
+  });
+
+  const completeMutation = useMutation({
+    mutationFn: (id: string) => changeOwnerReservationStatus(id, "complete"),
+  });
+
   // 예약 상태 업데이트
   const updateReservationStatus = async (newStatus: ReservationStatus, reason?: string) => {
+    console.log(reservationId, newStatus, reason);
+
     try {
-      console.log(reservationId, newStatus, reason);
+      const id = String(reservationId);
+
+      // 아동
+      if (role === "CHILD") {
+        if (newStatus === "CANCELED" && reason) {
+          await cancelChildMutation.mutateAsync({ id, reason });
+        }
+      }
+
+      // 가게
+      if (role === "OWNER") {
+        if (newStatus === "CONFIRMED") {
+          await approveMutation.mutateAsync(id);
+        }
+
+        if (newStatus === "CANCELED" && reason) {
+          await rejectMutation.mutateAsync({ id, reason });
+        }
+
+        if (newStatus === "COMPLETED") {
+          await completeMutation.mutateAsync(id);
+        }
+      }
+
+      await queryClient.invalidateQueries({
+        queryKey: ["reservations"],
+      });
 
       handleCloseModal();
-      router.refresh();
+
+      // router.refresh();
     } catch (err) {
       console.error(err);
     }

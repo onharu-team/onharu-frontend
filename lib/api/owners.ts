@@ -18,3 +18,17 @@ export const getOwnerReservations = ({
     `/owners/stores/${storeId}/reservations?${query}`
   );
 };
+
+type OwnerReservationAction = "approve" | "reject" | "complete";
+
+export const changeOwnerReservationStatus = (
+  reservationId: string,
+  action: OwnerReservationAction,
+  body?: { rejectReason: string }
+): Promise<ApiResponse<null>> => {
+  if (action === "reject") {
+    return apiClient.post<ApiResponse<null>>(`/owners/reservations/${reservationId}/reject`, body);
+  }
+
+  return apiClient.post<ApiResponse<null>>(`/owners/reservations/${reservationId}/${action}`);
+};

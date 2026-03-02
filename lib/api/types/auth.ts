@@ -22,6 +22,7 @@ export interface OwnerData {
   phone: string;
   levelName?: string;
   businessNumber: string;
+  stores: number[];
 }
 
 // 로그인

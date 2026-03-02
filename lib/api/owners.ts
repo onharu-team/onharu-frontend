@@ -1,10 +1,11 @@
 import { apiClient } from "./clientApiClient";
-import { ReservationsData, GetReservationsParams, ChildReservation } from "./types/reservation";
+import { ReservationsData, OwnerReservation, OwnerReservationParams } from "./types/reservation";
 import { ApiResponse } from "./types/common";
 
-export const getChildReservations = (
-  params: GetReservationsParams
-): Promise<ApiResponse<ReservationsData<ChildReservation>>> => {
+export const getOwnerReservations = ({
+  storeId,
+  ...params
+}: OwnerReservationParams): Promise<ApiResponse<ReservationsData<OwnerReservation>>> => {
   const query = new URLSearchParams({
     pageNum: String(params.pageNum ?? 1),
     perPage: String(params.perPage ?? 4),
@@ -13,7 +14,7 @@ export const getChildReservations = (
     sortDirection: params.sortDirection ?? "desc",
   }).toString();
 
-  return apiClient.get<ApiResponse<ReservationsData<ChildReservation>>>(
-    `/childrens/reservations?${query}`
+  return apiClient.get<ApiResponse<ReservationsData<OwnerReservation>>>(
+    `/owners/stores/${storeId}/reservations?${query}`
   );
 };

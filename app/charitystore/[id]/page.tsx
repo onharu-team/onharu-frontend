@@ -59,27 +59,20 @@ export default function Detail() {
           </Heading>
           <div className="relative mt-5 h-[110px] md:mt-8 md:h-[340px]">
             <h3 className="sr-only">매장 내부, 음식 사진이 슬라이드 형태로 나열되어 있습니다.</h3>
-            {isSlide && <FramerSlide />}
+            {isSlide && <FramerSlide data={storedetail.images} />}
             {!isSlide && (
               <div className="flex h-full gap-3 md:gap-5">
-                <div className="relative flex-1">
-                  <Image
-                    src={"/image/page/test-image.png"}
-                    alt=""
-                    fill
-                    style={{ objectFit: "cover" }}
-                    className="pointer-events-none"
-                  />
-                </div>
-                <div className="relative flex-1">
-                  <Image
-                    src={"/image/page/test-image.png"}
-                    alt=""
-                    fill
-                    style={{ objectFit: "cover" }}
-                    className="pointer-events-none"
-                  />
-                </div>
+                {storedetail.images.map((item: string, idx: number) => (
+                  <div className="relative flex-1" key={idx}>
+                    <Image
+                      src={item || "/image/page/test-image.png"}
+                      alt=""
+                      fill
+                      style={{ objectFit: "cover" }}
+                      className="pointer-events-none"
+                    />
+                  </div>
+                ))}
               </div>
             )}
           </div>

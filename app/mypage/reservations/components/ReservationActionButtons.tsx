@@ -11,6 +11,7 @@ import { ReservationStatus } from "@/lib/api/types/reservation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { childReservationCancel } from "@/lib/api/childrens";
 import { changeOwnerReservationStatus } from "@/lib/api/owners";
+import { Toast } from "@/components/feature/toast/Toast";
 
 interface Props {
   role: UserRole;
@@ -33,6 +34,21 @@ function getCancelModalType(
   return "cancelOwner";
 }
 
+const ACTION_TOAST: Partial<Record<ReservationStatus, { title: string; description: string }>> = {
+  CONFIRMED: {
+    title: "예약 확정",
+    description: "예약이 확정되었습니다.",
+  },
+  COMPLETED: {
+    title: "나눔 완료",
+    description: "나눔이 완료 처리되었습니다.",
+  },
+  CANCELED: {
+    title: "예약 취소",
+    description: "예약이 취소되었습니다.",
+  },
+};
+
 export default function ReservationActionButtons({
   role,
   status,
@@ -47,6 +63,14 @@ export default function ReservationActionButtons({
 
   const queryClient = useQueryClient();
 
+  const isChild = role === "CHILD";
+  const isOwner = role === "OWNER";
+
+  const isWaiting = status === "WAITING";
+  const isConfirmed = status === "CONFIRMED";
+  const isCompleted = status === "COMPLETED";
+
+  // mutations
   const cancelChildMutation = useMutation({
     mutationFn: ({ id, reason }: { id: string; reason: string }) =>
       childReservationCancel(id, reason),
@@ -58,7 +82,7 @@ export default function ReservationActionButtons({
 
   const rejectMutation = useMutation({
     mutationFn: ({ id, reason }: { id: string; reason: string }) =>
-      changeOwnerReservationStatus(id, "reject", { rejectReason: reason }),
+      changeOwnerReservationStatus(id, "cancel", { cancelReason: reason }),
   });
 
   const completeMutation = useMutation({
@@ -67,20 +91,16 @@ export default function ReservationActionButtons({
 
   // 예약 상태 업데이트
   const updateReservationStatus = async (newStatus: ReservationStatus, reason?: string) => {
-    console.log(reservationId, newStatus, reason);
-
     try {
       const id = String(reservationId);
 
       // 아동
-      if (role === "CHILD") {
-        if (newStatus === "CANCELED" && reason) {
-          await cancelChildMutation.mutateAsync({ id, reason });
-        }
+      if (isChild && newStatus === "CANCELED" && reason) {
+        await cancelChildMutation.mutateAsync({ id, reason });
       }
 
       // 가게
-      if (role === "OWNER") {
+      if (isOwner) {
         if (newStatus === "CONFIRMED") {
           await approveMutation.mutateAsync(id);
         }
@@ -94,13 +114,17 @@ export default function ReservationActionButtons({
         }
       }
 
+      const toast = ACTION_TOAST[newStatus];
+
+      if (toast) {
+        Toast("info", toast.title, toast.description);
+      }
+
       await queryClient.invalidateQueries({
         queryKey: ["reservations"],
       });
 
       handleCloseModal();
-
-      // router.refresh();
     } catch (err) {
       console.error(err);
     }
@@ -123,7 +147,7 @@ export default function ReservationActionButtons({
 
   return (
     <>
-      {role === "CHILD" && status === "COMPLETED" && (
+      {isChild && isCompleted && (
         <Button
           varient="default"
           width="lg"
@@ -135,13 +159,13 @@ export default function ReservationActionButtons({
         </Button>
       )}
 
-      {role === "CHILD" && (status === "CONFIRMED" || status === "WAITING") && (
+      {isChild && (isConfirmed || isWaiting) && (
         <Button varient="dark" width="lg" height="sm" fontSize="sm" onClick={handleCancelClick}>
           예약 취소
         </Button>
       )}
 
-      {role === "OWNER" && status === "CONFIRMED" && (
+      {isOwner && isConfirmed && (
         <>
           <Button
             varient="default"
@@ -152,13 +176,14 @@ export default function ReservationActionButtons({
           >
             나눔 완료
           </Button>
+
           <Button varient="dark" width="lg" height="sm" fontSize="sm" onClick={handleCancelClick}>
             예약 취소
           </Button>
         </>
       )}
 
-      {role === "OWNER" && status === "WAITING" && (
+      {isOwner && isWaiting && (
         <>
           <Button
             varient="default"
@@ -169,6 +194,7 @@ export default function ReservationActionButtons({
           >
             예약 확정
           </Button>
+
           <Button varient="dark" width="lg" height="sm" fontSize="sm" onClick={handleCancelClick}>
             예약 취소
           </Button>

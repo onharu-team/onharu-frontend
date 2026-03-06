@@ -19,15 +19,15 @@ export const getOwnerReservations = ({
   );
 };
 
-type OwnerReservationAction = "approve" | "reject" | "complete";
+type OwnerReservationAction = "approve" | "cancel" | "complete";
 
 export const changeOwnerReservationStatus = (
   reservationId: string,
   action: OwnerReservationAction,
-  body?: { rejectReason: string }
+  body?: { cancelReason: string }
 ): Promise<ApiResponse<null>> => {
-  if (action === "reject") {
-    return apiClient.post<ApiResponse<null>>(`/owners/reservations/${reservationId}/reject`, body);
+  if (action === "cancel") {
+    return apiClient.post<ApiResponse<null>>(`/owners/reservations/${reservationId}/cancel`, body);
   }
 
   return apiClient.post<ApiResponse<null>>(`/owners/reservations/${reservationId}/${action}`);

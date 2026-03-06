@@ -7,7 +7,6 @@ const STATUS_UI: Record<ReservationStatus, { label: string; badge: string }> = {
   WAITING: { label: "예약 대기중", badge: "text-sub-sub-600 border-sub-sub-600" },
   COMPLETED: { label: "이용 완료", badge: "text-main border-main" },
   CANCELED: { label: "예약 취소", badge: "text-danger border-danger" },
-  REJECTED: { label: "", badge: "" },
 };
 
 interface Props {

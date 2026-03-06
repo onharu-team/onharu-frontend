@@ -3,8 +3,7 @@ export type ReservationStatus =
   | "WAITING" // 예약 대기중
   | "CONFIRMED" // 예약 확정
   | "CANCELED" // 예약 취소
-  | "COMPLETED" // 이용 완료
-  | "REJECTED"; // 예약 거절
+  | "COMPLETED"; // 이용 완료
 
 interface BaseReservationParams {
   pageNum: number;

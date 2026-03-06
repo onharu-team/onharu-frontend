@@ -10,7 +10,7 @@ export async function POST(
   const body = await request.json();
 
   const result = await serverApiClient.post(
-    `/api/owners/reservations/${reservationId}/reject`,
+    `/api/owners/reservations/${reservationId}/cancel`,
     body
   );
 

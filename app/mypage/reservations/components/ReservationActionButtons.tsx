@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/Button";
 import { CancelModalType } from "../types";
 import useModal from "@/hooks/ui/useModal";
 import ReservationModal from "./ReservationModal";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { UserRole } from "@/lib/api/types/auth";
 import { ReservationStatus } from "@/lib/api/types/reservation";
@@ -12,12 +11,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { childReservationCancel } from "@/lib/api/childrens";
 import { changeOwnerReservationStatus } from "@/lib/api/owners";
 import { Toast } from "@/components/feature/toast/Toast";
+import ReviewWriteModal from "./ReviewWriteModal";
 
 interface Props {
   role: UserRole;
   status: ReservationStatus;
   reservationId: number;
   reservationDate: string;
+  storeName: string;
+  storeId: number;
 }
 
 // 취소 가능 여부 계산
@@ -54,10 +56,11 @@ export default function ReservationActionButtons({
   status,
   reservationId,
   reservationDate,
+  storeName,
+  storeId,
 }: Props) {
+  const [reviewOpen, setReviewOpen] = useState(false);
   const [modalType, setModalType] = useState<CancelModalType>();
-
-  const router = useRouter();
 
   const { open, handleOpenModal, handleCloseModal } = useModal();
 
@@ -153,11 +156,19 @@ export default function ReservationActionButtons({
           width="lg"
           height="sm"
           fontSize="sm"
-          onClick={() => router.push("/mypage/activity/reviews")}
+          onClick={() => setReviewOpen(true)}
         >
           감사 리뷰 작성
         </Button>
       )}
+      
+      <ReviewWriteModal
+        open={reviewOpen}
+        onClose={() => setReviewOpen(false)}
+        storeId={storeId}
+        storeName={storeName}
+        reservationId={reservationId}
+      />
 
       {isChild && (isConfirmed || isWaiting) && (
         <Button varient="dark" width="lg" height="sm" fontSize="sm" onClick={handleCancelClick}>

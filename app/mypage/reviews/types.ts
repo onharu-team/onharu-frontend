@@ -1,7 +1,17 @@
-export interface ReviewItem {
+export interface ReviewsData {
+  reviews: Review[];
+  totalCount: number;
+  currentPage: number;
+  totalPages: number;
+  perPage: number;
+}
+
+export interface Review {
   id: number;
-  storeName?: string;
-  nickname?: string;
+  childId: number;
+  storeId: number;
+  reservationId: number;
+  name: string;
   content: string;
-  createdAt: string;
+  createAt: string;
 }

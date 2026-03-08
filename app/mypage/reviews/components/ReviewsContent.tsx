@@ -1,45 +1,50 @@
 "use client";
 
 import Image from "next/image";
-import { ReviewItem } from "../types";
 import { Button } from "@/components/ui/Button";
 import { Pagination } from "@/components/feature/pagination/Pagination";
-import { usePagination } from "@/components/feature/pagination/usePagination";
-// import { paginate } from "@/components/feature/pagination/utils/paginate";
 import Link from "next/link";
+import { UserRole } from "@/lib/api/types/auth";
+import { useSearchParams, useRouter } from "next/navigation";
+import { formatDateLabel } from "@/utils/formatDateLabel";
+import { ReviewsData } from "../types";
+import DeleteReviewButton from "./DeleteReviewButton";
 
 interface Props {
-  items: ReviewItem[];
-  role: "child" | "owner";
+  items: ReviewsData | null;
+  role: UserRole;
   hasUsed?: boolean;
 }
 
+function ReviewActionButtons({ storeId, reviewId }: { storeId: number; reviewId: number }) {
+  return (
+    <div className="flex gap-2">
+      <Link href={`/charitystore/${storeId}`} className="w-full">
+        <Button varient="light" width="lg" height="sm" fontSize="sm">
+          매장 보러가기
+        </Button>
+      </Link>
+      <DeleteReviewButton reviewId={reviewId} />
+    </div>
+  );
+}
+
 export default function ReviewsContent({ items, role, hasUsed = false }: Props) {
-  const isOwner = role === "owner";
-  const perPageDataCount = 5;
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  // const {
-  //   currentPage,
-  //   setCurrentPage,
-  //   handleFirstPage,
-  //   handlePrevPage,
-  //   handleLastPage,
-  //   handleNextPage,
-  // } = usePagination({ totalDataCount: items.length, perPageDataCount });
+  const isOwner = role === "OWNER";
 
-  // const paginatedItems = paginate(items, currentPage, perPageDataCount);
+  const handlePageChange = (page: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("pageNum", String(page));
+    router.push(`?${params.toString()}`);
+  };
 
-  if (!items.length) {
+  if (!items || items.reviews.length === 0) {
     if (!isOwner && hasUsed) {
       return (
         <div>
-          <div className="flex justify-end">
-            <Link href="/mypage/reviews/write">
-              <Button varient="default" width="md" height="sm" fontSize="md">
-                감사카드 작성
-              </Button>
-            </Link>
-          </div>
           <p className="sm:text-md bg-secondary mt-3 rounded-[10px] py-8 text-center text-sm font-medium sm:mt-6">
             감사 리뷰 내역이 없습니다.
           </p>
@@ -71,64 +76,53 @@ export default function ReviewsContent({ items, role, hasUsed = false }: Props) 
     <>
       <div className="my-4 flex flex-col justify-between sm:my-8 sm:flex-row sm:items-center">
         <p className="sm:text-md my-4 text-base sm:my-0">
-          총 <span className="text-main font-bold">{items.length}개</span>의 감사카드를{" "}
+          총 <span className="text-main font-bold">{items.totalCount}개</span>의 감사카드를
           {isOwner ? "받았어요!" : "전달했어요!"}
         </p>
-
-        {!isOwner && (
-          <Link href="/mypage/reviews/write">
-            <Button varient="default" width="md" height="sm" fontSize="md">
-              감사카드 작성
-            </Button>
-          </Link>
-        )}
       </div>
 
-      {/* {paginatedItems.map(item => (
-        <div key={item.id} className="bg-secondary mb-2 rounded-[10px] p-4 sm:mb-5 sm:p-8">
-          <div className="flex items-center gap-5">
-            <div className="relative h-6.25 w-7.5 sm:h-10.75 sm:w-12.5">
-              <Image
-                src="/image/page/reservation-img2.png"
-                alt=""
-                fill
-                sizes="50px"
-                className="object-cover"
-              />
+      {items.reviews.map(({ id, name, storeId, content, createAt }) => {
+        const date = formatDateLabel(createAt);
+
+        return (
+          <div key={id} className="bg-secondary mb-2 rounded-[10px] p-4 sm:mb-5 sm:p-8">
+            <div className="flex items-center gap-5">
+              <div className="relative h-6.25 w-7.5 sm:h-10.75 sm:w-12.5">
+                <Image
+                  src="/image/page/reservation-img2.svg"
+                  alt=""
+                  fill
+                  sizes="50px"
+                  className="object-cover"
+                />
+              </div>
+
+              <div className="relative flex-1 text-xs sm:text-base">
+                <p>{isOwner ? `${name}님의 따뜻한 감사 인사` : `${name} 사장님께`}</p>
+
+                <p className="text-text-secondary">{date}</p>
+
+                {!isOwner && (
+                  <div className="absolute top-0 right-0 hidden w-full max-w-60 sm:block">
+                    <ReviewActionButtons storeId={storeId} reviewId={id} />
+                  </div>
+                )}
+              </div>
             </div>
 
-            <div className="relative flex-1 text-xs sm:text-base">
-              <p>
-                {isOwner ? `${item.nickname}님의 따뜻한 감사 인사` : `${item.storeName} 사장님께`}
-              </p>
+            <p className="sm:text-md mt-2 text-xs font-medium break-keep sm:mt-5">{content}</p>
 
-              <p className="text-text-secondary">{item.createdAt}</p>
-
-              {!isOwner && (
-                <div className="absolute top-0 right-0 w-full max-w-25 sm:max-w-35">
-                  <Button varient="dark" width="lg" height="sm" fontSize="sm">
-                    매장 보러가기
-                  </Button>
-                </div>
-              )}
-            </div>
+            {!isOwner && (
+              <div className="mt-3 sm:hidden">
+                <ReviewActionButtons storeId={storeId} reviewId={id} />
+              </div>
+            )}
           </div>
-
-          <p className="sm:text-md mt-2 text-xs font-medium break-keep sm:mt-5">{item.content}</p>
-        </div>
-      ))} */}
+        );
+      })}
 
       <div className="mt-10 flex justify-center">
-        {/* <Pagination
-          handleFirstPage={handleFirstPage}
-          handlePrevPage={handlePrevPage}
-          handleLastPage={handleLastPage}
-          handleNextPage={handleNextPage}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalDataCount={items.length}
-          perPageDataCount={perPageDataCount}
-        /> */}
+        <Pagination totalPage={items.totalPages} handlePageChange={handlePageChange} />
       </div>
     </>
   );

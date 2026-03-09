@@ -1,8 +1,7 @@
 "use client";
 
 import { useMemo, ReactNode } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Pagination } from "@/components/feature/pagination/Pagination";
+import GenericPagination from "../pagination/GenericPagination";
 
 interface Props<T> {
   items: T[];
@@ -19,9 +18,6 @@ export default function DateGroupedPaginatedSection<T>({
   render,
   emptyText = "내역이 없습니다.",
 }: Props<T>) {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
   // 날짜 기준 정렬
   const sortedItems = useMemo(() => {
     return [...items].sort(
@@ -51,12 +47,6 @@ export default function DateGroupedPaginatedSection<T>({
 
   const dates = Object.keys(grouped);
 
-  const handlePageChange = (page: number) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("pageNum", String(page));
-    router.push(`?${params.toString()}`);
-  };
-
   if (!items.length) {
     return (
       <p className="bg-secondary mt-6 rounded-[10px] py-8 text-center text-sm font-medium">
@@ -76,9 +66,7 @@ export default function DateGroupedPaginatedSection<T>({
         ))}
       </ul>
 
-      <div className="mt-10 flex justify-center">
-        <Pagination totalPage={totalPage} handlePageChange={handlePageChange} />
-      </div>
+      <GenericPagination totalPages={totalPage} />
     </div>
   );
 }

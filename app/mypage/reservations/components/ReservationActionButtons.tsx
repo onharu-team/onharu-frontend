@@ -20,6 +20,7 @@ interface Props {
   reservationDate: string;
   storeName: string;
   storeId: number;
+  reviewed: boolean;
 }
 
 // 취소 가능 여부 계산
@@ -58,6 +59,7 @@ export default function ReservationActionButtons({
   reservationDate,
   storeName,
   storeId,
+  reviewed,
 }: Props) {
   const [reviewOpen, setReviewOpen] = useState(false);
   const [modalType, setModalType] = useState<CancelModalType>();
@@ -150,7 +152,7 @@ export default function ReservationActionButtons({
 
   return (
     <>
-      {isChild && isCompleted && (
+      {isChild && isCompleted && !reviewed && (
         <Button
           varient="default"
           width="lg"
@@ -161,7 +163,7 @@ export default function ReservationActionButtons({
           감사 리뷰 작성
         </Button>
       )}
-      
+
       <ReviewWriteModal
         open={reviewOpen}
         onClose={() => setReviewOpen(false)}

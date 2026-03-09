@@ -15,8 +15,18 @@ type OwnerReservationCardProps = OwnerReservation & {
 type ReservationCardProps = ChildReservationCardProps | OwnerReservationCardProps;
 
 export default function ReservationCard(props: ReservationCardProps) {
-  const { id, role, status, storeName, scheduleDate, startTime, people, cancelReason, storeId } =
-    props;
+  const {
+    id,
+    role,
+    status,
+    storeName,
+    scheduleDate,
+    startTime,
+    people,
+    cancelReason,
+    storeId,
+    reviewed,
+  } = props;
 
   const { date, time } = formatDateTime(new Date(`${scheduleDate}T${startTime}`));
 
@@ -56,6 +66,7 @@ export default function ReservationCard(props: ReservationCardProps) {
           reservationDate={scheduleDate}
           storeName={storeName}
           storeId={storeId}
+          reviewed={reviewed}
         />
       </div>
     </li>

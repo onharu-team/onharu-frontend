@@ -2,13 +2,12 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
-import { Pagination } from "@/components/feature/pagination/Pagination";
 import Link from "next/link";
 import { UserRole } from "@/lib/api/types/auth";
-import { useSearchParams, useRouter } from "next/navigation";
 import { formatDateLabel } from "@/utils/formatDateLabel";
 import { ReviewsData } from "../types";
 import DeleteReviewButton from "./DeleteReviewButton";
+import GenericPagination from "@/components/feature/pagination/GenericPagination";
 
 interface Props {
   items: ReviewsData | null;
@@ -30,16 +29,7 @@ function ReviewActionButtons({ storeId, reviewId }: { storeId: number; reviewId:
 }
 
 export default function ReviewsContent({ items, role, hasUsed = false }: Props) {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
   const isOwner = role === "OWNER";
-
-  const handlePageChange = (page: number) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("pageNum", String(page));
-    router.push(`?${params.toString()}`);
-  };
 
   if (!items || items.reviews.length === 0) {
     if (!isOwner && hasUsed) {
@@ -124,9 +114,7 @@ export default function ReviewsContent({ items, role, hasUsed = false }: Props) 
         );
       })}
 
-      <div className="mt-10 flex justify-center">
-        <Pagination totalPage={items.totalPages} handlePageChange={handlePageChange} />
-      </div>
+      <GenericPagination totalPages={items.totalPages} />
     </>
   );
 }

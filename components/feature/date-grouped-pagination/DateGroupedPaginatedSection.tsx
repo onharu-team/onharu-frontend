@@ -8,7 +8,6 @@ interface Props<T> {
   totalPage: number;
   getDate: (item: T) => string;
   render: (item: T) => ReactNode;
-  emptyText?: string;
 }
 
 export default function DateGroupedPaginatedSection<T>({
@@ -16,7 +15,6 @@ export default function DateGroupedPaginatedSection<T>({
   totalPage,
   getDate,
   render,
-  emptyText = "내역이 없습니다.",
 }: Props<T>) {
   // 날짜 기준 정렬
   const sortedItems = useMemo(() => {
@@ -46,14 +44,6 @@ export default function DateGroupedPaginatedSection<T>({
   }, [sortedItems, getDate]);
 
   const dates = Object.keys(grouped);
-
-  if (!items.length) {
-    return (
-      <p className="bg-secondary mt-6 rounded-[10px] py-8 text-center text-sm font-medium">
-        {emptyText}
-      </p>
-    );
-  }
 
   return (
     <div className="relative mb-10">

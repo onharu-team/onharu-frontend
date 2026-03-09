@@ -36,6 +36,7 @@ interface BaseReservation {
   status: ReservationStatus;
   reservationAt: string;
   cancelReason: string | null;
+  reviewed: boolean;
 }
 
 export interface ChildReservation extends BaseReservation {

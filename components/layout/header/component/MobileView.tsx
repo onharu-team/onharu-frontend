@@ -9,7 +9,8 @@ import { NavItems } from "../data";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { useLogout } from "@/hooks/useLogout";
-import { RiMenu3Line, RiNotification3Line, RiCloseLine } from "@remixicon/react";
+import { RiMenu3Line, RiCloseLine } from "@remixicon/react";
+import { Alert } from "./Alert";
 
 export const MobileView = ({
   isLoggedIn,
@@ -63,18 +64,11 @@ export const MobileView = ({
       >
         <div className="relative h-12.5">
           {isLoggedIn && (
-            <button
-              className="absolute top-3.5 right-11"
-              onClick={() => {
-                router.push("/mypage/notifications");
-                setOpen(false);
-              }}
-            >
-              <span className="relative">
-                <RiNotification3Line size={20} />
-                <span className="bg-main absolute top-0 right-0 h-2 w-2 rounded-full" />
-              </span>
-            </button>
+            <Alert
+              buttonClass="absolute top-3.5 right-11"
+              iconSize={20}
+              alertClass="top-0 right-0 h-2 w-2 rounded-full"
+            />
           )}
 
           <button

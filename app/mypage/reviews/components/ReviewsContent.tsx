@@ -81,7 +81,7 @@ export default function ReviewsContent({ items, role, hasUsed = false }: Props) 
         </p>
       </div>
 
-      {items.reviews.map(({ id, name, storeId, content, createAt }) => {
+      {items.reviews.map(({ id, nickname, storeId, content, createAt }) => {
         const date = formatDateLabel(createAt);
 
         return (
@@ -98,7 +98,10 @@ export default function ReviewsContent({ items, role, hasUsed = false }: Props) 
               </div>
 
               <div className="relative flex-1 text-xs sm:text-base">
-                <p>{isOwner ? `${name}님의 따뜻한 감사 인사` : `${name} 사장님께`}</p>
+                <p>
+                  {nickname}
+                  {isOwner ? "님의 따뜻한 감사 인사" : "사장님께"}
+                </p>
 
                 <p className="text-text-secondary">{date}</p>
 

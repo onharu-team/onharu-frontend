@@ -11,7 +11,7 @@ export interface Review {
   childId: number;
   storeId: number;
   reservationId: number;
-  name: string;
+  nickname: string;
   content: string;
   createAt: string;
 }

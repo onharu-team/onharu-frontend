@@ -14,7 +14,6 @@ import { SignupSuccessModal } from "../components/SignupSuccessModal";
 import { Toast } from "@/components/feature/toast/Toast";
 
 export default function ChildSignupForm() {
-  const [isCodeSent, setIsCodeSent] = useState(false);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [documents, setDocuments] = useState<File[]>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -35,12 +34,8 @@ export default function ChildSignupForm() {
   } = useForm<SignupFormValues>({ mode: "onSubmit" });
 
   const onSubmit = async (data: SignupFormValues) => {
-    if (!isCodeSent) {
-      setError("email", { type: "manual", message: "이메일 인증을 진행해주세요." });
-      return;
-    }
     if (!isEmailVerified) {
-      setError("authCode", { type: "manual", message: "인증 확인을 완료해 주세요." });
+      setError("email", { type: "manual", message: "인증 확인을 완료해 주세요." });
       return;
     }
     if (documents.length === 0) {
@@ -67,8 +62,6 @@ export default function ChildSignupForm() {
         onError: error => {
           if (error?.status === 409) {
             setIsEmailVerified(false);
-            setIsCodeSent(false);
-            clearErrors(["authCode"]);
             setError("email", { type: "manual", message: "이미 등록된 이메일입니다." });
           } else {
             Toast("error", "회원가입에 실패했습니다.", "잠시 후 다시 시도해주세요.");
@@ -93,8 +86,6 @@ export default function ChildSignupForm() {
           trigger={trigger}
           setError={setError}
           clearErrors={clearErrors}
-          isCodeSent={isCodeSent}
-          setIsCodeSent={setIsCodeSent}
           isEmailVerified={isEmailVerified}
           setIsEmailVerified={setIsEmailVerified}
         />

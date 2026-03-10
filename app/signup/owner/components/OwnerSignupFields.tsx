@@ -9,7 +9,7 @@ import {
   UseFormWatch,
   UseFormTrigger,
 } from "react-hook-form";
-import EmailAuthField from "@/components/feature/EmailAuthField";
+import { EmailAuthField } from "@/components/feature/EmailAuthField";
 import { FormField } from "@/components/form-fields/FormField";
 import { FIELD_CONFIG } from "@/components/form-fields/fieldConfig";
 
@@ -20,8 +20,6 @@ interface Props {
   trigger: UseFormTrigger<SignupFormValues>;
   setError: UseFormSetError<SignupFormValues>;
   clearErrors: UseFormClearErrors<SignupFormValues>;
-  isCodeSent: boolean;
-  setIsCodeSent: (b: boolean) => void;
   isEmailVerified: boolean;
   setIsEmailVerified: (b: boolean) => void;
 }
@@ -33,9 +31,6 @@ export const OwnerSignupFields = ({
   trigger,
   setError,
   clearErrors,
-  isCodeSent,
-  setIsCodeSent,
-  isEmailVerified,
   setIsEmailVerified,
 }: Props) => {
   const passwordValue = watch("password");
@@ -44,19 +39,14 @@ export const OwnerSignupFields = ({
     <>
       <EmailAuthField<SignupFormValues>
         register={register}
-        errors={errors}
-        setError={setError}
-        clearErrors={clearErrors}
-        trigger={trigger}
         watch={watch}
+        errors={errors}
         emailName="email"
         codeName="authCode"
+        trigger={trigger}
+        setError={setError}
+        clearErrors={clearErrors}
         onVerifiedChange={setIsEmailVerified}
-        onCodeSentChange={setIsCodeSent}
-        isVerified={isEmailVerified}
-        setIsVerified={setIsEmailVerified}
-        isCodeSent={isCodeSent}
-        setIsCodeSent={setIsCodeSent}
       />
 
       <FormField<SignupFormValues>

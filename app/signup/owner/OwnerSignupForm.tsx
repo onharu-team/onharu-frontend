@@ -13,8 +13,9 @@ import { useSignupOwner } from "@/hooks/useSignupOwner";
 import { Toast } from "@/components/feature/toast/Toast";
 
 export default function OwnerSignupForm() {
-  const [isCodeSent, setIsCodeSent] = useState(false);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [isBusinessVerified, setIsBusinessVerified] = useState(false);
+
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const { mutate: signupMutate, isPending: isSignupPending } = useSignupOwner();
@@ -29,16 +30,20 @@ export default function OwnerSignupForm() {
     setError,
     trigger,
     clearErrors,
+    getValues,
   } = useForm<SignupFormValues>({ mode: "onSubmit" });
 
   const onSubmit = (data: SignupFormValues) => {
-    if (!isCodeSent) {
-      setError("email", { type: "manual", message: "이메일 인증을 진행해주세요." });
+    if (!isEmailVerified) {
+      setError("email", { type: "manual", message: "인증 확인을 완료해주세요." });
       return;
     }
 
-    if (!isEmailVerified) {
-      setError("authCode", { type: "manual", message: "인증 확인을 완료해 주세요." });
+    if (!isBusinessVerified) {
+      setError("businessNumber", {
+        type: "manual",
+        message: "사업자번호 인증을 진행해주세요.",
+      });
       return;
     }
 
@@ -51,8 +56,6 @@ export default function OwnerSignupForm() {
         onError: error => {
           if (error?.status === 409) {
             setIsEmailVerified(false);
-            setIsCodeSent(false);
-            clearErrors(["authCode"]);
             setError("email", { type: "manual", message: "이미 등록된 이메일입니다." });
           } else {
             Toast("error", "회원가입에 실패했습니다.", "잠시 후 다시 시도해주세요.");
@@ -77,14 +80,20 @@ export default function OwnerSignupForm() {
           trigger={trigger}
           setError={setError}
           clearErrors={clearErrors}
-          isCodeSent={isCodeSent}
-          setIsCodeSent={setIsCodeSent}
           isEmailVerified={isEmailVerified}
           setIsEmailVerified={setIsEmailVerified}
         />
 
         {/* 사업자등록번호 */}
-        <BusinessNumberField register={register} errors={errors} trigger={trigger} />
+        <BusinessNumberField
+          register={register}
+          errors={errors}
+          trigger={trigger}
+          setError={setError}
+          getValues={getValues}
+          isBusinessVerified={isBusinessVerified}
+          setIsBusinessVerified={setIsBusinessVerified}
+        />
 
         {/* 이용 약관 */}
         <TermsField register={register} errors={errors} />

@@ -1,12 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
-import { ChildData, OwnerData } from "@/lib/api/types/auth";
+import { useAuthProfile } from "@/hooks/useAuth";
 import { RiEditBoxLine } from "@remixicon/react";
 import { useRouter } from "next/navigation";
 
-export default function UserProfileCard({ user }: { user: ChildData | OwnerData }) {
+export default function UserProfileCard() {
   const router = useRouter();
+
+  const { data: user } = useAuthProfile();
+  if (!user) return null;
 
   const displayName = user.userType === "CHILD" ? user.nickname : user.name;
 

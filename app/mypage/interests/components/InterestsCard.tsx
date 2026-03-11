@@ -50,7 +50,7 @@ export default function InterestsCard({ items }: { items: FavoritesResponse }) {
         );
       })}
 
-      {items.currentPage > 1 && <GenericPagination totalPages={items.totalPages} />}
+      {items.totalPages > 1 && <GenericPagination totalPages={items.totalPages} />}
     </div>
   );
 }

@@ -1,131 +1,88 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
 import {
-  Path,
-  get,
-  FieldError,
-  UseFormRegister,
   FieldErrors,
+  FieldValues,
+  Path,
+  UseFormRegister,
+  UseFormWatch,
+  UseFormTrigger,
   UseFormSetError,
   UseFormClearErrors,
-  UseFormTrigger,
-  UseFormWatch,
-  FieldValues,
+  get,
+  FieldError,
 } from "react-hook-form";
+import { useEmailAuth } from "@/hooks/useEmailAuth";
 import Input from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import clsx from "clsx";
 
-type EmailAuthFieldProps<T extends FieldValues> = {
+interface Props<T extends FieldValues> {
   register: UseFormRegister<T>;
+  watch: UseFormWatch<T>;
   errors: FieldErrors<T>;
+  trigger: UseFormTrigger<T>;
   setError: UseFormSetError<T>;
   clearErrors: UseFormClearErrors<T>;
-  trigger: UseFormTrigger<T>;
-  watch: UseFormWatch<T>;
   emailName: Path<T>;
   codeName: Path<T>;
   onVerifiedChange: (verified: boolean) => void;
-  onCodeSentChange: (sent: boolean) => void;
-  isVerified: boolean;
-  setIsVerified: (v: boolean) => void;
-  isCodeSent: boolean;
-  setIsCodeSent: (v: boolean) => void;
-};
+}
 
-export default function EmailAuthField<T extends FieldValues>({
+export const EmailAuthField = <T extends FieldValues>({
   register,
+  watch,
   errors,
+  trigger,
   setError,
   clearErrors,
-  trigger,
-  watch,
   emailName,
   codeName,
   onVerifiedChange,
-  onCodeSentChange,
-  isVerified,
-  setIsVerified,
-  isCodeSent,
-  setIsCodeSent,
-}: EmailAuthFieldProps<T>) {
-  const [isResendMode, setIsResendMode] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(0);
+}: Props<T>) => {
+  const { isCodeSent, isVerified, isResendMode, timeLeft, sendCode, verifyCode, isSending } =
+    useEmailAuth();
 
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const email = watch(emailName);
+  const code = watch(codeName);
+  const emailError = get(errors, emailName) as FieldError | undefined;
+  const codeError = get(errors, codeName) as FieldError | undefined;
 
-  const clearTimer = () => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-  };
-
-  const startTimer = () => {
-    clearTimer();
-    setTimeLeft(180);
-
-    timerRef.current = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          clearTimer();
-          setIsVerified(false);
-          onVerifiedChange(false);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  };
-
-  const handleSendCode = async () => {
-    // 이메일 중복 체크
-    if (watch(emailName) === "test@test.com") {
-      setError(emailName, { type: "manual", message: "이미 존재하는 이메일입니다." });
-      setIsCodeSent(false);
-      setIsResendMode(false);
-      setIsVerified(false);
-      onVerifiedChange(false);
-      onCodeSentChange(false);
-      clearTimer();
-      return;
-    }
-
+  const handleSend = async () => {
     const isValid = await trigger(emailName);
     if (!isValid) return;
 
-    clearErrors(emailName);
-
-    setIsVerified(false);
-    setIsCodeSent(true);
-    setIsResendMode(true);
-    onVerifiedChange(false);
-    onCodeSentChange(true);
-
-    startTimer();
+    try {
+      await sendCode(email);
+      clearErrors(emailName);
+    } catch (error) {
+      setError(emailName, { type: "manual", message: "인증번호 발송에 실패했습니다." });
+    }
   };
 
-  const handleVerifyCode = (code: string) => {
+  const handleVerify = async () => {
     if (!code) {
       setError(codeName, { type: "manual", message: "인증번호 6자리를 입력해 주세요!" });
       return;
     }
 
-    if (code === "123456") {
-      clearErrors(codeName);
-      setIsVerified(true);
-      onVerifiedChange(true);
-      clearTimer();
-    } else {
-      setError(codeName, { type: "manual", message: "인증번호가 일치하지 않습니다!" });
+    try {
+      const success = await verifyCode(email, code);
+
+      if (success) {
+        clearErrors([emailName, codeName]);
+        onVerifiedChange(true);
+      } else {
+        setError(codeName, { type: "manual", message: "인증번호가 일치하지 않습니다!" });
+      }
+    } catch (error) {
+      setError(codeName, { type: "manual", message: "인증번호 확인 중 문제가 발생했습니다." });
     }
   };
 
-  useEffect(() => () => clearTimer(), []);
-
   return (
     <>
+      {/* 이메일 입력 */}
       <div className="relative flex flex-row">
         <div className="w-78.75">
           <Input
@@ -134,6 +91,7 @@ export default function EmailAuthField<T extends FieldValues>({
             type="email"
             placeholder="이메일을 입력해 주세요."
             isRequired
+            disabled={isCodeSent || isVerified}
             register={register(emailName, {
               required: "이메일은 필수입니다.",
               pattern: {
@@ -141,26 +99,26 @@ export default function EmailAuthField<T extends FieldValues>({
                 message: "올바른 이메일 형식이 아닙니다.",
               },
             })}
-            error={get(errors, emailName) as FieldError | undefined}
-            disabled={isCodeSent}
+            error={emailError}
           />
         </div>
 
-        <div className={clsx("absolute right-0 bottom-0", get(errors, emailName) && "mb-8")}>
+        <div className={clsx("absolute right-0 bottom-0", emailError && "mb-8")}>
           <Button
             type="button"
             varient="default"
             width="md"
             height="md"
             fontSize="sm"
-            onClick={handleSendCode}
-            disabled={isVerified}
+            onClick={handleSend}
+            disabled={isVerified || isSending}
           >
             {isVerified ? "인증 완료" : isCodeSent && isResendMode ? "재전송" : "인증번호 전송"}
           </Button>
         </div>
       </div>
 
+      {/* 인증 번호 입력 */}
       {isCodeSent && (
         <div className="relative flex flex-row">
           <div className="w-78.75">
@@ -169,22 +127,22 @@ export default function EmailAuthField<T extends FieldValues>({
               id="authCode"
               placeholder="인증번호를 입력해 주세요."
               isRequired
+              disabled={isVerified}
               register={register(codeName, {
                 required: "인증번호 6자리를 입력해 주세요!",
               })}
-              error={get(errors, codeName) as FieldError | undefined}
-              disabled={isVerified}
+              error={codeError}
             />
           </div>
 
-          <div className={clsx("absolute right-0 bottom-0", get(errors, codeName) && "mb-8")}>
+          <div className={clsx("absolute right-0 bottom-0", codeError && "mb-8")}>
             <Button
               type="button"
               varient="default"
               width="md"
               height="md"
               fontSize="sm"
-              onClick={() => handleVerifyCode(watch(codeName))}
+              onClick={handleVerify}
               disabled={isVerified}
             >
               인증번호 확인
@@ -201,4 +159,4 @@ export default function EmailAuthField<T extends FieldValues>({
       )}
     </>
   );
-}
+};

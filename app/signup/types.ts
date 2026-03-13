@@ -6,7 +6,7 @@ export type SignupFormValues = {
   nickname?: string;
   phone: string;
   authCode: string;
-  document: FileList;
+  document: File[];
   agreeTerms: boolean;
   agreePrivacy: boolean;
   storeName?: string;

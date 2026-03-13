@@ -13,13 +13,12 @@ import { useSignupOwner } from "@/hooks/useSignupOwner";
 import { Toast } from "@/components/feature/toast/Toast";
 
 export default function OwnerSignupForm() {
+  const [emailAuthKey, setEmailAuthKey] = useState(0);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [isBusinessVerified, setIsBusinessVerified] = useState(false);
-
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const { mutate: signupMutate, isPending: isSignupPending } = useSignupOwner();
-
   const router = useRouter();
 
   const {
@@ -56,9 +55,10 @@ export default function OwnerSignupForm() {
         onError: error => {
           if (error?.status === 409) {
             setIsEmailVerified(false);
+            setEmailAuthKey(prev => prev + 1);
             setError("email", { type: "manual", message: "이미 등록된 이메일입니다." });
           } else {
-            Toast("error", "회원가입에 실패했습니다.", "잠시 후 다시 시도해주세요.");
+            Toast("error", "회원가입 실패", "잠시 후 다시 시도해주세요.");
           }
         },
       }
@@ -74,6 +74,7 @@ export default function OwnerSignupForm() {
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
         <OwnerSignupFields
+          emailAuthKey={emailAuthKey}
           register={register}
           errors={errors}
           watch={watch}

@@ -16,8 +16,10 @@ interface InputProps {
   isRequired?: boolean;
   isVerified?: boolean;
   value?: string;
+  readOnly?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onClick?: () => void;
 }
 
 export default function Input({
@@ -31,8 +33,10 @@ export default function Input({
   isRequired = false,
   isVerified = false,
   value,
+  readOnly = false,
   onChange,
   onKeyDown,
+  onClick,
 }: InputProps) {
   const hasError = Boolean(error);
 
@@ -60,6 +64,8 @@ export default function Input({
         placeholder={placeholder}
         disabled={disabled}
         required={isRequired}
+        readOnly={readOnly}
+        onClick={onClick}
         aria-invalid={hasError}
         aria-describedby={describedBy}
         {...inputProps}
@@ -68,14 +74,16 @@ export default function Input({
           "border-border placeholder:text-subtle h-11.25 rounded-[10px] border px-2.5 text-sm transition-all duration-150 ease-in-out outline-none sm:text-base",
           disabled
             ? "text-text-secondary bg-[#EEEEEE]"
-            : "hover:border-main focus:border-main text-text active:border-main bg-white focus:border-2"
+            : readOnly
+              ? "cursor-pointer bg-white"
+              : "hover:border-main focus:border-main text-text active:border-main bg-white focus:border-2"
         )}
         autoComplete="off"
       />
 
-      {error && hasError && (
+      {hasError && (
         <div id={`${id}-error`} className="text-danger mt-2.5 text-xs sm:text-sm">
-          {error.message}
+          {error?.message}
         </div>
       )}
 

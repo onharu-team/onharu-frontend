@@ -13,7 +13,7 @@ export const Navigation = ({ onChange }: NavigatinProps) => {
   const category = searchParams.get("categoryId") ?? "0";
 
   const categoryBaseClasses =
-    "flex cursor-pointer bg-white items-center gap-1 md:gap-2 rounded-full border border-gray-300 px-4.5 py-1 shadow-md";
+    "flex cursor-pointer bg-white items-center gap-1 md:gap-2 rounded-full border border-gray-300 px-4.5 pl-3 shadow-md";
 
   return (
     <div className="flex flex-wrap items-center justify-center gap-1.5 md:gap-2">
@@ -28,7 +28,7 @@ export const Navigation = ({ onChange }: NavigatinProps) => {
             category === String(item.id) && "!bg-main !border-main text-white"
           )}
         >
-          <div className="relative h-4 w-4 md:h-6 md:w-6">
+          <div className="relative h-6 w-6 md:h-8 md:w-8">
             <Image src={item.icon} alt={`${item.name} 이동`} fill style={{ objectFit: "cover" }} />
           </div>
           <span className="md:text-md text-xs font-bold text-inherit">{item.name}</span>

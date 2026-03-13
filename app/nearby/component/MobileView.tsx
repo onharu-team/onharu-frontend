@@ -39,11 +39,11 @@ export function MobileView({
 }: MobileViewProps) {
   return (
     <>
-      <div className="fixed top-16 left-[50%] z-50 w-full -translate-x-[50%]">
+      <div className="fixed top-10 left-[50%] z-50 w-full -translate-x-[50%]">
         <StoreSearch value={inputValue} onChange={onInputChange} onSearch={onSearch} />
       </div>
 
-      <div className="fixed top-38 z-50 w-full">
+      <div className="fixed top-35 z-50 w-full">
         <Navigation onChange={onCategoryChange} />
       </div>
 

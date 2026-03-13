@@ -28,13 +28,13 @@ export const Card = (props: CardProps) => {
       href={`/charitystore/${props.storelink}`}
       id={props.storeId}
       className={cn(
-        "inline-block h-full duration-300 ease-in-out hover:-translate-y-1.5",
+        "inline-block h-full min-h-60.5 duration-300 ease-in-out hover:-translate-y-1.5 md:min-h-89.5",
         props.type === "nearby" && "h-fit w-full"
       )}
     >
       <div
         className={cn(
-          "h-full overflow-hidden rounded-md border border-gray-300",
+          "flex h-full flex-col overflow-hidden rounded-md border border-gray-300",
           activeId === props.storeId && "outline-main-400 outline outline-2",
           props.type === "nearby" && "h-fit"
         )}
@@ -43,7 +43,7 @@ export const Card = (props: CardProps) => {
           <div className="h-full w-full">{props.storeThumnail}</div>
           {category}
         </div>
-        <div className="relative bg-white p-2.5 md:p-4">
+        <div className="relative flex-1 bg-white p-2.5 md:p-4">
           <div className="absolute top-2 right-5 z-5">
             <Like isLiked={false} />
           </div>
@@ -53,11 +53,13 @@ export const Card = (props: CardProps) => {
           </p>
           {storeAddress}
           <p className="text-text mt-2 line-clamp-2 text-sm md:text-base">{props.storeIntroduce}</p>
-          {(hashtags || reservation) && (
-            <div className="mt-3.5 flex flex-wrap items-center gap-1 md:mt-7.5">
+          {hashtags && (
+            <div className="w-[calc(100% - 20px)] absolute bottom-4 left-2.5 mt-3.5 flex h-[22px] flex-wrap items-center gap-1 overflow-hidden md:mt-7.5 md:h-[29px]">
               {hashtags}
-              {reservation}
             </div>
+          )}
+          {reservation && (
+            <div className="mt-3.5 flex flex-wrap items-center gap-1 md:mt-7.5">{reservation}</div>
           )}
         </div>
       </div>

@@ -1,66 +1,104 @@
+export type UserRole = "OWNER" | "CHILD";
+
+export interface ImageInfo {
+  fileKey: string;
+  filePath: string;
+  displayOrder: string;
+}
+
+export interface ChildData {
+  userType: "CHILD";
+  loginId: string;
+  name: string;
+  phone: string;
+  nickname: string;
+  images: ImageInfo[] | string[];
+}
+
+export interface OwnerData {
+  userType: "OWNER";
+  loginId: string;
+  name: string;
+  phone: string;
+  levelName?: string;
+  businessNumber: string;
+  stores: number[];
+}
+
+// 이메일 인증 코드
+export type SendEmailCodeReq = {
+  email: string;
+};
+
+export type VerifyEmailCodeReq = {
+  email: string;
+  code: string;
+};
+
 // 로그인
-export interface LoginRequest {
+export interface LoginReq {
   loginId: string;
   password: string;
 }
 
-export interface LoginResponse {
-  success: boolean;
-  data: null;
-}
-
-// 로그아웃
-export interface LogoutResponse {
-  success: boolean;
-  data: unknown;
-}
-
 // 로그인 확인
-export interface User {
+export interface UserMeReq {
   userId: number;
   loginId: string;
-  userType: string;
+  userType: UserRole;
   statusType: string;
   providerType: string;
   name: string;
 }
 
-export interface MeResponse {
-  success: boolean;
-  data: User | null;
-}
-
 // 회원가입
-export interface SignupChildRequest {
+export interface ChildReq {
   loginId: string;
-  password: string;
-  passwordConfirm: string;
   name: string;
   phone: string;
   nickname: string;
-  certificate: string;
+  images: ImageInfo[] | string[];
 }
 
-export interface SignupOwnerRequest {
+export interface OwnerReq {
   loginId: string;
-  password: string;
-  passwordConfirm: string;
-  phone: string;
   name: string;
+  phone: string;
+  levelName?: string;
   businessNumber: string;
 }
 
-export interface SignupChildResponse {
-  success: boolean;
-  data: {
-    id: number;
-    loginId: string;
-  };
+export interface SignupReq {
+  password: string;
+  passwordConfirm: string;
 }
 
-export interface SignupOwnerResponse {
-  success: boolean;
-  data: {
-    userId: number;
-  };
+export interface SignupRes {
+  userId: number;
+  loginId?: string;
+}
+
+// 비밀번호 검증
+export interface ValidatePasswordReq {
+  password: string;
+}
+
+// 비밀번호 변경
+export interface ChangePasswordReq {
+  currentPassword: string;
+  newPassword: string;
+  newPasswordConfirm: string;
+}
+
+// 프로필 수정
+export interface UpdateChildProfileReq {
+  name: string;
+  phone: string;
+  nickname: string;
+}
+
+export interface UpdateOwnerProfileReq {
+  name: string;
+  phone: string;
+  businessNumber: string;
 }

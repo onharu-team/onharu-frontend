@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import scrollbar from "tailwind-scrollbar";
 
 const config: Config = {
   content: [
@@ -23,7 +24,7 @@ const config: Config = {
       spacing: {
         "section-lg-top": "6.25rem",
         "section-lg-bottom": "9.375rem",
-        "section-sm-top": "2.5rem",
+        "section-sm-top": "5.5rem",
         "section-sm-bottom": "3.75rem",
       },
       fontSize: {
@@ -92,7 +93,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwind-scrollbar")],
+  plugins: [scrollbar],
 };
 
 export default config;

@@ -1,26 +1,44 @@
 import { Button } from "@/components/ui/Button";
 import StatusBadge from "./StatusBadge";
 import ReservationActionButtons from "./ReservationActionButtons";
-import { ReservationItem } from "../types";
+import { ChildReservation, OwnerReservation } from "@/lib/api/types/reservation";
+import formatDateTime from "../../utils/format";
 
-export default function ReservationCard({
-  id,
-  role,
-  status,
-  title,
-  reservationDate,
-  reservationTime,
-  people,
-  address,
-  cancelReason,
-}: ReservationItem) {
+type ChildReservationCardProps = ChildReservation & {
+  role: "CHILD";
+};
+
+type OwnerReservationCardProps = OwnerReservation & {
+  role: "OWNER";
+};
+
+type ReservationCardProps = ChildReservationCardProps | OwnerReservationCardProps;
+
+export default function ReservationCard(props: ReservationCardProps) {
+  const {
+    id,
+    role,
+    status,
+    storeName,
+    scheduleDate,
+    startTime,
+    people,
+    cancelReason,
+    storeId,
+    reviewed,
+  } = props;
+
+  const { date, time } = formatDateTime(new Date(`${scheduleDate}T${startTime}`));
+
   return (
     <li className="bg-secondary mb-2 flex flex-col gap-3 rounded-[10px] p-3 sm:mb-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-1">
-          <StatusBadge status={status} />
+          <StatusBadge status={status} role={role} />
 
-          <h3 className="text-sm font-bold sm:text-base">{title}</h3>
+          <h3 className="text-sm font-bold sm:text-base">
+            {role === "CHILD" ? storeName : props.childNickname}
+          </h3>
 
           <Button varient="dark" width="xs" height="xs" fontSize="sm">
             채팅하기
@@ -28,10 +46,12 @@ export default function ReservationCard({
         </div>
 
         <p className="text-xs font-medium sm:text-sm">
-          {reservationDate} · {reservationTime} · {people}인 예약
+          {date} {time} · {people}인 예약
         </p>
 
-        {address && <p className="text-text-secondary text-xs font-medium sm:text-sm">{address}</p>}
+        {role === "CHILD" && (
+          <p className="text-text-secondary text-xs font-medium sm:text-sm">{props.storeAddress}</p>
+        )}
 
         {cancelReason && (
           <p className="text-xs font-medium sm:text-sm">취소 사유 : {cancelReason}</p>
@@ -43,7 +63,10 @@ export default function ReservationCard({
           role={role}
           status={status}
           reservationId={id}
-          reservationDate={reservationDate}
+          reservationDate={scheduleDate}
+          storeName={storeName}
+          storeId={storeId}
+          reviewed={reviewed}
         />
       </div>
     </li>

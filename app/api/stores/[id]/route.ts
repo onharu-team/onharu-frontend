@@ -1,3 +1,5 @@
+import { handleApiResult } from "@/lib/api/handleApiResult";
+import { serverApiClient } from "@/lib/api/serverApiClient";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
@@ -16,4 +18,14 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
 
   const data = await res.json();
   return NextResponse.json(data);
+}
+
+// 가게 정보 수정
+export async function PUT(request: Request, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
+  const body = await request.json();
+
+  const result = await serverApiClient.put(`/api/stores/${id}`, body);
+
+  return handleApiResult(result);
 }

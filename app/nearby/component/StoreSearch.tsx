@@ -16,9 +16,11 @@ export const StoreSearch = ({ value, onChange, onSearch }: StoreSearchSearchProp
 
   return (
     <div className="my-7.5 px-7">
-      <div className="flex h-12.5 w-full items-center rounded-sm border border-gray-300 bg-white px-4 focus-within:outline-2">
+      <div className="focus-within:outline-main flex h-12.5 w-full items-center rounded-sm border border-gray-300 bg-white px-4 focus-within:outline-1">
         <input
           type="text"
+          name="search-store"
+          id="search-store"
           value={value || ""}
           onChange={onChange}
           onKeyDown={handleKeyDown}

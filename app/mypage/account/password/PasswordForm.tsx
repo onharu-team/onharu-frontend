@@ -6,16 +6,14 @@ import useModal from "@/hooks/ui/useModal";
 import FormPageLayout from "../components/FormPageLayout";
 import { FIELD_CONFIG } from "@/components/form-fields/fieldConfig";
 import { FormField } from "@/components/form-fields/FormField";
-
-interface PasswordFormData {
-  currentPassword: string;
-  newPassword: string;
-  passwordConfirm: string;
-}
+import { useChangePassword } from "@/hooks/useChangePw";
+import { ChangePasswordReq } from "@/lib/api/types/auth";
 
 export default function PasswordFormPage() {
   const router = useRouter();
   const { open, handleOpenModal, handleCloseModal } = useModal();
+
+  const { mutate: changePasswordMutate } = useChangePassword();
 
   const {
     register,
@@ -24,25 +22,26 @@ export default function PasswordFormPage() {
     reset,
     formState: { errors },
     setError,
-  } = useForm<PasswordFormData>();
+  } = useForm<ChangePasswordReq>();
 
   const newPasswordValue = watch("newPassword");
 
-  const onSubmit = async (data: PasswordFormData) => {
-    if (data.currentPassword !== "1234") {
-      setError("currentPassword", {
-        type: "server",
-        message: "현재 비밀번호가 일치하지 않습니다.",
-      });
-      return;
-    }
-
-    handleOpenModal();
-
-    reset({
-      currentPassword: "",
-      newPassword: "",
-      passwordConfirm: "",
+  const onSubmit = async (data: ChangePasswordReq) => {
+    changePasswordMutate(data, {
+      onSuccess: () => {
+        handleOpenModal();
+        reset({
+          currentPassword: "",
+          newPassword: "",
+          newPasswordConfirm: "",
+        });
+      },
+      onError: () => {
+        setError("currentPassword", {
+          type: "server",
+          message: "현재 비밀번호가 일치하지 않습니다.",
+        });
+      },
     });
   };
 
@@ -60,7 +59,7 @@ export default function PasswordFormPage() {
       modalMessage="비밀번호가 성공적으로 수정되었습니다."
       onModalConfirm={handleCloseModal}
     >
-      <FormField<PasswordFormData>
+      <FormField<ChangePasswordReq>
         name="currentPassword"
         config={FIELD_CONFIG.currentPassword}
         register={register}
@@ -68,7 +67,7 @@ export default function PasswordFormPage() {
       />
 
       {/* 비밀번호 */}
-      <FormField<PasswordFormData>
+      <FormField<ChangePasswordReq>
         name="newPassword"
         config={FIELD_CONFIG.password}
         register={register}
@@ -76,8 +75,8 @@ export default function PasswordFormPage() {
       />
 
       {/* 비밀번호 확인 */}
-      <FormField<PasswordFormData>
-        name="passwordConfirm"
+      <FormField<ChangePasswordReq>
+        name="newPasswordConfirm"
         config={FIELD_CONFIG.passwordConfirm(newPasswordValue)}
         register={register}
         errors={errors}

@@ -39,7 +39,7 @@ export default function TabFilter({ tabs, status, setStatus }: TabFilterProps) {
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: isActive ? 1 : 0 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="bg-main absolute bottom-0 left-0 h-[3px] w-full"
+                    className="bg-main absolute bottom-0 left-0 h-0.75 w-full"
                   />
                 )}
               </button>

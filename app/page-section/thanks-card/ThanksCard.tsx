@@ -1,9 +1,26 @@
 "use client";
 
 import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
+import { GetReviews } from "@/lib/api/GetReviews";
 import { VerticalMarquee } from "./verticalMarquee/VerticalMarquee";
+import { MarqueeSkeleton } from "./verticalMarquee/MarqueeSkeleton";
 
 export const ThanksCard = () => {
+  const filters = {
+    pageNum: 1,
+    perPage: 20,
+    sortField: "id",
+    sortDirection: "desc",
+  };
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["stores", filters],
+    queryFn: ({ signal }) => GetReviews(filters, signal),
+    staleTime: 1000 * 60,
+    placeholderData: previousData => previousData,
+  });
+
   return (
     <section className="mt-section-sm-top lg:mt-section-lg-top overflow-hidden bg-gradient-to-b from-white/15 to-[rgba(255,241,205,0.18)]">
       <div className="wrapper block justify-between gap-5 lg:flex">
@@ -27,7 +44,7 @@ export const ThanksCard = () => {
           />
         </div>
         <div className="max-w-full lg:max-w-[60%]">
-          <VerticalMarquee />
+          <VerticalMarquee data={data?.data?.reviews} isLoading={isLoading} error={error} />
         </div>
       </div>
     </section>

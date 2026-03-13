@@ -12,16 +12,16 @@ interface ButtonProps {
 }
 
 const FontSizeClasses = {
-  sm: "text-sm",
+  sm: "text-xs md:text-sm",
   md: "text-base",
   lg: "text-md",
 };
 
 const HeightClasses = {
-  xs: "h-[25px] rounded-sm",
-  sm: "h-[35px] rounded-sm",
-  md: "h-[45px] rounded-md",
-  lg: "h-[50px] rounded-md",
+  xs: "h-[22px] md:h-[25px] rounded-sm",
+  sm: "h-[30px] md:h-[35px] rounded-sm",
+  md: "h-[40px] md:h-[45px] rounded-md",
+  lg: "h-[45px] md:h-[50px] rounded-md",
 };
 
 const WidthClasses = {

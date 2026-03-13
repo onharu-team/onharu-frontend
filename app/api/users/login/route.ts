@@ -1,13 +1,12 @@
 import { serverApiClient } from "@/lib/api/serverApiClient";
-import { LoginResponse } from "@/lib/api/types/auth";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   const body = await request.json();
 
-  const result = await serverApiClient.post<LoginResponse>("/api/users/login", body);
+  const result = await serverApiClient.post("/api/users/login", body);
 
-  if (!result.ok) {
+  if (!result.success) {
     return NextResponse.json(
       {
         success: false,

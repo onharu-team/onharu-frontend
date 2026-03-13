@@ -1,14 +1,13 @@
+"use client";
+
 import { OwnerMyPage } from "./components/OwnerMyPage";
 import { ChildMyPage } from "./components/ChildMyPage";
-import { ownerUser } from "./data/mockData";
-import { User } from "./types";
+import { useAuthProfile } from "@/hooks/useAuth";
 
 export default function MyPage() {
-  const user = ownerUser;
+  const { data: user } = useAuthProfile();
 
-  if (user.role === "owner") {
-    return <OwnerMyPage user={user as User & { role: "owner" }} />;
-  }
+  if (!user) return null;
 
-  return <ChildMyPage user={user as User & { role: "child" }} />;
+  return user.userType === "OWNER" ? <OwnerMyPage user={user} /> : <ChildMyPage user={user} />;
 }

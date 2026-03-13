@@ -2,26 +2,36 @@
 
 import { SignupFormValues } from "@/app/signup/types";
 import { signupChild } from "@/lib/api/auth";
-import { SignupChildResponse } from "@/lib/api/types/auth";
-import { ApiError } from "@/lib/api/types/common";
+import { ChildReq, ImageInfo, SignupReq, SignupRes } from "@/lib/api/types/auth";
+import { ApiError, ApiResponse } from "@/lib/api/types/common";
 import { useMutation } from "@tanstack/react-query";
 
 export const useSignupChild = () => {
   return useMutation<
-    SignupChildResponse,
+    ApiResponse<SignupRes>,
     ApiError,
     { formData: SignupFormValues; documentUrl: string }
   >({
     mutationFn: async ({ formData, documentUrl }) => {
-      return signupChild({
+      const images: ImageInfo[] = [
+        {
+          fileKey: documentUrl.split("/onharu-minio/")[1],
+          filePath: documentUrl,
+          displayOrder: "0",
+        },
+      ];
+
+      const payload: SignupReq & ChildReq = {
         loginId: formData.email,
         password: formData.password,
         passwordConfirm: formData.passwordConfirm,
         name: formData.name ?? "",
         phone: formData.phone,
         nickname: formData.nickname ?? "",
-        certificate: documentUrl,
-      });
+        images,
+      };
+
+      return signupChild(payload);
     },
   });
 };

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, ReactNode } from "react";
+import { ReactNode } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import TabFilter from "@/components/ui/TabFilter";
 
 export interface TabItem {
@@ -8,30 +9,38 @@ export interface TabItem {
   value: string;
 }
 
-interface Props<T> {
-  items: T[];
+interface Props {
   tabs: TabItem[];
-  filterKey: keyof T;
-  render: (filteredItems: T[], activeValue: string) => ReactNode;
+  children: ReactNode;
   defaultValue?: string;
+  filterKey?: string;
 }
 
-export default function FilteredTabSection<T>({
-  items,
+export default function FilteredTabSection({
   tabs,
-  filterKey,
-  render,
+  children,
   defaultValue = "ALL",
-}: Props<T>) {
-  const [active, setActive] = useState(defaultValue);
+  filterKey = "statusFilter",
+}: Props) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  const filteredItems =
-    active === "ALL" ? items : items.filter(item => String(item[filterKey]) === active);
+  const active = searchParams.get(filterKey) ?? defaultValue;
+
+  const handleChange = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.set(filterKey, value);
+
+    params.set("pageNum", "1");
+
+    router.push(`?${params.toString()}`);
+  };
 
   return (
     <>
-      <TabFilter tabs={tabs} status={active} setStatus={setActive} />
-      {render(filteredItems, active)}
+      <TabFilter tabs={tabs} status={active} setStatus={handleChange} />
+      {children}
     </>
   );
 }

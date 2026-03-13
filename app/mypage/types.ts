@@ -1,10 +1,3 @@
-export type UserRole = "owner" | "child";
-
-export interface User {
-  name: string;
-  role: UserRole;
-}
-
 export interface Reservation {
   date: string;
   time: string;

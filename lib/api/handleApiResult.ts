@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { ApiResult } from "./types/common";
 
 export function handleApiResult<T>(result: ApiResult<T>) {
-    if (!result.ok) {
+  if (!result.success) {
     return NextResponse.json(
       {
         success: false,
@@ -14,5 +14,5 @@ export function handleApiResult<T>(result: ApiResult<T>) {
     );
   }
 
-  return NextResponse.json(result.data);
+  return NextResponse.json(result);
 }

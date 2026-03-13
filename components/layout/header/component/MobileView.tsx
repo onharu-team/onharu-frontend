@@ -2,14 +2,15 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { NavItems } from "../data";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
-import { RiMenu3Line, RiNotification3Line, RiCloseLine } from "@remixicon/react";
 import { useLogout } from "@/hooks/useLogout";
-import Link from "next/link";
+import { RiMenu3Line, RiCloseLine } from "@remixicon/react";
+import { Alert } from "./Alert";
 
 export const MobileView = ({
   isLoggedIn,
@@ -36,13 +37,13 @@ export const MobileView = ({
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-100 border-b border-b-gray-200 bg-white">
+    <header className="fixed top-0 z-100 w-full border-b border-b-gray-200 bg-white">
       <div className="wrapper relative">
-        <Link href={"/"}>
-          <h1 className="relative m-auto h-12.5 w-20">
+        <h1 className="relative m-auto h-12.5 w-20">
+          <Link href={"/"}>
             <Image src={"/image/icon/logo.svg"} alt="" fill style={{ objectFit: "contain" }} />
-          </h1>
-        </Link>
+          </Link>
+        </h1>
 
         <button className="absolute top-3 right-3" onClick={() => setOpen(true)}>
           <RiMenu3Line />
@@ -63,15 +64,11 @@ export const MobileView = ({
       >
         <div className="relative h-12.5">
           {isLoggedIn && (
-            <button
-              className="absolute top-3.5 right-11"
-              onClick={() => router.push("/mypage/notifications")}
-            >
-              <span className="relative">
-                <RiNotification3Line size={20} />
-                <span className="bg-main absolute top-0 right-0 h-2 w-2 rounded-full" />
-              </span>
-            </button>
+            <Alert
+              buttonClass="absolute top-3.5 right-11"
+              iconSize={20}
+              alertClass="top-0 right-0 h-2 w-2 rounded-full"
+            />
           )}
 
           <button
@@ -123,7 +120,10 @@ export const MobileView = ({
                 width="sm"
                 height="md"
                 fontSize="md"
-                onClick={() => router.push("/mypage")}
+                onClick={() => {
+                  router.push("/mypage");
+                  setOpen(false);
+                }}
               >
                 마이페이지
               </Button>
@@ -132,7 +132,10 @@ export const MobileView = ({
                 width="sm"
                 height="md"
                 fontSize="md"
-                onClick={() => logout()}
+                onClick={() => {
+                  logout();
+                  setOpen(false);
+                }}
               >
                 로그아웃
               </Button>
@@ -144,7 +147,10 @@ export const MobileView = ({
               width="sm"
               height="md"
               fontSize="md"
-              onClick={() => router.push("/login")}
+              onClick={() => {
+                router.push("/login");
+                setOpen(false);
+              }}
             >
               로그인
             </Button>

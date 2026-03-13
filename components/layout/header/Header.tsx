@@ -2,12 +2,12 @@
 
 import { MobileView } from "./component/MobileView";
 import { DesktopView } from "./component/DesktopView";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthProfile } from "@/hooks/useAuth";
 
 export const Header = () => {
-  const { data: user } = useAuth();
+  const { data: user } = useAuthProfile();
 
-  const isLoggedIn = !!user?.success;
+  const isLoggedIn = !!user;
 
   return (
     <>
@@ -15,7 +15,7 @@ export const Header = () => {
         <DesktopView isLoggedIn={isLoggedIn} />
       </div>
       <div className="block md:hidden">
-        <MobileView isLoggedIn={isLoggedIn} userName={user?.data?.name} />
+        <MobileView isLoggedIn={isLoggedIn} userName={user?.name} />
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 import "server-only";
 import { cookies } from "next/headers";
-import { ApiResult, ApiError } from "./types/common";
+import { ApiResult, ApiError, SuccessResponse } from "./types/common";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -72,7 +72,7 @@ export class ServerApiClient {
       const message = errorData?.message || errorData?.error || res.statusText || "Unknown error";
 
       return {
-        ok: false,
+        success: false,
         error: {
           message,
           status: res.status,
@@ -82,8 +82,8 @@ export class ServerApiClient {
     }
 
     return {
-      ok: true,
-      data: data as T,
+      success: true,
+      data: (data as SuccessResponse<T>).data,
       headers: res.headers,
     };
   }

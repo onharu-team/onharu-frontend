@@ -1,11 +1,11 @@
-import { ChatItem } from "../types";
+import { ChatRoomRes } from "@/lib/api/types/chat";
 import { ChatListItem } from "./ChatListItem";
 
 interface Props {
   name: string;
-  chatList: ChatItem[];
-  selectedChat: ChatItem | null;
-  onSelectChat: (chat: ChatItem) => void;
+  chatList: ChatRoomRes[];
+  selectedChat: ChatRoomRes | null;
+  onSelectChat: (chat: ChatRoomRes) => void;
 }
 
 export function ChatListPanel({ name, chatList, selectedChat, onSelectChat }: Props) {

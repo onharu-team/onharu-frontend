@@ -1,18 +1,12 @@
 import { Button } from "@/components/ui/Button";
 import StatusBadge from "./StatusBadge";
 import ReservationActionButtons from "./ReservationActionButtons";
-import { ChildReservation, OwnerReservation } from "@/lib/api/types/reservation";
 import formatDateTime from "../../utils/format";
+import { ChildReservationCardProps, OwnerReservationCardProps } from "../types";
 
-type ChildReservationCardProps = ChildReservation & {
-  role: "CHILD";
+type ReservationCardProps = (ChildReservationCardProps | OwnerReservationCardProps) & {
+  className?: string;
 };
-
-type OwnerReservationCardProps = OwnerReservation & {
-  role: "OWNER";
-};
-
-type ReservationCardProps = ChildReservationCardProps | OwnerReservationCardProps;
 
 export default function ReservationCard(props: ReservationCardProps) {
   const {
@@ -26,12 +20,15 @@ export default function ReservationCard(props: ReservationCardProps) {
     cancelReason,
     storeId,
     reviewed,
+    className = "bg-secondary",
   } = props;
 
   const { date, time } = formatDateTime(new Date(`${scheduleDate}T${startTime}`));
 
   return (
-    <li className="bg-secondary mb-2 flex flex-col gap-3 rounded-[10px] p-3 sm:mb-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+    <li
+      className={`${className} mb-2 flex flex-col gap-3 rounded-[10px] p-3 sm:mb-5 sm:flex-row sm:items-center sm:justify-between sm:p-6`}
+    >
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-1">
           <StatusBadge status={status} role={role} />
@@ -46,7 +43,7 @@ export default function ReservationCard(props: ReservationCardProps) {
         </div>
 
         <p className="text-xs font-medium sm:text-sm">
-          {date} {time} · {people}인 예약
+          {date} · {time} · {people}인 예약
         </p>
 
         {role === "CHILD" && (

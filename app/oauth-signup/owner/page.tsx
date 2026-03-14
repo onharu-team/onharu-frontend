@@ -8,6 +8,7 @@ import FormLayout from "@/components/layout/FormLayout";
 import { Button } from "@/components/ui/Button";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { signupKakaoOwner } from "@/lib/api/auth";
 
 export default function OauthOwnerSignupPage() {
   const [isBusinessVerified, setIsBusinessVerified] = useState(false);
@@ -21,7 +22,7 @@ export default function OauthOwnerSignupPage() {
     getValues,
   } = useForm<SignupFormValues>({ mode: "onSubmit" });
 
-  const onSubmit = (data: SignupFormValues) => {
+  const onSubmit = async (data: SignupFormValues) => {
     if (!isBusinessVerified) {
       setError("businessNumber", {
         type: "manual",
@@ -30,11 +31,24 @@ export default function OauthOwnerSignupPage() {
       return;
     }
 
-    console.log("회원가입 데이터:", data);
+    try {
+      const response = await signupKakaoOwner({
+        name: data.storeName!,
+        businessNumber: data.businessNumber!,
+      });
+
+      if (response.success) {
+        console.log("카카오 가게 회원가입 성공:", response.data);
+      } else {
+        console.error("회원가입 실패:", response.message);
+      }
+    } catch (err) {
+      console.error("회원가입 API 호출 중 오류:", err);
+    }
   };
 
   return (
-    <div className="mt-section-sm-top wrapper md:mt-section-lg-top mb-section-sm-bottom md:mb-section-lg-bottom flex min-h-screen items-center justify-center">
+    <div className="wrapper flex min-h-screen items-center justify-center">
       <div className="w-full max-w-115">
         <FormLayout title="매장 회원가입">
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">

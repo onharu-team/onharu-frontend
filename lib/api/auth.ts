@@ -3,6 +3,7 @@ import {
   ChangePasswordReq,
   ChildData,
   ChildReq,
+  ImageInfo,
   LoginReq,
   OwnerData,
   OwnerReq,
@@ -67,9 +68,31 @@ export const signupChild = (body: SignupReq & ChildReq): Promise<ApiResponse<Sig
   return apiClient.post<ApiResponse<SignupRes>, SignupReq & ChildReq>("/users/signup/child", body);
 };
 
+// 아동 카카오 회원가입
+export const signupKakaoChild = (body: {
+  nickname: string;
+  images: ImageInfo[];
+}): Promise<ApiResponse<SignupRes>> => {
+  return apiClient.post<ApiResponse<SignupRes>, { nickname: string; images: ImageInfo[] }>(
+    "/users/signup/child/finish",
+    body
+  );
+};
+
 // 가게 회원가입
 export const signupOwner = (body: SignupReq & OwnerReq): Promise<ApiResponse<SignupRes>> => {
   return apiClient.post<ApiResponse<SignupRes>, SignupReq & OwnerReq>("/users/signup/owner", body);
+};
+
+// 가게 카카오 회원가입
+export const signupKakaoOwner = (body: {
+  name: string;
+  businessNumber: string;
+}): Promise<ApiResponse<SignupRes>> => {
+  return apiClient.post<ApiResponse<SignupRes>, { name: string; businessNumber: string }>(
+    "/users/signup/owner/finish",
+    body
+  );
 };
 
 // 회원 탈퇴

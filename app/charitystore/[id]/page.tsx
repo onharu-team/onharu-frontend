@@ -15,6 +15,7 @@ import { CategoryData } from "@/components/feature/category/data";
 import { DetailSkeleton } from "./components/DetailSkeleton";
 import Skeleton from "react-loading-skeleton";
 import { GetReservationSchedule } from "@/lib/api/GetReservationSchedule";
+import { CharityDetail } from "@/types/store/type";
 
 export default function Detail() {
   const params = useParams();
@@ -61,17 +62,17 @@ export default function Detail() {
     );
   }
 
-  const storedetail = storeData.data.store;
+  const storedetail: CharityDetail = storeData.data.store;
   const isSlide = storedetail.images.length > 4;
   const storeCategory = CategoryData.filter(val => val.id === storedetail.categoryId);
 
+  console.log(storedetail);
+
   // 리뷰는 실패해도 빈 배열로 fallback
   const storereview = reviewData?.data.reviews ?? [];
-  console.log(storereview);
 
   // 예약 가능 일정
   const reservation = reservationData?.data;
-  console.log(reservation);
 
   return (
     <section className="mt-section-sm-top md:mt-section-lg-top mb-section-sm-bottom md:mb-section-lg-bottom">
@@ -125,7 +126,7 @@ export default function Detail() {
         </article>
         <article className="mt-15 md:mt-21">
           <Heading title="예약 정보" addClassName="justify-between">
-            <ReservationBtn data={storedetail.storeSchedules} />
+            <ReservationBtn isSharing={storedetail.isSharing} />
           </Heading>
           <div className="mt-3 md:mt-8">
             <Reservation status="short" />

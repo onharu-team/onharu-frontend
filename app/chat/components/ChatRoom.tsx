@@ -23,7 +23,7 @@ export default function ChatRoom({ chat, onBack, onDeleteRoom }: ChatRoomProps) 
 
   return (
     <div className="border-border flex h-[calc(100vh-120px)] w-full flex-col justify-between rounded-[10px] border">
-      <ChatHeader sender={"나중에 수정"} onBack={onBack} onDeleteRoom={handleDelete} />
+      <ChatHeader sender={chat.chatParticipants[0]} onBack={onBack} onDeleteRoom={handleDelete} />
 
       <div className="px-wrapper scrollbar-thin flex-1 overflow-y-auto sm:px-7.5">
         <MessageList messages={messages} />

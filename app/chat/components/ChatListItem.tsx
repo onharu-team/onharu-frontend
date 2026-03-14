@@ -30,14 +30,14 @@ export function ChatListItem({ chat, isSelected, onSelect }: Props) {
       </div>
 
       <div className="min-w-0 flex-1">
-        <div className="sm:text-md mb-1.25 font-semibold">{"나중에 수정"}</div>
+        <div className="sm:text-md mb-1.25 font-semibold">{chat.chatParticipants[0]}</div>
         <div className="truncate text-sm sm:text-base">{chat.lastMessage}</div>
       </div>
 
       <div
-        className={`flex flex-col items-end ${chat.unreadMessageCount ? "justify-between" : "justify-end"}`}
+        className={`flex flex-col items-end ${chat.unreadMessageCount > 0 ? "justify-between" : "justify-end"}`}
       >
-        {chat.unreadMessageCount && (
+        {chat.unreadMessageCount > 0 && (
           <div className="bg-main flex h-5.5 w-5.5 items-center justify-center rounded-full text-xs font-bold text-white">
             {chat.unreadMessageCount}
           </div>

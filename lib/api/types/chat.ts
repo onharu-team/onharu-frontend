@@ -3,6 +3,7 @@ export interface ChatRoomRes {
   lastMessage: string;
   lastMessageTime: string;
   unreadMessageCount: number;
+  chatParticipants: string[];
 }
 
 export interface ChatList {

@@ -1,140 +1,168 @@
 "use client";
 
-import { useState } from "react";
-import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
+import { useEffect, useState } from "react";
 import { RiCameraLine, RiDeleteBinLine } from "@remixicon/react";
 import Image from "next/image";
-import { SignupFormValues } from "@/app/signup/types";
 
-type InitialFile = {
+export type DisplayFile = {
+  id?: string | number;
   name: string;
   url: string;
+  file?: File;
+  isExisting: boolean;
 };
 
 type DocumentUploadFieldProps = {
-  register?: UseFormRegister<SignupFormValues>;
-  errors?: FieldErrors<SignupFormValues>;
-  watch?: UseFormWatch<SignupFormValues>;
-  onFilesChange?: (files: File[]) => void;
-  initialFiles?: InitialFile[];
+  onFilesChange: (files: DisplayFile[]) => void;
+  initialFiles?: { id?: string | number; name?: string; url: string }[];
   maxNum?: number;
+  error?: string;
+};
+
+// 초기 데이터 변환
+const convertInitialFiles = (
+  files: { id?: string | number; name?: string; url: string }[]
+): DisplayFile[] =>
+  files.map(f => ({
+    ...f,
+    name: f.name || "existing-file",
+    isExisting: true,
+  }));
+
+// 신규 파일 생성
+const createDisplayFile = (file: File): DisplayFile => {
+  const trimmedName = file.name.replace(/\s+/g, "");
+
+  return {
+    name: trimmedName,
+    url: URL.createObjectURL(file),
+    file: new File([file], trimmedName, { type: file.type }),
+    isExisting: false,
+  };
 };
 
 export default function DocumentUploadField({
-  register,
-  errors,
-  watch,
   onFilesChange,
   initialFiles = [],
   maxNum = 10,
+  error,
 }: DocumentUploadFieldProps) {
-  const [files, setFiles] = useState<File[]>([]);
-  const [customError, setCustomError] = useState<string>("");
-  const [existingFiles, setExistingFiles] = useState<InitialFile[]>(initialFiles);
+  const [allFiles, setAllFiles] = useState<DisplayFile[]>(() => convertInitialFiles(initialFiles));
 
-  const watchedFiles = watch?.("document") || [];
-  const displayFiles = watchedFiles.length
-    ? Array.from(watchedFiles).slice(0, maxNum)
-    : [...existingFiles.map((f): InitialFile | File => f), ...files];
+  const [internalError, setInternalError] = useState("");
 
+  // 파일 추가
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
+    const files = e.target.files;
+    if (!files) return;
 
-    const selectedFiles = Array.from(e.target.files).map(file => {
-      const trimmedName = file.name.replace(/\s+/g, "");
-      return new File([file], trimmedName, { type: file.type });
+    const selectedFiles = Array.from(files).map(createDisplayFile);
+
+    setAllFiles(prev => {
+      const totalCount = prev.length + selectedFiles.length;
+
+      if (totalCount > maxNum) {
+        setInternalError(`최대 ${maxNum}장까지만 업로드 가능합니다.`);
+
+        const allowedCount = maxNum - prev.length;
+        if (allowedCount <= 0) return prev;
+
+        return [...prev, ...selectedFiles.slice(0, allowedCount)];
+      }
+
+      setInternalError("");
+      return [...prev, ...selectedFiles];
     });
 
-    const totalCount = existingFiles.length + files.length + selectedFiles.length;
-
-    let newFiles: File[];
-    if (totalCount > maxNum) {
-      setCustomError(`최대 ${maxNum}장까지만 업로드 가능합니다.`);
-      const allowed = maxNum - existingFiles.length - files.length;
-      newFiles = [...files, ...selectedFiles.slice(0, allowed)];
-    } else {
-      newFiles = [...files, ...selectedFiles];
-      setCustomError("");
-    }
-
-    setFiles(newFiles);
-    onFilesChange?.(newFiles);
+    e.target.value = "";
   };
 
+  // 파일 삭제
   const handleRemoveFile = (index: number) => {
-    if (index < existingFiles.length) {
-      // 기존 파일 삭제
-      const updatedExisting = existingFiles.filter((_, i) => i !== index);
-      setExistingFiles(updatedExisting);
-    } else {
-      // 새로 추가한 파일 삭제
-      const adjustedIndex = index - existingFiles.length;
-      const updatedFiles = files.filter((_, i) => i !== adjustedIndex);
-      setFiles(updatedFiles);
-      onFilesChange?.(updatedFiles);
-    }
-    setCustomError("");
+    setAllFiles(prev => {
+      const target = prev[index];
+
+      if (!target.isExisting) {
+        URL.revokeObjectURL(target.url);
+      }
+
+      return prev.filter((_, i) => i !== index);
+    });
+
+    setInternalError("");
   };
+
+  // 부모에 변경 전달
+  useEffect(() => {
+    onFilesChange(allFiles);
+  }, [allFiles, onFilesChange]);
+
+  // 언마운트 시 URL 해제
+  useEffect(() => {
+    return () => {
+      allFiles.forEach(file => {
+        if (!file.isExisting) {
+          URL.revokeObjectURL(file.url);
+        }
+      });
+    };
+  }, [allFiles]);
+
+  const displayError = error || internalError;
 
   return (
     <div className="flex flex-col">
       <input
-        id="document"
+        id="document-upload"
         type="file"
-        accept=".jpg,.jpeg,.png,.pdf"
         multiple
+        accept="image/*"
         className="hidden"
-        {...(register ? register("document", { required: "증명서류는 필수입니다." }) : {})}
         onChange={handleFileChange}
       />
 
       <label
-        htmlFor="document"
-        className="border-border text-text-secondary flex h-22.5 w-22.5 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-lg border bg-white px-4 py-3 text-[14px] hover:bg-gray-50"
+        htmlFor="document-upload"
+        className="border-border text-text-secondary flex h-22.5 w-22.5 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-lg border bg-white px-4 py-3 text-[14px] transition-colors hover:bg-gray-50"
       >
         <RiCameraLine size={30} color="rgba(117,117,117,1)" />
-        업로드
+        <span className="mt-1">업로드</span>
+        <span className="text-[10px] opacity-60">
+          ({allFiles.length}/{maxNum})
+        </span>
       </label>
 
-      {errors?.document && <p className="text-danger mt-1 text-sm">{errors.document.message}</p>}
-      {customError && <p className="text-danger mt-1 text-sm">{customError}</p>}
+      {displayError && <p className="mt-1 text-sm text-red-500">{displayError}</p>}
 
-      {displayFiles.length > 0 && (
-        <div className="scrollbar-hide mt-2 flex flex-nowrap gap-2 overflow-x-auto">
-          {displayFiles.map((file: InitialFile | File, index) => (
-            <div key={index} className="relative h-25 w-25 shrink-0 rounded-[10px] border">
-              {"url" in file ? (
-                <Image
-                  src={file.url}
-                  alt={file.name}
-                  width={100}
-                  height={100}
-                  className="h-full w-full rounded-[10px] object-cover"
-                />
-              ) : file.type?.startsWith("image/") ? (
-                <Image
-                  src={URL.createObjectURL(file)}
-                  alt={file.name}
-                  width={100}
-                  height={100}
-                  className="h-full w-full rounded-[10px] object-cover"
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center bg-gray-100 text-xs text-gray-600">
-                  {file.name}
-                </div>
-              )}
-              <button
-                type="button"
-                onClick={() => handleRemoveFile(index)}
-                className="absolute top-1 right-1 rounded-full bg-white p-1 shadow"
-              >
-                <RiDeleteBinLine size={16} color="red" />
-              </button>
+      <div className="scrollbar-hide mt-2 flex flex-nowrap gap-2 overflow-x-auto pb-2">
+        {allFiles.map((file, index) => (
+          <div
+            key={`${file.isExisting ? "old" : "new"}-${file.name}-${index}`}
+            className="relative h-25 w-25 shrink-0 rounded-[10px] border bg-gray-50"
+          >
+            <Image
+              src={file.url}
+              alt={file.name}
+              fill
+              sizes="100px"
+              className="rounded-[10px] object-cover"
+            />
+
+            <button
+              type="button"
+              onClick={() => handleRemoveFile(index)}
+              className="absolute top-1 right-1 rounded-full bg-white/80 p-1 shadow-sm transition-colors hover:bg-white"
+              title="삭제"
+            >
+              <RiDeleteBinLine size={16} color="red" />
+            </button>
+
+            <div className="absolute bottom-1 left-1 rounded-md bg-black/50 px-1.5 text-[10px] text-white">
+              {index + 1}
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

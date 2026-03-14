@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/TextArea";
 import Select from "@/components/ui/Select";
@@ -11,65 +12,129 @@ import { useStoreForm } from "./useStoreForm";
 import type { StoreInitialData } from "../types";
 import useModal from "@/hooks/ui/useModal";
 import { Modal } from "@/components/ui/Modal";
+import TagInput from "./TagInput";
+import AddressSearchModal from "@/components/feature/AddressSearchModal";
+import { Toast } from "@/components/feature/toast/Toast";
 
 type StoreFormProps = {
-  initialData: StoreInitialData;
+  initialData?: StoreInitialData;
+  storeId?: string;
 };
 
-export default function StoreForm({ initialData }: StoreFormProps) {
+type AddressSelect = {
+  address: string;
+  lat: string;
+  lng: string;
+};
+
+const DEFAULT_DATA: StoreInitialData = {
+  storeName: "",
+  intro: "",
+  category: "",
+  content: "",
+  phone: "",
+  selectedDays: [],
+  openTime: "",
+  closeTime: "",
+  tags: [],
+  files: [],
+  address: "",
+  lat: "",
+  lng: "",
+};
+
+function mapInitialFiles(files?: string[]) {
+  return files?.map((url, index) => ({
+    id: index,
+    url,
+    isExisting: true as const,
+  }));
+}
+
+export default function StoreForm({ initialData, storeId }: StoreFormProps) {
+  const data = initialData ?? DEFAULT_DATA;
+
+  const storeForm = useStoreForm(data, storeId);
+
   const {
-    state: {
-      storeName,
-      category,
-      content,
-      phone,
-      selectedDays,
-      openTime,
-      closeTime,
-      tags,
-      initialFiles,
-    },
-    actions: {
-      setStoreName,
-      setCategory,
-      setContent,
-      setPhone,
-      toggleDay,
-      setOpenTime,
-      setCloseTime,
-      setTags,
-      handleFilesChange,
-      handleSubmit,
-    },
-    computed: { isValid, CATEGORY_OPTIONS, TIME_OPTIONS, DAYS },
-  } = useStoreForm(initialData);
+    storeName,
+    category,
+    intro,
+    content,
+    phone,
+    selectedDays,
+    openTime,
+    closeTime,
+    tags,
+    address,
+  } = storeForm.state;
+
+  const {
+    setStoreName,
+    setCategory,
+    setIntro,
+    setContent,
+    setPhone,
+    toggleDay,
+    setOpenTime,
+    setCloseTime,
+    setTags,
+    handleFilesChange,
+    handleSubmit,
+    setAddress,
+    setLat,
+    setLng,
+  } = storeForm.actions;
+
+  const { isValid, CATEGORY_OPTIONS, TIME_OPTIONS, DAYS } = storeForm.computed;
 
   const { open, handleOpenModal, handleCloseModal } = useModal();
 
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+
+  const initialFiles = useMemo(() => mapInitialFiles(initialData?.files), [initialData?.files]);
+
+
   const handleRegisterClick = async () => {
     try {
-      // 실제 등록 처리
-      handleSubmit();
+      await handleSubmit();
+
       handleOpenModal();
     } catch (error) {
       console.error("가게 등록 실패:", error);
+      Toast("error", "가게 등록에 실패했습니다.", "잠시후에 다시 시도해주세요.");
     }
+  };
+
+  const handleAddressSelect = ({ address, lat, lng }: AddressSelect) => {
+    setAddress(address);
+    setLat(lat);
+    setLng(lng);
   };
 
   return (
     <>
       <div className="mx-auto flex max-w-125 flex-col gap-2 sm:gap-5">
-        {/* 상호명 */}
         <Input
           label="상호명"
           id="storeName"
           value={storeName}
-          placeholder="매장명을 입력해 주세요."
+          placeholder="매장명을 입력해주세요."
           onChange={e => setStoreName(e.target.value)}
           isRequired
+          disabled={!!storeId}
         />
 
-        {/* 카테고리 */}
+        <Input
+          label="주소"
+          id="address"
+          value={address}
+          readOnly
+          isRequired
+          placeholder="클릭하여 매장 주소 검색을 해주세요."
+          onClick={() => setIsAddressModalOpen(true)}
+        />
+
         <div className="flex w-full flex-col">
           <label className="sm:text-md text-base font-medium">
             카테고리<span className="text-danger ml-1">*</span>
@@ -78,12 +143,21 @@ export default function StoreForm({ initialData }: StoreFormProps) {
             value={category}
             options={CATEGORY_OPTIONS}
             onChange={value => setCategory(String(value))}
-            placeholder="카테고리를 선택해 주세요"
+            placeholder="카테고리를 선택해주세요."
             className="mt-2"
           />
         </div>
 
-        {/* 가게 소개 */}
+        <Input
+          label="한 줄 소개"
+          id="intro"
+          type="text"
+          value={intro}
+          onChange={e => setIntro(e.target.value)}
+          placeholder="가게 한 줄 소개를 입력해주세요."
+          isRequired
+        />
+
         <div className="sm:text-md flex flex-col text-base font-medium">
           <label>
             가게 소개<span className="text-danger ml-1">*</span>
@@ -93,23 +167,21 @@ export default function StoreForm({ initialData }: StoreFormProps) {
             name="content"
             value={content}
             onChange={e => setContent(e.target.value)}
-            placeholder="가게 소개를 입력해 주세요."
+            placeholder="가게 소개를 입력해주세요."
             maxLength={500}
           />
         </div>
 
-        {/* 전화번호 */}
         <Input
           label="전화번호"
           id="phone"
           type="tel"
           value={phone}
           onChange={e => setPhone(e.target.value.replace(/[^0-9]/g, ""))}
-          placeholder="연락 가능한 매장 번호를 숫자만 입력해 주세요."
+          placeholder="연락 가능한 매장 번호를 숫자만 입력해주세요."
           isRequired
         />
 
-        {/* 매장 사진 */}
         <div className="sm:text-md flex flex-col text-base font-medium">
           <label>
             매장 사진<span className="text-danger ml-1">*</span>
@@ -117,13 +189,18 @@ export default function StoreForm({ initialData }: StoreFormProps) {
           <p className="text-text-secondary mt-1.25 mb-2.5 text-sm">
             최소 1장의 매장 사진을 올려주세요.
           </p>
-          <DocumentUploadField onFilesChange={handleFilesChange} initialFiles={initialFiles} />
+
+          <DocumentUploadField
+            onFilesChange={handleFilesChange}
+            initialFiles={initialFiles}
+            maxNum={10}
+          />
         </div>
 
         {/* 운영 시간 */}
         <Section title="운영 시간" isRequired>
           <div className="flex flex-wrap gap-2">
-            {DAYS.map((day: string) => (
+            {DAYS.map(day => (
               <SelectButton
                 key={day}
                 label={day}
@@ -150,6 +227,7 @@ export default function StoreForm({ initialData }: StoreFormProps) {
               className="mt-2.5 max-w-60"
             />
           </div>
+
           <div className="sm:text-md flex flex-1 flex-col text-base font-medium">
             <label>
               마감 시간<span className="text-danger ml-1">*</span>
@@ -165,13 +243,7 @@ export default function StoreForm({ initialData }: StoreFormProps) {
         </div>
 
         {/* 태그 */}
-        <Input
-          label="태그"
-          id="tags"
-          value={tags}
-          onChange={e => setTags(e.target.value)}
-          placeholder="쉼표(,)로 여러 태그를 입력해 주세요. 예: 카페, 빵"
-        />
+        <TagInput value={tags} onChange={setTags} maxTags={3} />
 
         {/* 등록 버튼 */}
         <div className="mt-7.5 sm:mt-12.5">
@@ -206,6 +278,12 @@ export default function StoreForm({ initialData }: StoreFormProps) {
           </div>
         </Modal>
       )}
+
+      <AddressSearchModal
+        open={isAddressModalOpen}
+        onClose={() => setIsAddressModalOpen(false)}
+        onSelect={handleAddressSelect}
+      />
     </>
   );
 }

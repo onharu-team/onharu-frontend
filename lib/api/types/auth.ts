@@ -28,6 +28,16 @@ export interface OwnerData {
   nextToConditionNumber: string;
 }
 
+// 이메일 인증 코드
+export type SendEmailCodeReq = {
+  email: string;
+};
+
+export type VerifyEmailCodeReq = {
+  email: string;
+  code: string;
+};
+
 // 로그인
 export interface LoginReq {
   loginId: string;

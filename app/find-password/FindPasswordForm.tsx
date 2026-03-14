@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/Button";
-import EmailAuthField from "@/components/feature/EmailAuthField";
+import { EmailAuthField } from "@/components/feature/EmailAuthField";
 import { FIELD_CONFIG } from "@/components/form-fields/fieldConfig";
 import { FormField } from "@/components/form-fields/FormField";
 
@@ -25,17 +25,11 @@ export default function FindPasswordForm() {
     trigger,
   } = useForm<FindPasswordFormValues>({ mode: "onSubmit" });
 
-  const [isCodeSent, setIsCodeSent] = useState(false);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
 
   const onSubmit = (data: FindPasswordFormValues) => {
-    if (!isCodeSent) {
-      setError("email", { type: "manual", message: "이메일 인증을 진행해주세요." });
-      return;
-    }
-
     if (!isEmailVerified) {
-      setError("authCode", { type: "manual", message: "인증 확인을 완료해 주세요." });
+      setError("email", { type: "manual", message: "인증 확인을 완료해 주세요." });
       return;
     }
 
@@ -55,19 +49,14 @@ export default function FindPasswordForm() {
       {/* 이메일 */}
       <EmailAuthField<FindPasswordFormValues>
         register={register}
-        errors={errors}
-        setError={setError}
-        clearErrors={clearErrors}
-        trigger={trigger}
         watch={watch}
+        errors={errors}
         emailName="email"
         codeName="authCode"
+        trigger={trigger}
+        setError={setError}
+        clearErrors={clearErrors}
         onVerifiedChange={setIsEmailVerified}
-        onCodeSentChange={setIsCodeSent}
-        isVerified={isEmailVerified}
-        setIsVerified={setIsEmailVerified}
-        isCodeSent={isCodeSent}
-        setIsCodeSent={setIsCodeSent}
       />
 
       {/* 연락처  */}

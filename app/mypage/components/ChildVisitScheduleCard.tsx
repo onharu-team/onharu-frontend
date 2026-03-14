@@ -1,12 +1,17 @@
 "use client";
 
-import { ChildSchedule } from "../types";
 import { RiArrowRightSLine } from "@remixicon/react";
 import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
+import { ChildReservation } from "@/lib/api/types/reservation";
+import formatDateTime from "../utils/format";
 
-export default function ChildVisitScheduleCard({ schedule }: { schedule?: ChildSchedule }) {
+export default function ChildVisitScheduleCard({ schedule }: { schedule?: ChildReservation }) {
   const router = useRouter();
+
+  const { date, time } = formatDateTime(
+    new Date(`${schedule?.scheduleDate}T${schedule?.startTime}`)
+  );
 
   if (!schedule) {
     return (
@@ -43,9 +48,9 @@ export default function ChildVisitScheduleCard({ schedule }: { schedule?: ChildS
 
       <div className="flex flex-col gap-2.5 text-xs break-keep sm:text-base">
         <p>{schedule.storeName}</p>
-        <p className="text-text-secondary">{schedule.address}</p>
+        <p className="text-text-secondary">{schedule.storeAddress}</p>
         <p>
-          {schedule.date} · {schedule.time} · {schedule.people}인 예약
+          {date} · {time} · {schedule.people}인 예약
         </p>
       </div>
     </div>

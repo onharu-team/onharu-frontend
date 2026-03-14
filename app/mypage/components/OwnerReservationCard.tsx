@@ -1,16 +1,30 @@
-import { Reservation } from "../types";
+import { serverApiClient } from "@/lib/api/serverApiClient";
 import CardList from "./CardList";
+import { OwnerReservation } from "@/lib/api/types/reservation";
+import { OwnerReservationCardProps } from "../reservations/types";
 
-export default function OwnerReservationCard({ reservations }: { reservations?: Reservation[] }) {
+type OwnerReservationsRes = {
+  ongoingReservations: OwnerReservation[];
+};
+
+export default async function OwnerReservationCard() {
+  const result = await serverApiClient.get<OwnerReservationsRes>(
+    "/api/owners/reservations/summary"
+  );
+
+  const reservations: OwnerReservationCardProps[] =
+    (result.success &&
+      result.data?.ongoingReservations.map(r => ({
+        ...r,
+        role: "OWNER",
+      }))) ||
+    [];
+
   return (
     <div className="bg-secondary flex-1 rounded-[10px] p-5 lg:p-7">
       <CardList
         title="진행중인 예약"
-        items={reservations?.map(r => ({
-          title: `예약 ${r.status}`,
-          subtitle: `${r.date} · ${r.time} · ${r.people}인`,
-        }))}
-        link="/review"
+        items={reservations}
         emptyTitle="현재 진행중인 예약이 없어요."
         emptySubtitle="나눔 등록 후 예약을 받아보세요!"
         emptyButtonText="나눔 하러 가기"

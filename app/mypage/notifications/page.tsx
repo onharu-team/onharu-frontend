@@ -10,6 +10,7 @@ import { PageSection } from "../components/PageSection";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useEffect } from "react";
+import EmptyState from "@/components/ui/EmptyState";
 
 export default function NotificationsPage({ perPage = 6 }: { perPage?: number }) {
   const searchParams = useSearchParams();
@@ -35,10 +36,11 @@ export default function NotificationsPage({ perPage = 6 }: { perPage?: number })
   if (!notification || !notification.isSystemEnabled) {
     return (
       <PageSection title="알림 내역" className="bg-white">
-        <div className="bg-secondary mt-6 rounded-[10px] py-8 text-center text-sm font-medium">
-          알림이 꺼져 있습니다.
-          <p>알림을 받으려면 알림 설정에서 켜주세요.</p>
-        </div>
+        <EmptyState
+          title="알림이 꺼져 있습니다."
+          subtitle="알림을 받으려면 알림을 켜주세요!"
+          showButton={false}
+        />
       </PageSection>
     );
   }
@@ -52,7 +54,7 @@ export default function NotificationsPage({ perPage = 6 }: { perPage?: number })
           ))}
         </>
       ) : notifications.length === 0 ? (
-        <div className="py-5 text-center text-sm font-medium">알림 내역이 없습니다.</div>
+        <EmptyState title="알림 내역이 없습니다." showButton={false} />
       ) : (
         <div className="divide-y">
           {notifications.map(item => (

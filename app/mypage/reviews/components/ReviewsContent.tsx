@@ -8,6 +8,7 @@ import { formatDateLabel } from "@/utils/formatDateLabel";
 import { ReviewsData } from "../types";
 import DeleteReviewButton from "./DeleteReviewButton";
 import GenericPagination from "@/components/feature/pagination/GenericPagination";
+import EmptyState from "@/components/ui/EmptyState";
 
 interface Props {
   items: ReviewsData | null;
@@ -34,31 +35,31 @@ export default function ReviewsContent({ items, role, hasUsed = false }: Props) 
   if (!items || items.reviews.length === 0) {
     if (!isOwner && hasUsed) {
       return (
-        <div>
-          <p className="sm:text-md bg-secondary mt-3 rounded-[10px] py-8 text-center text-sm font-medium sm:mt-6">
-            감사 리뷰 내역이 없습니다.
-          </p>
-        </div>
+        <EmptyState
+          title="작성하신 리뷰가 없습니다."
+          subtitle="리뷰 작성을 통해 감사의 마음을 전해보세요!"
+          buttonText="리뷰 작성하기"
+          buttonLink="/mypage/reservations?statusFilter=COMPLETED&pageNum=1"
+        />
       );
     }
 
     if (!isOwner && !hasUsed) {
       return (
-        <div className="sm:text-md bg-secondary mt-6 flex flex-col items-center gap-2 rounded-[10px] py-8 text-sm font-medium sm:mt-12.5 sm:gap-5">
-          나눔 가게를 이용하고 감사 리뷰를 작성 해 보세요!
-          <Link href="/charitystore">
-            <Button varient="default" width="md" height="sm" fontSize="md">
-              나눔가게 보러가기
-            </Button>
-          </Link>
-        </div>
+        <EmptyState
+          title="작성하신 리뷰가 없습니다."
+          subtitle="나눔 가게를 이용하고 감사 리뷰를 작성해보세요!"
+        />
       );
     }
 
     return (
-      <p className="sm:text-md bg-secondary mt-3 rounded-[10px] py-8 text-center text-sm font-medium sm:mt-6">
-        감사 리뷰 내역이 없습니다.
-      </p>
+      <EmptyState
+        title="감사 리뷰 내역이 없습니다."
+        subtitle="나눔 등록 후 리뷰를 받아보세요!"
+        buttonText="나눔 등록하기"
+        buttonLink="/mypage/sharing/create"
+      />
     );
   }
 

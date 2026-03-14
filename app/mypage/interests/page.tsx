@@ -6,6 +6,7 @@ import InterestsCard from "./components/InterestsCard";
 import { useFavoritesQuery } from "@/hooks/useFavorite";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import EmptyState from "@/components/ui/EmptyState";
 
 export default function InterestsPage() {
   const searchParams = useSearchParams();
@@ -29,9 +30,10 @@ export default function InterestsPage() {
           ))}
         </div>
       ) : hasNoData ? (
-        <p className="sm:text-md bg-secondary mt-6 rounded-[10px] py-8 text-center text-sm font-medium sm:mt-12.5">
-          관심 목록이 없습니다.
-        </p>
+        <EmptyState
+          title="관심 목록이 비어있습니다."
+          subtitle="나눔 가게를 둘러보고 마음에 드는 곳을 찾아보세요!"
+        />
       ) : (
         <InterestsCard items={data} />
       )}

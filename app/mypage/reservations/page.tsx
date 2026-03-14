@@ -10,6 +10,7 @@ import { useAuthProfile } from "@/hooks/useAuth";
 import { useReservations } from "@/hooks/useReservations";
 import { ReservationStatus } from "@/lib/api/types/reservation";
 import { CHILD_RESERVATION_TABS, OWNER_RESERVATION_TABS } from "./constants/reservationTabs";
+import EmptyState from "@/components/ui/EmptyState";
 
 const PER_PAGE = 4;
 
@@ -53,9 +54,7 @@ export default function ReservationPage() {
             <Skeleton key={idx} className="mt-4 h-30 rounded-[10px]" />
           ))
         ) : showEmpty ? (
-          <p className="bg-secondary mt-6 rounded-[10px] py-8 text-center text-sm font-medium">
-            예약 내역이 없습니다.
-          </p>
+          <EmptyState title="예약 내역이 없습니다." subtitle="나눔 가게를 둘러보고 예약해보세요!" />
         ) : (
           user && <ReservationContent items={reservationsData} role={user.userType} />
         )}

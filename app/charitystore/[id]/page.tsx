@@ -38,12 +38,12 @@ export default function Detail() {
     throwOnError: false,
   });
 
-  const { data: reservationData, isLoading: reservationLoading } = useQuery({
-    queryKey: ["reservation", storeId],
-    queryFn: () => GetReservationSchedule(storeId),
-    staleTime: 1000 * 60,
-    throwOnError: false,
-  });
+  // const { data: reservationData, isLoading: reservationLoading } = useQuery({
+  //   queryKey: ["reservation", storeId],
+  //   queryFn: () => GetReservationSchedule(storeId),
+  //   staleTime: 1000 * 60,
+  //   throwOnError: false,
+  // });
 
   // 스토어 로딩 중
   if (storeLoading) return <DetailSkeleton />;
@@ -71,8 +71,8 @@ export default function Detail() {
   console.log(reviewData?.data?.reviews);
 
   // 예약 가능 일정
-  const reservation = reservationData?.data;
-  console.log(reservation);
+  // const reservation = reservationData?.data;
+  // console.log(reservation);
 
   return (
     <section className="mt-section-sm-top md:mt-section-lg-top mb-section-sm-bottom md:mb-section-lg-bottom">

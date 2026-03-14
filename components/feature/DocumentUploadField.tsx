@@ -59,6 +59,8 @@ export default function DocumentUploadField({
 
     setFiles(newFiles);
     onFilesChange?.(newFiles);
+
+    e.target.value = "";
   };
 
   const handleRemoveFile = (index: number) => {

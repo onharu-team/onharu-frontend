@@ -26,7 +26,10 @@ export function SelectedReservationList({
   if (entries.length === 0)
     return (
       <div className="rounded-md border border-gray-300 bg-white p-3 text-center md:p-5">
-        <button onClick={() => setOpen(prev => !prev)} className="flex w-full font-semibold">
+        <button
+          onClick={() => setOpen(prev => !prev)}
+          className="md:text-md flex w-full text-sm font-semibold"
+        >
           <div>선택된 일정이 없습니다.</div>
         </button>
       </div>
@@ -35,23 +38,22 @@ export function SelectedReservationList({
   return (
     <div className="rounded-md border border-gray-300 bg-white p-3 text-center md:p-5">
       {/* 헤더 */}
-      <div className="relative flex items-center justify-between">
-        <button
+      <div className="flex items-center justify-between">
+        <div
           onClick={() => setOpen(prev => !prev)}
-          className="flex w-full justify-between font-semibold"
+          className="md:text-md flex w-full justify-between text-sm font-semibold"
         >
-          <div>
-            선택된 일정 <span className="text-main">{totalCount}개</span>
+          <div className="flex items-center gap-1 sm:gap-2">
+            선택된 일정<span className="text-main">{totalCount}개</span>
+            <button
+              onClick={handleClearAll}
+              className="cursor-pointer text-xs font-semibold text-red-500"
+            >
+              전체 삭제
+            </button>
           </div>
           {open ? <RiArrowDownSLine className="h-6 w-6" /> : <RiArrowUpSLine className="h-6 w-6" />}
-        </button>
-
-        <button
-          onClick={handleClearAll}
-          className="absolute left-30 cursor-pointer text-sm font-semibold text-red-500"
-        >
-          전체 삭제
-        </button>
+        </div>
       </div>
 
       {/* 드롭다운 */}
@@ -61,7 +63,7 @@ export function SelectedReservationList({
             <div key={date}>
               {/* 날짜 + 날짜 삭제 */}
               <div className="flex items-center justify-between">
-                <p className="font-medium">{FormatKoreanDate(date)}</p>
+                <p className="text-sm font-medium sm:text-base">{FormatKoreanDate(date)}</p>
 
                 <button
                   onClick={() => handleRemoveDate(date)}

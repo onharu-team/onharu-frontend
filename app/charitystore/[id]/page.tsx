@@ -14,13 +14,15 @@ import { GetReviewDetail } from "@/lib/api/GetReviewDetail";
 import { CategoryData } from "@/components/feature/category/data";
 import { DetailSkeleton } from "./components/DetailSkeleton";
 import Skeleton from "react-loading-skeleton";
-// import { GetReservationSchedule } from "@/lib/api/GetReservationSchedule";
+import { GetStoreSchedules } from "@/lib/api/GetStoreSchedules";
 import { CharityDetail } from "@/types/store/type";
 
 export default function Detail() {
   const params = useParams();
   const storeId = params.id as string;
-
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
   const {
     data: storeData,
     error: storeError,
@@ -39,12 +41,13 @@ export default function Detail() {
     throwOnError: false,
   });
 
-  // const { data: reservationData, isLoading: reservationLoading } = useQuery({
-  //   queryKey: ["reservation", storeId],
-  //   queryFn: () => GetReservationSchedule(storeId),
-  //   staleTime: 1000 * 60,
-  //   throwOnError: false,
-  // });
+  const { data: scheduleData, isLoading: scheduleLoading } = useQuery({
+    queryKey: ["store-schedules", storeId, year, month],
+    queryFn: () => GetStoreSchedules(storeId, year, month),
+    enabled: !!storeId,
+    staleTime: 1000 * 60,
+    retry: false,
+  });
 
   // 스토어 로딩 중
   if (storeLoading) return <DetailSkeleton />;
@@ -72,7 +75,9 @@ export default function Detail() {
   const storereview = reviewData?.data.reviews ?? [];
 
   // 예약 가능 일정
-  // const reservation = reservationData?.data;
+  const reservation = scheduleData?.data.monthlySummaries ?? [];
+
+  console.log(scheduleData?.data.monthlySummaries);
 
   return (
     <section className="mt-section-sm-top md:mt-section-lg-top mb-section-sm-bottom md:mb-section-lg-bottom">
@@ -126,7 +131,11 @@ export default function Detail() {
         </article>
         <article className="mt-15 md:mt-21">
           <Heading title="예약 정보" addClassName="justify-between">
-            <ReservationBtn isSharing={storedetail.isSharing} />
+            <ReservationBtn
+              storeId={storeId}
+              data={reservation}
+              isSharing={storedetail.isSharing}
+            />
           </Heading>
           <div className="mt-3 md:mt-8">
             <Reservation status="short" />

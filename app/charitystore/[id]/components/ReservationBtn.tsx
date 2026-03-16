@@ -1,14 +1,16 @@
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import { StoreSchedules } from "@/types/store/detail/StoreSchedules";
+import { MonthlySummary } from "@/types/store/schedules/type";
 
 interface ReservationProps {
-  data?: StoreSchedules[];
+  storeId?: string;
+  data?: MonthlySummary[];
   isSharing: boolean;
 }
 
-export const ReservationBtn = ({ data, isSharing }: ReservationProps) => {
+export const ReservationBtn = ({ storeId, data, isSharing }: ReservationProps) => {
   const router = useRouter();
+
   if (!isSharing) {
     return (
       <Button varient="dark" fontSize="md" width="md" height="md">
@@ -24,7 +26,7 @@ export const ReservationBtn = ({ data, isSharing }: ReservationProps) => {
         width="md"
         height="md"
         onClick={() => {
-          // router.push(`/reservation/"${data[0]?.storeId}`);
+          router.push(`/reservation/${storeId}`);
         }}
       >
         예약하기

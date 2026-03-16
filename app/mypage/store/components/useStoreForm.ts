@@ -9,6 +9,7 @@ import { createStore, updateStore } from "@/lib/stores";
 import { CreateStoreReq, UpdateStoreReq } from "@/lib/api/types/stores";
 import { useUploadImage } from "@/hooks/useUploadImage";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 const reverseDayMap = Object.fromEntries(Object.entries(DAY_MAP).map(([k, v]) => [v, k]));
 
@@ -43,7 +44,8 @@ function buildBusinessHours(selectedDays: string[], openTime: string, closeTime:
 
 export function useStoreForm(initialData: StoreInitialData, storeId?: string) {
   const queryClient = useQueryClient();
-  
+  const router = useRouter();
+
   const { mutateAsync: uploadImage } = useUploadImage();
 
   const [selectedDays, setSelectedDays] = useState<string[]>(
@@ -148,27 +150,27 @@ export function useStoreForm(initialData: StoreInitialData, storeId?: string) {
       };
 
       await updateStore(storeId, updateBody);
-      return;
+    } else {
+      const createBody: CreateStoreReq = {
+        categoryId,
+        name: storeName,
+        address,
+        phone,
+        lat,
+        lng,
+        introduction: content,
+        intro,
+        tagNames: tags,
+        businessHours,
+        images,
+      };
+
+      await createStore(createBody);
+
+      await queryClient.invalidateQueries({ queryKey: ["auth"] });
     }
 
-    const createBody: CreateStoreReq = {
-      categoryId,
-      name: storeName,
-      address,
-      phone,
-      lat,
-      lng,
-      introduction: content,
-      intro,
-      tagNames: tags,
-      businessHours,
-      images,
-    };
-
-    await createStore(createBody);
-
-    await queryClient.invalidateQueries({ queryKey: ["auth"] });
-
+    router.refresh();
   };
 
   const isValid =

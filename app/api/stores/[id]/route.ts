@@ -25,7 +25,7 @@ export async function PUT(request: Request, context: { params: Promise<{ id: str
   const { id } = await context.params;
   const body = await request.json();
 
-  const result = await serverApiClient.put(`/api/stores/${id}`, body);
+  const result = await serverApiClient.put(`/api/owners/stores/${id}`, body);
 
   return handleApiResult(result);
 }

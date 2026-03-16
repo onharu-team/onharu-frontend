@@ -20,7 +20,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   const body = await request.json();
 
-  const result = await serverApiClient.post("/api/stores", body);
+  const result = await serverApiClient.post("/api/owners/stores", body);
 
   return handleApiResult(result);
 }

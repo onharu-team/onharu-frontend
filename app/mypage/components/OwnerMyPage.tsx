@@ -18,7 +18,7 @@ export async function OwnerMyPage() {
             description="아직 등록된 가게가 없어요."
             subDescription="상점을 먼저 등록하고 나눔을 시작해보세요!"
             buttonText="가게 등록하러 가기"
-            moveTo="/mypage/store/edit"
+            moveTo="/mypage/store"
           />
         ) : (
           <OwnerLevelCard />

@@ -49,7 +49,7 @@ export default function SharingPage() {
 
   const storeId = String(user?.stores[0]);
 
-  const { data: existingSchedules = {} } = useStoreSchedules({
+  const { times: existingSchedules } = useStoreSchedules({
     storeId: storeId,
     params: { year: String(currentYear), month: String(currentMonth) },
   });

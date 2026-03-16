@@ -1,5 +1,10 @@
 import { apiClient } from "./clientApiClient";
-import { ReservationsData, OwnerReservation, OwnerReservationParams } from "./types/reservation";
+import {
+  ReservationsData,
+  OwnerReservation,
+  OwnerReservationParams,
+  CreateStoreSchedulesReq,
+} from "./types/reservation";
 import { ApiResponse } from "./types/common";
 
 export const getOwnerReservations = ({
@@ -31,4 +36,12 @@ export const changeOwnerReservationStatus = (
   }
 
   return apiClient.post<ApiResponse<null>>(`/owners/reservations/${reservationId}/${action}`);
+};
+
+// 가게 스케줄 생성
+export const createStoreSchedules = (
+  storeId: string,
+  body: CreateStoreSchedulesReq
+): Promise<ApiResponse<null>> => {
+  return apiClient.post<ApiResponse<null>>(`/owners/stores/${storeId}/schedules`, body);
 };

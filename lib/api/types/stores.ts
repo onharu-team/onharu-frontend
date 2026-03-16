@@ -31,3 +31,31 @@ export type UpdateStoreReq = StoreBase & {
   isOpen: boolean;
   isSharing: boolean;
 };
+
+export interface StoreSchedule {
+  id: number;
+  storeId: number;
+  scheduleDate: string;
+  startTime: string;
+  endTime: string;
+  maxPeople: number;
+  isAvailable: boolean;
+}
+
+// 가게 스케줄 조회
+export interface MonthlySummary {
+  date: string;
+  availableSlots: number;
+  dailyScheduleDetails: StoreSchedule[];
+}
+
+export interface StoreSchedulesRes {
+  monthlySummaries: MonthlySummary[];
+  dailyDetails: StoreSchedule[];
+}
+
+export interface GetStoreSchedulesReq {
+  year: string;
+  month: string;
+  day?: string;
+}

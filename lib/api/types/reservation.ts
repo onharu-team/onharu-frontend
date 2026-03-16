@@ -57,3 +57,15 @@ export interface ReservationsData<T> {
   totalPages: number;
   perPage: number;
 }
+
+// 가게 스케줄 생성
+export interface CreateStoreScheduleItem {
+  scheduleDate: string;
+  startTime: string;
+  endTime: string;
+  maxPeople: number;
+}
+
+export interface CreateStoreSchedulesReq {
+  storeSchedules: CreateStoreScheduleItem[];
+}

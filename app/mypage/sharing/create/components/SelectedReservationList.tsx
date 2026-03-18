@@ -43,11 +43,11 @@ export function SelectedReservationList({
           onClick={() => setOpen(prev => !prev)}
           className="md:text-md flex w-full justify-between text-sm font-semibold"
         >
-          <div className="flex items-center gap-1 sm:gap-2">
+          <div className="flex items-center gap-1 text-base sm:gap-2">
             선택된 일정<span className="text-main">{totalCount}개</span>
             <button
               onClick={handleClearAll}
-              className="cursor-pointer text-xs font-semibold text-red-500"
+              className="bg-main-active hover:bg-main cursor-pointer rounded-full p-1 text-xs text-white sm:p-2"
             >
               전체 삭제
             </button>
@@ -67,7 +67,7 @@ export function SelectedReservationList({
 
                 <button
                   onClick={() => handleRemoveDate(date)}
-                  className="cursor-pointer text-xs font-semibold text-red-400"
+                  className="bg-main-400 hover:bg-main-500 cursor-pointer rounded-full p-1 text-xs font-semibold text-gray-900 sm:p-2"
                 >
                   날짜 삭제
                 </button>

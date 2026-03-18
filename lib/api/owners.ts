@@ -45,3 +45,14 @@ export const createStoreSchedules = (
 ): Promise<ApiResponse<null>> => {
   return apiClient.post<ApiResponse<null>>(`/owners/stores/${storeId}/schedules`, body);
 };
+
+// 가게 스케줄 삭제
+export const deleteStoreSchedules = (
+  storeId: string,
+  body: { storeScheduleIds: number[] }
+): Promise<ApiResponse<null>> => {
+  return apiClient.delete<ApiResponse<null>, { storeScheduleIds: number[] }>(
+    `/owners/stores/${storeId}/schedules`,
+    body
+  );
+};

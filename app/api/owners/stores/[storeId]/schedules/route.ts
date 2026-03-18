@@ -11,3 +11,14 @@ export async function POST(request: Request, context: { params: Promise<{ storeI
 
   return handleApiResult(result);
 }
+
+// 가게 스케줄 삭제
+export async function DELETE(request: Request, context: { params: Promise<{ storeId: string }> }) {
+  const { storeId } = await context.params;
+
+  const body = await request.json();
+
+  const result = await serverApiClient.delete(`/api/owners/stores/${storeId}/schedules`, body);
+
+  return handleApiResult(result);
+}

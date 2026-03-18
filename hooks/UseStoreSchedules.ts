@@ -1,18 +1,11 @@
+import { Schedule } from "@/app/mypage/sharing/types";
 import { getStoreSchedules } from "@/lib/api/stores";
 import { GetStoreSchedulesReq } from "@/lib/api/types/stores";
 import { useQuery } from "@tanstack/react-query";
 
-interface DailyTime {
-  id: number;
-  time: string;
-  endTime: string;
-  maxPeople: number;
-  isAvailable: boolean;
-}
-
 interface ScheduleReturn {
   times: Record<string, string[]>;
-  detailed: Record<string, DailyTime[]>;
+  detailed: Record<string, Schedule[]>;
 }
 
 interface UseStoreSchedulesProps {
@@ -35,7 +28,7 @@ export const useStoreSchedules = ({ storeId, params }: UseStoreSchedulesProps) =
 
       const monthly = res.data.monthlySummaries ?? [];
       const times: Record<string, string[]> = {};
-      const detailed: Record<string, DailyTime[]> = {};
+      const detailed: Record<string, Schedule[]> = {};
 
       monthly.forEach(item => {
         const details = item.dailyScheduleDetails.map(s => ({

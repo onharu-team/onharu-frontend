@@ -1,4 +1,9 @@
-export function formatDateLabel(dateString: string) {
-  const date = new Date(dateString);
-  return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+export function formatDateLabel(dateInput: string | Date) {
+  const date = typeof dateInput === "string" ? new Date(dateInput) : dateInput;
+
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  return `${year}년 ${month}월 ${day}일`;
 }

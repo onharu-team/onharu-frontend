@@ -2,7 +2,7 @@
 
 import { SignupSuccessModal } from "@/app/signup/components/SignupSuccessModal";
 import { SignupFormValues } from "@/app/signup/types";
-import DocumentUploadField from "@/components/feature/DocumentUploadField";
+import DocumentUploadField, { DisplayFile } from "@/components/feature/DocumentUploadField";
 import { Toast } from "@/components/feature/toast/Toast";
 import { FIELD_CONFIG } from "@/components/form-fields/fieldConfig";
 import { FormField } from "@/components/form-fields/FormField";
@@ -12,28 +12,39 @@ import { useUploadImage } from "@/hooks/useUploadImage";
 import { signupKakaoChild } from "@/lib/api/auth";
 import { ImageInfo } from "@/lib/api/types/auth";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 
 export default function OauthChildSignupPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    watch,
+    setValue,
     setError,
     clearErrors,
+    formState: { errors },
   } = useForm<SignupFormValues>({ mode: "onSubmit" });
 
-  const [documents, setDocuments] = useState<File[]>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const { mutateAsync: uploadImage } = useUploadImage();
   const router = useRouter();
 
-  // 이미지 업로드 + 회원가입 처리
+  const handleFilesChange = useCallback(
+    (allFiles: DisplayFile[]) => {
+      const newFiles = allFiles.filter(f => !f.isExisting && f.file).map(f => f.file as File);
+
+      setValue("document", newFiles, { shouldValidate: false });
+
+      if (newFiles.length > 0) clearErrors("document");
+    },
+    [setValue, clearErrors]
+  );
+
   const handleSignup = async (data: SignupFormValues) => {
-    if (documents.length === 0) {
+    const currentDocuments = data.document as unknown as File[];
+
+    if (currentDocuments.length === 0) {
       setError("document", { type: "manual", message: "증명서류를 업로드해주세요." });
       return;
     }
@@ -42,7 +53,7 @@ export default function OauthChildSignupPage() {
 
     try {
       // 이미지 업로드
-      const uploadedUrl = await uploadImage(documents[0]);
+      const uploadedUrl = await uploadImage(currentDocuments[0]);
       const images: ImageInfo[] = [
         {
           fileKey: uploadedUrl.split("/onharu-minio/")[1],
@@ -65,7 +76,6 @@ export default function OauthChildSignupPage() {
           "회원가입에 실패했습니다.",
           response.message || "잠시 후 다시 시도해주세요."
         );
-
         console.error("회원가입 실패:", response.message);
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -105,7 +115,11 @@ export default function OauthChildSignupPage() {
               <div className="sm:text-md mb-1.25 text-base font-medium sm:mb-2.5">
                 증명서류 <span className="text-danger ml-1">*</span>
               </div>
-              <DocumentUploadField onFilesChange={setDocuments} maxNum={1} />
+              <DocumentUploadField
+                error={errors.document?.message}
+                onFilesChange={handleFilesChange}
+                maxNum={1}
+              />
             </div>
 
             {/* 회원가입 버튼 */}

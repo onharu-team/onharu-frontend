@@ -37,7 +37,7 @@ export const FIELD_CONFIG = {
     placeholder: "비밀번호를 다시 한 번 입력해 주세요.",
     rules: {
       required: "비밀번호 확인은 필수입니다.",
-      validate: (v: string | boolean | FileList | undefined) =>
+      validate: (v: string | boolean | File | File[] | undefined) =>
         v === passwordValue || "비밀번호가 일치하지 않습니다.",
     },
   }),

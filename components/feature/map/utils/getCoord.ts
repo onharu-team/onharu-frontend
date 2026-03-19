@@ -1,23 +1,18 @@
-type Coord = { lat: number; lng: number } | null;
+export type Coord = { lat: number; lng: number } | null;
 
 export async function getCoord(address: string): Promise<Coord> {
-  return new Promise(resolve => {
-    if (!window.kakao || !window.kakao.maps || !address) {
-      resolve(null);
-      return;
+  if (!address) return null;
+
+  try {
+    const res = await fetch(`/api/get-coord?address=${encodeURIComponent(address)}`);
+    const data = await res.json();
+
+    if (data.lat && data.lng) {
+      return { lat: data.lat, lng: data.lng };
     }
-
-    const geocoder = new kakao.maps.services.Geocoder();
-
-    geocoder.addressSearch(address, (results, status) => {
-      if (status === kakao.maps.services.Status.OK && results.length > 0) {
-        resolve({
-          lat: Number(results[0].y),
-          lng: Number(results[0].x),
-        });
-      } else {
-        resolve(null);
-      }
-    });
-  });
+    return null;
+  } catch (error) {
+    console.error("좌표 변환 실패:", error);
+    return null;
+  }
 }

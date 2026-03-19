@@ -22,6 +22,7 @@ interface Props {
   clearErrors: UseFormClearErrors<SignupFormValues>;
   isEmailVerified: boolean;
   setIsEmailVerified: (b: boolean) => void;
+  emailAuthKey: number;
 }
 
 export const OwnerSignupFields = ({
@@ -32,12 +33,14 @@ export const OwnerSignupFields = ({
   setError,
   clearErrors,
   setIsEmailVerified,
+  emailAuthKey,
 }: Props) => {
   const passwordValue = watch("password");
 
   return (
     <>
       <EmailAuthField<SignupFormValues>
+        key={emailAuthKey}
         register={register}
         watch={watch}
         errors={errors}

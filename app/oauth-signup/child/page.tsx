@@ -105,13 +105,7 @@ export default function OauthChildSignupPage() {
               <div className="sm:text-md mb-1.25 text-base font-medium sm:mb-2.5">
                 증명서류 <span className="text-danger ml-1">*</span>
               </div>
-              <DocumentUploadField
-                register={register}
-                errors={errors}
-                watch={watch}
-                onFilesChange={setDocuments}
-                maxNum={1}
-              />
+              <DocumentUploadField onFilesChange={setDocuments} maxNum={1} />
             </div>
 
             {/* 회원가입 버튼 */}

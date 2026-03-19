@@ -20,9 +20,12 @@ export interface OwnerData {
   loginId: string;
   name: string;
   phone: string;
-  levelName?: string;
   businessNumber: string;
   stores: number[];
+  distributionCount: string;
+  levelName: string;
+  nextLevelName: string;
+  nextToConditionNumber: string;
 }
 
 // 이메일 인증 코드

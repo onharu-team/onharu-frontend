@@ -9,6 +9,7 @@ const publicOnlyRoutes = ["/login", "/signup", "/find-id", "/find-password", "/o
 
 export default function middleware(req: NextRequest) {
   const isLoggedIn = !!req.cookies.get("JSESSIONID");
+  const userType = req.cookies.get("userType")?.value;
   const { pathname } = req.nextUrl;
 
   const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
@@ -18,7 +19,9 @@ export default function middleware(req: NextRequest) {
   if (!isLoggedIn && isProtectedRoute) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
-
+  if (pathname.startsWith("/reservation") && userType !== "CHILD") {
+    return NextResponse.redirect(new URL("/unauthorized", req.url));
+  }
   if (isLoggedIn && isPublicOnlyRoute) {
     return NextResponse.redirect(new URL("/", req.url));
   }
@@ -29,7 +32,7 @@ export default function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     "/mypage/:path*",
-    "/reservation",
+    "/reservation/:path*",
     "/chat",
     "/login",
     "/signup/:path*",

@@ -32,7 +32,8 @@ class ApiClient {
   put = <T, B = unknown>(endpoint: string, body?: B) =>
     this.request<T>(endpoint, { method: "PUT", body: body ? JSON.stringify(body) : undefined });
 
-  delete = <T>(endpoint: string) => this.request<T>(endpoint, { method: "DELETE" });
+  delete = <T, B = unknown>(endpoint: string, body?: B) =>
+    this.request<T>(endpoint, { method: "DELETE", body: body ? JSON.stringify(body) : undefined });
 }
 
 export const apiClient = new ApiClient();

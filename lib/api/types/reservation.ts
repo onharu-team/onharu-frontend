@@ -1,3 +1,5 @@
+import { UserRole } from "./auth";
+
 export type ReservationStatus =
   | "ALL" // 전체
   | "WAITING" // 예약 대기중
@@ -37,6 +39,7 @@ interface BaseReservation {
   reservationAt: string;
   cancelReason: string | null;
   reviewed: boolean;
+  cancelRequestedBy?: UserRole | null;
 }
 
 export interface ChildReservation extends BaseReservation {
@@ -53,4 +56,16 @@ export interface ReservationsData<T> {
   currentPage: number;
   totalPages: number;
   perPage: number;
+}
+
+// 가게 스케줄 생성
+export interface CreateStoreScheduleItem {
+  scheduleDate: string;
+  startTime: string;
+  endTime: string;
+  maxPeople: number;
+}
+
+export interface CreateStoreSchedulesReq {
+  storeSchedules: CreateStoreScheduleItem[];
 }

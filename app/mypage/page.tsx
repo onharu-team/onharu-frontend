@@ -1,13 +1,11 @@
-"use client";
-
 import { OwnerMyPage } from "./components/OwnerMyPage";
 import { ChildMyPage } from "./components/ChildMyPage";
-import { useAuthProfile } from "@/hooks/useAuth";
+import { cookies } from "next/headers";
+import { UserRole } from "@/lib/api/types/auth";
 
-export default function MyPage() {
-  const { data: user } = useAuthProfile();
+export default async function MyPage() {
+  const cookieStore = await cookies();
+  const userType = cookieStore.get("userType")?.value as UserRole;
 
-  if (!user) return null;
-
-  return user.userType === "OWNER" ? <OwnerMyPage user={user} /> : <ChildMyPage user={user} />;
+  return userType === "OWNER" ? <OwnerMyPage /> : <ChildMyPage />;
 }

@@ -27,8 +27,8 @@ export const DesktopView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             </h1>
           </Link>
           <LayoutGroup>
-            <nav>
-              <ul className="flex gap-8">
+            <nav className="shrink-0">
+              <ul className="flex gap-6">
                 {NavItems.filter(items => !items.requireAuth || isLoggedIn).map(items => {
                   const isActive = pathname.includes(items.pathname);
                   return (
@@ -57,7 +57,7 @@ export const DesktopView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             </nav>
           </LayoutGroup>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           {isLoggedIn && (
             <>
               <Alert

@@ -1,4 +1,11 @@
-export async function GetReviews(filters: any, signal?: AbortSignal) {
+interface Filters {
+  pageNum: number;
+  perPage: number;
+  sortField: string;
+  sortDirection: string;
+}
+
+export async function GetReviews(filters: Filters, signal?: AbortSignal) {
   const params = new URLSearchParams();
 
   const res = await fetch(`/api/reviews?${params.toString()}`, {

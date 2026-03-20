@@ -6,6 +6,7 @@ import {
   LoginReq,
   OwnerData,
   OwnerReq,
+  resetPWReq,
   SendEmailCodeReq,
   SignupReq,
   SignupRes,
@@ -61,6 +62,11 @@ export const logout = (): Promise<ApiResponse<null>> =>
 // 로그인 확인
 export const userMe = (): Promise<ApiResponse<UserMeReq>> =>
   apiClient.get<ApiResponse<UserMeReq>>("/users/me");
+
+// 비밀번호 찾기/재설정
+export async function resetPassword(body: resetPWReq): Promise<ApiResponse<null>> {
+  return apiClient.post("/auth/reset-password", body);
+}
 
 // 아동 회원가입
 export const signupChild = (body: SignupReq & ChildReq): Promise<ApiResponse<SignupRes>> => {

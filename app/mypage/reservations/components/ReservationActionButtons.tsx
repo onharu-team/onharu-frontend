@@ -12,6 +12,7 @@ import { childReservationCancel } from "@/lib/api/childrens";
 import { changeOwnerReservationStatus } from "@/lib/api/owners";
 import { Toast } from "@/components/feature/toast/Toast";
 import ReviewWriteModal from "./ReviewWriteModal";
+import { useRouter } from "next/navigation";
 
 interface Props {
   role: UserRole;
@@ -65,6 +66,8 @@ export default function ReservationActionButtons({
   const [modalType, setModalType] = useState<CancelModalType>();
 
   const { open, handleOpenModal, handleCloseModal } = useModal();
+
+  const router = useRouter();
 
   const queryClient = useQueryClient();
 
@@ -128,6 +131,8 @@ export default function ReservationActionButtons({
       await queryClient.invalidateQueries({
         queryKey: ["reservations"],
       });
+
+      router.refresh();
 
       handleCloseModal();
     } catch (err) {

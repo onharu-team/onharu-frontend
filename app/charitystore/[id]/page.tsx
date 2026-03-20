@@ -4,37 +4,56 @@ import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { GetStoreDetail } from "@/lib/api/GetStoreDetail";
 import { Heading } from "./components/shared/heading";
-import { Like } from "@/components/feature/StoreLike";
+import LikeButton from "@/components/feature/LikeButton";
 import { FramerSlide } from "./components/framerSlide";
 import { Map } from "@/components/feature/map/map";
 import { Reservation } from "./components/reservation";
 import { ReservationBtn } from "./components/ReservationBtn";
 import { ThanksCard } from "./components/thanksCard";
-//data
-import { ThanksData } from "./data/thanksdata";
+import { GetReviewDetail } from "@/lib/api/GetReviewDetail";
 import { CategoryData } from "@/components/feature/category/data";
-
 import { DetailSkeleton } from "./components/DetailSkeleton";
+import Skeleton from "react-loading-skeleton";
+import { GetStoreSchedules } from "@/lib/api/GetStoreSchedules";
+import { CharityDetail } from "@/types/store/type";
 
 export default function Detail() {
   const params = useParams();
   const storeId = params.id as string;
-
-  const { data, error, isLoading } = useQuery({
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const {
+    data: storeData,
+    error: storeError,
+    isLoading: storeLoading,
+  } = useQuery({
     queryKey: ["stores", storeId],
     queryFn: () => GetStoreDetail(storeId),
     staleTime: 1000 * 60,
   });
 
-  if (isLoading) {
-    return (
-      <>
-        <DetailSkeleton />
-      </>
-    );
-  }
+  const { data: reviewData, isLoading: reviewLoading } = useQuery({
+    queryKey: ["reviews", storeId],
+    queryFn: () => GetReviewDetail(storeId),
+    staleTime: 1000 * 60,
+    retry: false,
+    throwOnError: false,
+  });
 
-  if (!isLoading && error) {
+  const { data: scheduleData, isLoading: scheduleLoading } = useQuery({
+    queryKey: ["store-schedules", storeId, year, month],
+    queryFn: () => GetStoreSchedules(storeId, year, month),
+    enabled: !!storeId,
+    staleTime: 1000 * 60,
+    retry: false,
+  });
+
+  // 스토어 로딩 중
+  if (storeLoading) return <DetailSkeleton />;
+
+  // 스토어 데이터 로딩 실패 시에만 전체 에러 처리
+  if (storeError) {
     return (
       <section className="mt-section-sm-top md:mt-section-lg-top mb-section-sm-bottom md:mb-section-lg-bottom">
         <div className="wrapper">
@@ -46,40 +65,52 @@ export default function Detail() {
     );
   }
 
-  const storedetail = data.data.store;
+  const storedetail: CharityDetail = storeData.data.store;
   const isSlide = storedetail.images.length > 4;
   const storeCategory = CategoryData.filter(val => val.id === storedetail.categoryId);
+
+  // 리뷰는 실패해도 빈 배열로 fallback
+  const storereview = reviewData?.data.reviews ?? [];
+
+  // 예약 가능 일정
+  const reservation = scheduleData?.data.dateSummaries ?? [];
 
   return (
     <section className="mt-section-sm-top md:mt-section-lg-top mb-section-sm-bottom md:mb-section-lg-bottom">
       <div className="wrapper">
         <article>
           <Heading title={storedetail.name}>
-            <Like isLiked={false} />
+            <LikeButton storeId={Number(params.id)} isLiked={false} className="static" />
           </Heading>
           <div className="relative mt-5 h-[110px] md:mt-8 md:h-[340px]">
-            <h3 className="sr-only">매장 내부, 음식 사진이 슬라이드 형태로 나열되어 있습니다.</h3>
-            {isSlide && <FramerSlide />}
+            <h3 className="sr-only">매장 내부, 음식 사진이 나열되어 있습니다.</h3>
+            {storedetail.images.length === 0 && (
+              <div className="flex h-full gap-3 md:gap-5">
+                <div className="relative flex-1 bg-[#eeeeee]">
+                  <Image
+                    src={"/image/page/no-image.svg"}
+                    alt=""
+                    fill
+                    style={{ objectFit: "contain" }}
+                    className="pointer-events-none"
+                  />
+                </div>
+              </div>
+            )}
+            {isSlide && <FramerSlide data={storedetail.images} />}
             {!isSlide && (
               <div className="flex h-full gap-3 md:gap-5">
-                <div className="relative flex-1">
-                  <Image
-                    src={"/image/page/test-image.png"}
-                    alt=""
-                    fill
-                    style={{ objectFit: "cover" }}
-                    className="pointer-events-none"
-                  />
-                </div>
-                <div className="relative flex-1">
-                  <Image
-                    src={"/image/page/test-image.png"}
-                    alt=""
-                    fill
-                    style={{ objectFit: "cover" }}
-                    className="pointer-events-none"
-                  />
-                </div>
+                {storedetail.images.map((item: string, idx: number) => (
+                  <div className="relative flex-1" key={idx}>
+                    <Image
+                      src={item || "/image/page/test-image.png"}
+                      alt=""
+                      fill
+                      style={{ objectFit: "cover" }}
+                      className="pointer-events-none"
+                    />
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -96,10 +127,10 @@ export default function Detail() {
         </article>
         <article className="mt-15 md:mt-21">
           <Heading title="예약 정보" addClassName="justify-between">
-            <ReservationBtn data={storedetail.storeSchedules} />
+            <ReservationBtn storeId={storeId} isSharing={storedetail.isSharing} />
           </Heading>
           <div className="mt-3 md:mt-8">
-            <Reservation status="short" />
+            <Reservation data={reservation} />
           </div>
         </article>
         <article className="mt-15 md:mt-21">
@@ -109,11 +140,14 @@ export default function Detail() {
             <p>{storedetail.introduction}</p>
           </div>
         </article>
-        {ThanksData && (
+
+        {/* 리뷰 섹션 - 로딩 중이거나 데이터 있을 때만 렌더 */}
+        {reviewLoading && <Skeleton />}
+        {!reviewLoading && storereview.length > 0 && (
           <article className="mt-15 md:mt-21">
             <Heading title="감사 후기" />
             <div className="mt-3 md:mt-8">
-              <ThanksCard card={ThanksData} />
+              <ThanksCard card={storereview} />
             </div>
           </article>
         )}

@@ -22,9 +22,12 @@ export interface OwnerData {
   userId?: number;
   name: string;
   phone: string;
-  levelName?: string;
   businessNumber: string;
   stores: number[];
+  distributionCount: string;
+  levelName: string;
+  nextLevelName: string;
+  nextToConditionNumber: string;
 }
 
 // 이메일 인증 코드
@@ -51,6 +54,13 @@ export interface UserMeReq {
   statusType: string;
   providerType: string;
   name: string;
+}
+
+// 비밀번호 찾기/재설정
+export interface resetPWReq {
+  name: string;
+  loginId: string;
+  phone: string;
 }
 
 // 회원가입

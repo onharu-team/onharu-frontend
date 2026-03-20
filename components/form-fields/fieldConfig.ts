@@ -1,6 +1,7 @@
 export const FIELD_PATTERNS = {
   password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/,
   phone: /^01[016789]\d{7,8}$/,
+  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
 };
 
 export const FIELD_CONFIG = {
@@ -9,6 +10,17 @@ export const FIELD_CONFIG = {
     placeholder: "이름을 입력해 주세요.",
     rules: {
       required: "이름은 필수입니다.",
+    },
+  },
+  email: {
+    label: "이메일",
+    placeholder: "이메일을 입력해 주세요.",
+    rules: {
+      required: "이메일은 필수입니다.",
+      pattern: {
+        value: FIELD_PATTERNS.email,
+        message: "올바른 이메일 형식이 아닙니다.",
+      },
     },
   },
   nickname: {

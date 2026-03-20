@@ -28,9 +28,12 @@ export function useChatSocket(roomId: number | null, senderId: number) {
   useEffect(() => {
     if (!roomId) return; // 방 ID 없으면 연결 안 함
 
+    const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+    const brokerURL = `${protocol}://onharu-api.votex.co.kr:15080/ws-chat`;
+
     // STOMP 클라이언트 생성 (웹소켓 기반 실시간 메시지 통신)
     const stompClient = new Client({
-      brokerURL: "ws://onharu-api.votex.co.kr:15080/ws-chat",
+      brokerURL,
       reconnectDelay: 5000, // 연결 끊기면 5초 후 재연결
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,

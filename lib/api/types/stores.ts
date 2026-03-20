@@ -46,12 +46,12 @@ export interface StoreSchedule {
 export interface MonthlySummary {
   date: string;
   availableSlots: number;
-  dailyScheduleDetails: StoreSchedule[];
+  scheduleSlots: StoreSchedule[];
 }
 
 export interface StoreSchedulesRes {
-  monthlySummaries: MonthlySummary[];
-  dailyDetails: StoreSchedule[];
+  dateSummaries: MonthlySummary[];
+  scheduleSlots: StoreSchedule[];
 }
 
 export interface GetStoreSchedulesReq {

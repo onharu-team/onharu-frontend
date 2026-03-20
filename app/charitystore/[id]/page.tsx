@@ -69,15 +69,13 @@ export default function Detail() {
   const isSlide = storedetail.images.length > 4;
   const storeCategory = CategoryData.filter(val => val.id === storedetail.categoryId);
 
-  console.log(storedetail);
-
   // 리뷰는 실패해도 빈 배열로 fallback
   const storereview = reviewData?.data.reviews ?? [];
 
   // 예약 가능 일정
-  const reservation = scheduleData?.data.monthlySummaries ?? [];
+  const reservation = scheduleData?.data.dateSummaries ?? [];
 
-  console.log(scheduleData?.data.monthlySummaries);
+  console.log(scheduleData);
 
   return (
     <section className="mt-section-sm-top md:mt-section-lg-top mb-section-sm-bottom md:mb-section-lg-bottom">

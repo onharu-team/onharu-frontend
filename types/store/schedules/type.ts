@@ -8,16 +8,16 @@ export interface DailyScheduleDetail {
   isAvailable: boolean;
 }
 
-export interface MonthlySummary {
+export interface DateSummaries {
   date: string;
   availableSlots: number;
-  dailyScheduleDetails: DailyScheduleDetail[];
+  scheduleSlots: DailyScheduleDetail[];
 }
 
 export interface ScheduleApiResponse {
   success: boolean;
   data: {
-    monthlySummaries: MonthlySummary[];
-    dailyDetails: DailyScheduleDetail[];
+    dateSummaries: DateSummaries[];
+    scheduleSlots: DailyScheduleDetail[];
   };
 }

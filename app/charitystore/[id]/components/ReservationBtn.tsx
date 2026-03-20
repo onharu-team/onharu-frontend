@@ -1,6 +1,5 @@
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import { MonthlySummary } from "@/types/store/schedules/type";
 
 interface ReservationProps {
   storeId?: string;

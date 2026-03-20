@@ -4,13 +4,14 @@ import { useFavoriteMutation } from "@/hooks/useFavorite";
 import { RiPokerHeartsFill } from "@remixicon/react";
 import { cn } from "@/lib/utils";
 
+
 interface LikeButtonProps {
   storeId: number;
   isLiked: boolean;
   className?: string;
 }
 
-export default function LikeButton({ storeId, isLiked, className }: LikeButtonProps) {
+export default function LikeButton({ storeId, isLiked }: LikeButtonProps) {
   const { mutate: toggleLike, isPending } = useFavoriteMutation();
 
   const handleLikeClick = (e: React.MouseEvent) => {

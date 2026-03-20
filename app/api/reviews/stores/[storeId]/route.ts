@@ -29,3 +29,4 @@ export async function GET(request: Request, context: { params: Promise<{ storeId
   const data = await res.json();
   return NextResponse.json(data);
 }
+

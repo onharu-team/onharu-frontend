@@ -9,8 +9,6 @@ export const Header = () => {
 
   const isLoggedIn = !!user;
 
-  console.log(user);
-
   return (
     <>
       <div className="tablet:block hidden">

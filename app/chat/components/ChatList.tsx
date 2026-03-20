@@ -7,39 +7,32 @@ import { ChatRoomRes } from "@/lib/api/types/chat";
 
 interface ChatListProps {
   name: string;
+  userId: number;
   chatList: ChatRoomRes[];
 }
 
-export default function ChatList({ name, chatList }: ChatListProps) {
+export default function ChatList({ name, userId, chatList }: ChatListProps) {
   const [selectedChat, setSelectedChat] = useState<ChatRoomRes | null>(null);
-  const [rooms, setRooms] = useState(chatList);
 
-  const handleDeleteRoom = async (roomId: number) => {
-    try {
-      // 삭제
-
-      setRooms(prev => prev.filter(room => room.chatRoomId !== roomId));
-
-      setSelectedChat(prev => (prev?.chatRoomId === roomId ? null : prev));
-    } catch (e) {
-      console.error("채팅방 나가기 실패", e);
-    }
-  };
+  const handleBackOrDelete = () => setSelectedChat(null);
+  const isChatRoomVisible = selectedChat !== null;
 
   return (
     <div className="flex justify-center sm:justify-baseline sm:gap-7.5">
       <ChatListPanel
         name={name}
-        chatList={rooms}
+        chatList={chatList}
         selectedChat={selectedChat}
         onSelectChat={setSelectedChat}
       />
 
-      <div className={`w-full ${selectedChat ? "block" : "hidden md:block"}`}>
+      <div className={`w-full ${isChatRoomVisible ? "block" : "hidden md:block"}`}>
         <ChatRoom
+          userName={name}
+          userId={userId}
           chat={selectedChat}
-          onBack={() => setSelectedChat(null)}
-          onDeleteRoom={handleDeleteRoom}
+          onBack={handleBackOrDelete}
+          onDeleteRoom={handleBackOrDelete}
         />
       </div>
     </div>

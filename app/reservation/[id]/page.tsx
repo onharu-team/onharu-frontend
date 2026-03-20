@@ -58,8 +58,6 @@ export default function Reservation() {
     [scheduleData]
   );
 
-  console.log(rawData);
-
   const groupedDate = ReservationUtils(rawData);
   const formatDate = (date: Date) => {
     const year = date.getFullYear();

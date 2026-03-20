@@ -75,8 +75,6 @@ export default function Detail() {
   // 예약 가능 일정
   const reservation = scheduleData?.data.dateSummaries ?? [];
 
-  console.log(scheduleData);
-
   return (
     <section className="mt-section-sm-top md:mt-section-lg-top mb-section-sm-bottom md:mb-section-lg-bottom">
       <div className="wrapper">
@@ -132,7 +130,7 @@ export default function Detail() {
             <ReservationBtn storeId={storeId} isSharing={storedetail.isSharing} />
           </Heading>
           <div className="mt-3 md:mt-8">
-            <Reservation status="short" />
+            <Reservation data={reservation} />
           </div>
         </article>
         <article className="mt-15 md:mt-21">

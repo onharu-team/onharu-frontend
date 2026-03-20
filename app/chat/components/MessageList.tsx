@@ -118,7 +118,7 @@ export function MessageList({ userName, userId, chatRoomId, unreadCount = 0 }: M
         const MessageComponent = isMe ? MyMessage : OtherMessage;
         return (
           <MessageComponent
-            key={msg.chatMessageId ?? `${isMe ? "me" : "other"}-${idx}`}
+            key={`msg-${msg.chatMessageId}-${idx}`}
             message={msg.content}
             time={msg.formattedTime}
           />

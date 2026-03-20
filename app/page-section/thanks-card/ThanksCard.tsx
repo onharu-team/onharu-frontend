@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { GetReviews } from "@/lib/api/GetReviews";
 import { VerticalMarquee } from "./verticalMarquee/VerticalMarquee";
-import { MarqueeSkeleton } from "./verticalMarquee/MarqueeSkeleton";
 
 export const ThanksCard = () => {
   const filters = {

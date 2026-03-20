@@ -22,6 +22,8 @@ import { RawReservation, GroupedReservations } from "../type/ReservationType";
  *
  */
 export function ReservationUtils(data: RawReservation[]): GroupedReservations {
+  if (!Array.isArray(data)) return {};
+
   return data.reduce((acc, cur) => {
     if (!acc[cur.date]) acc[cur.date] = [];
     acc[cur.date].push(cur.time);

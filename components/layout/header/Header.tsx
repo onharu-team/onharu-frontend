@@ -11,7 +11,7 @@ export const Header = () => {
 
   return (
     <>
-      <div className="hidden md:block">
+      <div className="tablet:block hidden">
         <DesktopView isLoggedIn={isLoggedIn} />
       </div>
       <div className="block md:hidden">

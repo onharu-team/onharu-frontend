@@ -38,7 +38,7 @@ const VarientClasses = {
 };
 
 const baseClasses =
-  "flex items-center justify-center font-medium px-2 transform transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[-1px_3px_3px_0_rgba(80,80,80,0.3)] active:scale-97 disabled:pointer-events-none";
+  "flex items-center justify-center font-medium px-2 cursor-pointer transform transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[-1px_3px_3px_0_rgba(80,80,80,0.3)] active:scale-97 disabled:pointer-events-none";
 
 const disabledClasses = "!bg-main-300 !text-gray-50 cursor-not-allowed";
 

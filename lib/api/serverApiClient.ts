@@ -97,8 +97,8 @@ export class ServerApiClient {
   put = <T>(endpoint: string, body: unknown, options?: CacheOptions) =>
     this.request<T>(endpoint, "PUT", body, options);
 
-  delete = <T>(endpoint: string, options?: CacheOptions) =>
-    this.request<T>(endpoint, "DELETE", undefined, options);
+  delete = <T>(endpoint: string, body?: unknown, options?: CacheOptions) =>
+    this.request<T>(endpoint, "DELETE", body, options);
 }
 
 export const serverApiClient = new ServerApiClient();

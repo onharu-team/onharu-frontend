@@ -26,12 +26,12 @@ export const useStoreSchedules = ({ storeId, params }: UseStoreSchedulesProps) =
     select: (res): ScheduleReturn => {
       if (!res.success) return { times: {}, detailed: {} };
 
-      const monthly = res.data.monthlySummaries ?? [];
+      const monthly = res.data.dateSummaries ?? [];
       const times: Record<string, string[]> = {};
       const detailed: Record<string, Schedule[]> = {};
 
       monthly.forEach(item => {
-        const details = item.dailyScheduleDetails.map(s => ({
+        const details = item.scheduleSlots.map(s => ({
           time: s.startTime.slice(0, 5),
           endTime: s.endTime.slice(0, 5),
           maxPeople: s.maxPeople,

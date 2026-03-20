@@ -1,20 +1,39 @@
+"use client";
+
 import { Button } from "@/components/ui/Button";
 import { RiArrowLeftSLine } from "@remixicon/react";
 import { Modal } from "@/components/ui/Modal";
 import useModal from "@/hooks/ui/useModal";
+import { leaveChatRoom } from "@/lib/api/chat";
+import { useQueryClient } from "@tanstack/react-query";
+import { Toast } from "@/components/feature/toast/Toast";
 
 interface Props {
+  chatRoomId: number;
   sender: string;
   onBack: () => void;
-  onDeleteRoom: () => void;
+  onClose?: () => void;
 }
 
-export function ChatHeader({ sender, onBack, onDeleteRoom }: Props) {
+export function ChatHeader({ chatRoomId, sender, onBack, onClose }: Props) {
   const { open, handleOpenModal, handleCloseModal } = useModal();
+  const queryClient = useQueryClient();
 
-  const handleConfirmDelete = () => {
-    onDeleteRoom();
-    handleCloseModal();
+  const handleConfirmDelete = async () => {
+    try {
+      await leaveChatRoom(chatRoomId);
+
+      await queryClient.invalidateQueries({
+        queryKey: ["chatList"],
+      });
+
+      onClose?.();
+
+      handleCloseModal();
+    } catch (err) {
+      console.error("채팅방 나가기 실패:", err);
+      Toast("error", "채팅방 나가기에 실패했습니다.", "잠시후에 다시 시도해주세요.");
+    }
   };
 
   return (

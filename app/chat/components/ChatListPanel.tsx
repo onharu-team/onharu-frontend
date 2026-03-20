@@ -1,18 +1,26 @@
-import { ChatItem } from "../types";
+import { useParams, useRouter } from "next/navigation";
+import { ChatRoomRes } from "@/lib/api/types/chat";
 import { ChatListItem } from "./ChatListItem";
 
 interface Props {
   name: string;
-  chatList: ChatItem[];
-  selectedChat: ChatItem | null;
-  onSelectChat: (chat: ChatItem) => void;
+  chatList: ChatRoomRes[];
 }
 
-export function ChatListPanel({ name, chatList, selectedChat, onSelectChat }: Props) {
+export function ChatListPanel({ name, chatList }: Props) {
+  const params = useParams();
+  const router = useRouter();
+
+  const currentChatId = params.id;
+
+  const handleSelect = (chat: ChatRoomRes) => {
+    router.push(`/chat/${chat.chatRoomId}`);
+  };
+
   return (
     <div
       className={`scrollbar-thin wrapper md:border-border h-[calc(100vh-120px)] w-full overflow-y-auto md:max-w-133.75 md:rounded-[10px] md:border md:p-7.5 ${
-        selectedChat ? "hidden md:block" : ""
+        currentChatId ? "hidden md:block" : ""
       }`}
     >
       <h3 className="text-md mb-4.25 font-bold sm:mb-8.75 sm:text-2xl">
@@ -24,8 +32,8 @@ export function ChatListPanel({ name, chatList, selectedChat, onSelectChat }: Pr
         <ChatListItem
           key={i}
           chat={chat}
-          isSelected={selectedChat === chat}
-          onSelect={() => onSelectChat(chat)}
+          isSelected={String(currentChatId) === String(chat.chatRoomId)}
+          onSelect={() => handleSelect(chat)}
         />
       ))}
     </div>

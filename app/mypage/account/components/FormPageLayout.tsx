@@ -30,7 +30,7 @@ export default function FormPageLayout({
   showActions = true,
 }: FormPageLayoutProps) {
   return (
-    <div className="mx-auto flex max-w-md flex-col gap-2 sm:gap-5">
+    <form className="mx-auto flex max-w-md flex-col gap-2 sm:gap-5">
       {/* 상단 안내 문구 */}
       {title && <div className="sm:text-md text-center text-sm font-medium">{title}</div>}
 
@@ -69,6 +69,6 @@ export default function FormPageLayout({
           </div>
         </Modal>
       )}
-    </div>
+    </form>
   );
 }

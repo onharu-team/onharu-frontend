@@ -5,7 +5,7 @@ import { CATEGORY_MAP, DAY_MAP, DAYS } from "@/app/mypage/sharing/create/constan
 import { CATEGORY_OPTIONS, TIME_OPTIONS } from "../constants";
 import type { StoreInitialData } from "../types";
 import { DisplayFile } from "@/components/feature/DocumentUploadField";
-import { createStore, updateStore } from "@/lib/stores";
+import { createStore, updateStore } from "@/lib/api/stores";
 import { CreateStoreReq, UpdateStoreReq } from "@/lib/api/types/stores";
 import { useUploadImage } from "@/hooks/useUploadImage";
 import { useQueryClient } from "@tanstack/react-query";

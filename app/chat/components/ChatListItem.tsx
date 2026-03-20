@@ -1,13 +1,16 @@
 import Image from "next/image";
-import { ChatItem } from "../types";
+import { ChatRoomRes } from "@/lib/api/types/chat";
+import formatDateTime from "@/utils/formatDateTime";
 
 interface Props {
-  chat: ChatItem;
+  chat: ChatRoomRes;
   isSelected: boolean;
   onSelect: () => void;
 }
 
 export function ChatListItem({ chat, isSelected, onSelect }: Props) {
+  const { time } = formatDateTime(chat.lastMessageTime);
+
   return (
     <div
       onClick={onSelect}
@@ -27,17 +30,19 @@ export function ChatListItem({ chat, isSelected, onSelect }: Props) {
       </div>
 
       <div className="min-w-0 flex-1">
-        <div className="sm:text-md mb-1.25 font-semibold">{chat.sender}</div>
-        <div className="truncate text-sm sm:text-base">{chat.message}</div>
+        <div className="sm:text-md mb-1.25 font-semibold">{chat.chatParticipants[0]}</div>
+        <div className="truncate text-sm sm:text-base">{chat.lastMessage}</div>
       </div>
 
-      <div className={`flex flex-col items-end ${chat.readAt ? "justify-between" : "justify-end"}`}>
-        {chat.readAt && (
+      <div
+        className={`flex flex-col items-end ${chat.unreadMessageCount > 0 ? "justify-between" : "justify-end"}`}
+      >
+        {chat.unreadMessageCount > 0 && (
           <div className="bg-main flex h-5.5 w-5.5 items-center justify-center rounded-full text-xs font-bold text-white">
-            N
+            {chat.unreadMessageCount}
           </div>
         )}
-        <div className="text-sm sm:text-base">{chat.time}</div>
+        <div className="text-sm sm:text-base">{time}</div>
       </div>
     </div>
   );

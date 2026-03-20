@@ -34,7 +34,7 @@ export const useEmailAuth = () => {
   };
 
   const sendCode = async (email: string) => {
-    // await sendMutation.mutateAsync({ email });
+    await sendMutation.mutateAsync({ email });
     setIsCodeSent(true);
     setIsVerified(false);
     setIsResendMode(true);
@@ -42,21 +42,21 @@ export const useEmailAuth = () => {
   };
 
   const verifyCode = async (email: string, code: string) => {
-    // const response = await verifyMutation.mutateAsync({ email, code });
-    //   if (response.data) {
-    //     setIsVerified(true);
-    //     clearTimer();
-    //   }
-    //   return response.data;
-    // };
+    const response = await verifyMutation.mutateAsync({ email, code });
 
-    //=============== Test ===================
-    const isTestSuccess = code === "123456";
-    if (isTestSuccess) {
+    if (response.success) {
       setIsVerified(true);
       clearTimer();
     }
-    return isTestSuccess;
+    return response.success;
+
+    //=============== Test ===================
+    // const isTestSuccess = code === "123456";
+    // if (isTestSuccess) {
+    //   setIsVerified(true);
+    //   clearTimer();
+    // }
+    // return isTestSuccess;
     //=========================================
   };
 

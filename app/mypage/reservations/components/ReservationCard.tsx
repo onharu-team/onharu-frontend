@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/Button";
 import StatusBadge from "./StatusBadge";
 import ReservationActionButtons from "./ReservationActionButtons";
-import formatDateTime from "../../utils/format";
+import formatDateTime from "@/utils/formatDateTime";
 import { ChildReservationCardProps, OwnerReservationCardProps } from "../types";
 
 type ReservationCardProps = (ChildReservationCardProps | OwnerReservationCardProps) & {

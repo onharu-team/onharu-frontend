@@ -5,24 +5,31 @@ import clsx from "clsx";
 interface ReservationTimeProps {
   data: GroupedReservations;
   selectedDate: Date | null;
-  selectedTime: string | null;
+  selectedTime: string | string[] | null;
   handleSelectTime: (value: string) => void;
+  existingSchedules?: Record<string, string[]>;
 }
+
 /**
  * 날짜별로 시간을 그룹핑
  * @param data 그룹화된 데이터입니다.
  *  @param selectedDate 선택된 날짜입니다.
  *  @param selectedTime 선택된 시간입니다.
  *  @param handleSelectTime 커스텀 훅입니다. 선택된 시간을 selectedTime에 반영해줍니다.
+ *  @param existingSchedules 이미 예약된 시간 정보 (선택 불가 시간 표시용)
  */
+
 export const ReservationTime = ({
   data,
   selectedDate,
   selectedTime,
   handleSelectTime,
+  existingSchedules,
 }: ReservationTimeProps) => {
   const formatted = selectedDate ? format(selectedDate, "yyyy-MM-dd") : "";
   const timesForSelectedDate = data[formatted] || [];
+
+  const existingTimes = existingSchedules?.[formatted] ?? [];
 
   /**
    * 날짜별로 시간을 그룹핑
@@ -39,18 +46,30 @@ export const ReservationTime = ({
   if (timesForSelectedDate.length > 0) {
     return (
       <div className="grid grid-cols-4 gap-2">
-        {timesForSelectedDate.map(date => (
-          <button
-            key={date}
-            onClick={() => handleSelectTime(date)}
-            className={clsx(
-              "focus-visible:bg-main-300 cursor-pointer rounded-md border border-gray-300 bg-white py-2 transition duration-150 hover:bg-gray-50 md:py-4",
-              selectedTime === date && "!bg-main text-white"
-            )}
-          >
-            {date}
-          </button>
-        ))}
+        {timesForSelectedDate.map(date => {
+          const isSelected = Array.isArray(selectedTime)
+            ? selectedTime.includes(date)
+            : selectedTime === date;
+
+          const isExisting = existingTimes.includes(date);
+
+          return (
+            <button
+              key={date}
+              disabled={isExisting}
+              onClick={() => !isExisting && handleSelectTime(date)}
+              className={clsx(
+                "focus-visible:bg-main-300 rounded-md border border-gray-300 bg-white py-2 transition duration-150 md:py-4",
+                isSelected && "!bg-main text-white",
+                isExisting
+                  ? "cursor-not-allowed bg-gray-200 text-gray-400"
+                  : "cursor-pointer hover:bg-gray-50"
+              )}
+            >
+              {date}
+            </button>
+          );
+        })}
       </div>
     );
   }

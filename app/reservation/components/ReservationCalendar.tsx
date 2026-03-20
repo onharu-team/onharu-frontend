@@ -24,7 +24,10 @@ export const ReservationCalendar = ({
    * 어떤 날짜를 활성화(선택 가능)할지 결정하는 필터 함수입니다.
    */
 
-  const availableDates: Date[] = Object.keys(data).map(dateStr => new Date(dateStr));
+  const availableDates: Date[] = Object.keys(data).map(dateStr => {
+    const [year, month, day] = dateStr.split("-").map(Number);
+    return new Date(year, month - 1, day);
+  });
   const filterDate = (d: Date) => availableDates.some(ad => isSameDay(d, ad));
 
   return (

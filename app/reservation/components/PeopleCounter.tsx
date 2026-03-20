@@ -1,7 +1,9 @@
+import { cn } from "@/lib/utils";
 import { RiAddLine, RiSubtractLine } from "@remixicon/react";
 interface PeopleCounter {
   counter: number;
   availableCounter: number;
+  disabled: boolean;
   handleSubtract: () => void;
   handleAdd: () => void;
 }
@@ -15,6 +17,7 @@ interface PeopleCounter {
 export const PeopleCounter = ({
   counter,
   availableCounter,
+  disabled,
   handleSubtract,
   handleAdd,
 }: PeopleCounter) => {
@@ -28,10 +31,11 @@ export const PeopleCounter = ({
       <div className="flex h-9 overflow-hidden rounded-md border border-gray-300 md:h-12.5">
         <button
           aria-label="인원수 감소, 최소 1명"
-          className={ButtonBaseClasses}
+          className={cn(ButtonBaseClasses, disabled && "cursor-default bg-gray-100")}
           onClick={handleSubtract}
+          disabled={disabled}
         >
-          <RiSubtractLine size={18} />
+          <RiSubtractLine size={18} className={cn(disabled && "text-gray-400")} />
         </button>
         <div
           aria-live="polite"
@@ -41,10 +45,11 @@ export const PeopleCounter = ({
         </div>
         <button
           aria-label={`인원수 증가, 최대 ${availableCounter}명`}
-          className={ButtonBaseClasses}
+          className={cn(ButtonBaseClasses, disabled && "cursor-default bg-gray-100")}
           onClick={handleAdd}
+          disabled={disabled}
         >
-          <RiAddLine size={18} />
+          <RiAddLine size={18} className={cn(disabled && "text-gray-400")} />
         </button>
       </div>
     </div>

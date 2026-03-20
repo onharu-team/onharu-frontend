@@ -54,6 +54,13 @@ export interface UserMeReq {
   name: string;
 }
 
+// 비밀번호 찾기/재설정
+export interface resetPWReq {
+  name: string;
+  loginId: string;
+  phone: string;
+}
+
 // 회원가입
 export interface ChildReq {
   loginId: string;

@@ -43,7 +43,7 @@ export default function AccountEditForm({
   }, [serverNicknameError, setError]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <>
       <div className="mb-7.5 flex flex-col gap-2 sm:mb-12.5 sm:gap-5">
         <Input label="이메일" id="email" placeholder={defaultValues.loginId} disabled />
 
@@ -80,9 +80,16 @@ export default function AccountEditForm({
         )}
       </div>
 
-      <Button type="submit" varient="default" fontSize="md" width="lg" height="md">
+      <Button
+        type="submit"
+        varient="default"
+        fontSize="md"
+        width="lg"
+        height="md"
+        onClick={handleSubmit(onSubmit)}
+      >
         수정하기
       </Button>
-    </form>
+    </>
   );
 }

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { RiKeyboardFill } from "@remixicon/react";
 
-export const FramerSlide = () => {
+export const FramerSlide = ({ data }: { data: string[] }) => {
   const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const testRef = useRef<HTMLDivElement>(null);
@@ -94,51 +94,20 @@ export const FramerSlide = () => {
           className="h-full"
         >
           <div className="flex h-full gap-3 md:gap-5" ref={trackRef}>
-            <motion.div className="relative w-[calc(25%-11px)] shrink-0 md:w-[calc(25%-15px)]">
-              <Image
-                src={"/image/page/test-image.png"}
-                alt=""
-                fill
-                style={{ objectFit: "cover" }}
-                className="pointer-events-none"
-              />
-            </motion.div>
-            <motion.div className="relative w-[calc(25%-11px)] shrink-0 md:w-[calc(25%-15px)]">
-              <Image
-                src={"/image/page/test-image.png"}
-                alt=""
-                fill
-                style={{ objectFit: "cover" }}
-                className="pointer-events-none"
-              />
-            </motion.div>
-            <motion.div className="relative w-[calc(25%-11px)] shrink-0 md:w-[calc(25%-15px)]">
-              <Image
-                src={"/image/page/test-image.png"}
-                alt=""
-                fill
-                style={{ objectFit: "cover" }}
-                className="pointer-events-none"
-              />
-            </motion.div>
-            <motion.div className="relative w-[calc(25%-11px)] shrink-0 md:w-[calc(25%-15px)]">
-              <Image
-                src={"/image/page/test-image.png"}
-                alt=""
-                fill
-                style={{ objectFit: "cover" }}
-                className="pointer-events-none"
-              />
-            </motion.div>
-            <motion.div className="relative w-[calc(25%-11px)] shrink-0 md:w-[calc(25%-15px)]">
-              <Image
-                src={"/image/page/test-image.png"}
-                alt=""
-                fill
-                style={{ objectFit: "cover" }}
-                className="pointer-events-none"
-              />
-            </motion.div>
+            {data.map((item, idx) => (
+              <motion.div
+                key={idx}
+                className="relative w-[calc(25%-11px)] shrink-0 md:w-[calc(25%-15px)]"
+              >
+                <Image
+                  src={item}
+                  alt=""
+                  fill
+                  style={{ objectFit: "cover" }}
+                  className="pointer-events-none"
+                />
+              </motion.div>
+            ))}
           </div>
         </motion.div>
       </motion.div>

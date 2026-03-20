@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Like } from "../../feature/StoreLike";
+import LikeButton from "@/components/feature/LikeButton";
 import { CardProps } from "./type/type";
 import { cn } from "@/lib/utils";
 
@@ -45,7 +45,7 @@ export const Card = (props: CardProps) => {
         </div>
         <div className="relative flex-1 bg-white p-2.5 md:p-4">
           <div className="absolute top-2 right-5 z-5">
-            <Like isLiked={false} />
+            <LikeButton storeId={Number(props.storeId)} isLiked={false} className="static" />
           </div>
           <p className="md:text-md flex items-center gap-2 pr-6 text-base font-bold">
             <span className="line-clamp-1">{props.storename}</span>

@@ -15,7 +15,7 @@ export async function POST(req: Request, context: { params: Promise<{ storeId: s
 export async function GET(request: Request, context: { params: Promise<{ storeId: string }> }) {
   const { storeId } = await context.params;
 
-  const res = await fetch(`http://onharu-api.votex.co.kr:15080/api/reviews/stores/${storeId}`, {
+  const res = await fetch(`${process.env.API_BASE_URL}/api/reviews/stores/${storeId}`, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -29,4 +29,3 @@ export async function GET(request: Request, context: { params: Promise<{ storeId
   const data = await res.json();
   return NextResponse.json(data);
 }
-

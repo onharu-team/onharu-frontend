@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
 
-  const res = await fetch(`http://onharu-api.votex.co.kr:15080/api/stores/${id}`, {
+  const res = await fetch(`${process.env.API_BASE_URL}/api/stores/${id}`, {
     headers: {
       "Content-Type": "application/json",
     },

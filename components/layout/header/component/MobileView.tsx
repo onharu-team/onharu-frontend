@@ -15,9 +15,11 @@ import { Alert } from "./Alert";
 export const MobileView = ({
   isLoggedIn,
   userName,
+  unreadCount,
 }: {
   isLoggedIn: boolean;
   userName?: string;
+  unreadCount: number;
 }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -93,6 +95,7 @@ export const MobileView = ({
             <ul>
               {NavItems.filter(items => !items.requireAuth || isLoggedIn).map(items => {
                 const isActive = pathname.includes(items.pathname);
+                const isChat = items.pathname === "/chat";
                 return (
                   <button
                     key={items.id}
@@ -105,6 +108,11 @@ export const MobileView = ({
                     <li className={cn("border-b py-4", isActive && "text-main font-bold")}>
                       {items.title}
                     </li>
+                    {isChat && unreadCount > 0 && (
+                      <span className="bg-main absolute top-3 left-7 flex h-3 w-3 items-center justify-center rounded-full text-[8px] font-semibold text-white">
+                        {unreadCount > 9 ? "9+" : unreadCount}
+                      </span>
+                    )}
                   </button>
                 );
               })}

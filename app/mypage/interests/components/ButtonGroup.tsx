@@ -21,9 +21,11 @@ export default function ButtonGroup({ isShare, storeId }: ButtonGroupProps) {
         </Button>
       </Link>
       {isShare && (
-        <Button varient="dark" width="lg" height="sm" fontSize="sm">
-          예약하기
-        </Button>
+        <Link href={`/reservation/${storeId}`} className="w-full">
+          <Button varient="dark" width="lg" height="sm" fontSize="sm">
+            예약하기
+          </Button>
+        </Link>
       )}
     </div>
   );

@@ -28,7 +28,8 @@ export function useChatSocket(roomId: number | null, senderId: number) {
   useEffect(() => {
     if (!roomId) return; // 방 ID 없으면 연결 안 함
 
-    const brokerURL = process.env.NEXT_PUBLIC_WS_URL;
+    const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+    const brokerURL = `${protocol}://${process.env.NEXT_PUBLIC_WS_HOST}/ws-chat`;
 
     // STOMP 클라이언트 생성 (웹소켓 기반 실시간 메시지 통신)
     const stompClient = new Client({

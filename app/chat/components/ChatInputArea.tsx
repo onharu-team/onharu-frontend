@@ -68,7 +68,7 @@ export function ChatInputArea({ onSendMessage, isConnected }: ChatInputAreaProps
           value={message}
           onChange={e => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
-          // disabled={!isConnected} // 연결 안 되면 입력 방지
+          disabled={!isConnected} 
         />
       ) : (
         <ImagePreview previewUrl={previewUrl!} onRemove={() => setImageFile(null)} />

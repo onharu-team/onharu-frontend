@@ -5,12 +5,15 @@ import { Button } from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { useState } from "react";
 import { CancelModalType } from "../types";
+import { useEnterChat } from "@/hooks/useEnterChat";
 
 interface ReservationModalProps {
   open: boolean;
   modalType: CancelModalType;
   onClose: () => void;
   onConfirm: (reason?: string) => void;
+  userId: number;
+  targetUserName: string;
 }
 
 interface CancelContentProps {
@@ -60,8 +63,12 @@ export default function ReservationModal({
   modalType,
   onClose,
   onConfirm,
+  userId,
+  targetUserName,
 }: ReservationModalProps) {
   const [reason, setReason] = useState("");
+
+  const { enterChat } = useEnterChat();
 
   if (!open) return null;
 
@@ -118,7 +125,13 @@ export default function ReservationModal({
               <p>사장님께 알려주세요! :{")"}</p>
             </div>
 
-            <Button varient="default" width="lg" height="md" fontSize="md">
+            <Button
+              varient="default"
+              width="lg"
+              height="md"
+              fontSize="md"
+              onClick={() => enterChat(userId, targetUserName)}
+            >
               채팅하기
             </Button>
           </div>

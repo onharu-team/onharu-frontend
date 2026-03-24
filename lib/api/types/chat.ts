@@ -16,7 +16,7 @@ export interface ChatList {
 export interface CreateChatReq {
   name: string;
   roomType: "ONE_TO_ONE";
-  chatParticipantIds: number[];
+  targetId: number;
 }
 
 // 채팅방 생성 성공 시 받는 응답

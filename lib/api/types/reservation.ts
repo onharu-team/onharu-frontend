@@ -27,6 +27,7 @@ export type GetReservationsParams = ChildReservationParams | OwnerReservationPar
 
 interface BaseReservation {
   id: number;
+  userId: number;
   childId: number;
   storeScheduleId: number;
   storeId: number;

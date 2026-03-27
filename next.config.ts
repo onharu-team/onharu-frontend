@@ -15,6 +15,12 @@ const nextConfig: NextConfig = {
         hostname: "example.com",
         pathname: "/bucket/image/**",
       },
+      {
+        protocol: "https",
+        hostname: "minio.example.com",
+        port: "",
+        pathname: "/bucket/**",
+      },
     ],
   },
 };

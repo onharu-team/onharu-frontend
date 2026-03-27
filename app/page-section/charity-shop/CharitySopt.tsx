@@ -47,6 +47,7 @@ export const CharityShop = () => {
   }
 
   const stores: CharityMain[] = data?.data?.stores ?? [];
+  console.log(stores);
 
   return (
     <>

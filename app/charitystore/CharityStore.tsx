@@ -104,7 +104,9 @@ export default function CharityStore() {
           </>
         )}
         {!isLoading && !error && storeLength === 0 && (
-          <p className="font-gmarketsans text-center text-xl">결과가 없습니다.</p>
+          <div className="flex h-[calc(100vh-550px)] items-center justify-center">
+            <p className="font-gmarketsans text-center text-xl">결과가 없습니다.</p>
+          </div>
         )}
       </div>
     </section>

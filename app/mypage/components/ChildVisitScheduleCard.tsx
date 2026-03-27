@@ -4,7 +4,7 @@ import { RiArrowRightSLine } from "@remixicon/react";
 import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 import { ChildReservation } from "@/lib/api/types/reservation";
-import formatDateTime from "../utils/format";
+import formatDateTime from "@/utils/formatDateTime";
 
 export default function ChildVisitScheduleCard({ schedule }: { schedule?: ChildReservation }) {
   const router = useRouter();

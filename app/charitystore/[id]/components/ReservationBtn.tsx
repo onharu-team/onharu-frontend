@@ -1,10 +1,15 @@
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import { StoreSchedules } from "@/types/store/detail/StoreSchedules";
 
-export const ReservationBtn = ({ data }: { data: StoreSchedules[] | null }) => {
+interface ReservationProps {
+  storeId?: string;
+  isSharing: boolean;
+}
+
+export const ReservationBtn = ({ storeId, isSharing }: ReservationProps) => {
   const router = useRouter();
-  if (!data) {
+
+  if (!isSharing) {
     return (
       <Button varient="dark" fontSize="md" width="md" height="md">
         채팅하기
@@ -19,7 +24,7 @@ export const ReservationBtn = ({ data }: { data: StoreSchedules[] | null }) => {
         width="md"
         height="md"
         onClick={() => {
-          router.push(`/reservation/"${data[0].storeId}`);
+          router.push(`/reservation/${storeId}`);
         }}
       >
         예약하기

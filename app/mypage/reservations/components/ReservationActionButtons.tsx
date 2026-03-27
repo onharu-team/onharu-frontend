@@ -22,6 +22,8 @@ interface Props {
   storeName: string;
   storeId: number;
   reviewed: boolean;
+  userId: number;
+  targetUserName: string;
 }
 
 // 취소 가능 여부 계산
@@ -61,6 +63,8 @@ export default function ReservationActionButtons({
   storeName,
   storeId,
   reviewed,
+  userId,
+  targetUserName,
 }: Props) {
   const [reviewOpen, setReviewOpen] = useState(false);
   const [modalType, setModalType] = useState<CancelModalType>();
@@ -225,6 +229,8 @@ export default function ReservationActionButtons({
           modalType={modalType}
           onClose={handleCloseModal}
           onConfirm={handleConfirmClick}
+          userId={userId}
+          targetUserName={targetUserName}
         />
       )}
     </>

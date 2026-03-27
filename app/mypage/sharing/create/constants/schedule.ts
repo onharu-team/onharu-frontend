@@ -8,7 +8,7 @@ export const CATEGORY_MAP: Record<string, number> = {
   생활: 5,
 };
 
-export const PERIODS = ["1개월", "3개월", "6개월", "1년"];
+export const PERIODS = ["1개월", "3개월", "6개월"];
 
 export const DAYS = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"];
 
@@ -23,6 +23,7 @@ export const DAY_MAP: Record<string, BusinessHour["businessDay"]> = {
 };
 
 export const TIMES = [
+  "09:00",
   "10:00",
   "11:00",
   "12:00",
@@ -32,5 +33,8 @@ export const TIMES = [
   "16:00",
   "17:00",
   "18:00",
-  "종일",
+  "19:00",
+  "20:00",
+  "21:00",
+  // "종일",
 ];

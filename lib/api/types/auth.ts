@@ -9,6 +9,7 @@ export interface ImageInfo {
 export interface ChildData {
   userType: "CHILD";
   loginId: string;
+  userId?: number;
   name: string;
   phone: string;
   nickname: string;
@@ -18,6 +19,7 @@ export interface ChildData {
 export interface OwnerData {
   userType: "OWNER";
   loginId: string;
+  userId?: number;
   name: string;
   phone: string;
   businessNumber: string;
@@ -52,6 +54,13 @@ export interface UserMeReq {
   statusType: string;
   providerType: string;
   name: string;
+}
+
+// 비밀번호 찾기/재설정
+export interface resetPWReq {
+  name: string;
+  loginId: string;
+  phone: string;
 }
 
 // 회원가입

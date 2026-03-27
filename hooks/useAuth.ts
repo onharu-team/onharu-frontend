@@ -28,6 +28,7 @@ export function useAuthProfile() {
       }
 
       return {
+        userId: meRes.data.userId,
         ...profileRes.data,
       };
     },

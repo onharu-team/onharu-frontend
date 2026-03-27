@@ -5,6 +5,12 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: "https",
+        hostname: "onharu-api-v2.votex.co.kr",
+        port: "9000",
+        pathname: "/onharu-minio/**",
+      },
+      {
         protocol: "http",
         hostname: "onharu-api.votex.co.kr",
         port: "15090",

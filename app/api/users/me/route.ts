@@ -25,7 +25,7 @@ export async function GET() {
     });
   }
 
-  if ("status" in result.data && result.data.status === -500) {
+  if (result.data && "status" in result.data && result.data.status === -500) {
     throw NextResponse.json({
       success: false,
       data: null,

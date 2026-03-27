@@ -11,7 +11,13 @@ import { motion, LayoutGroup } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useLogout } from "@/hooks/useLogout";
 
-export const DesktopView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
+export const DesktopView = ({
+  isLoggedIn,
+  unreadCount,
+}: {
+  isLoggedIn: boolean;
+  unreadCount: number;
+}) => {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -27,10 +33,11 @@ export const DesktopView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             </h1>
           </Link>
           <LayoutGroup>
-            <nav>
-              <ul className="flex gap-8">
+            <nav className="shrink-0">
+              <ul className="flex gap-6">
                 {NavItems.filter(items => !items.requireAuth || isLoggedIn).map(items => {
                   const isActive = pathname.includes(items.pathname);
+                  const isChat = items.pathname === "/chat";
                   return (
                     <li key={items.id}>
                       <Link href={items.pathname} className="relative px-3">
@@ -49,6 +56,11 @@ export const DesktopView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                           style={{ originX: 0.5 }}
                           className="bg-main absolute -bottom-[30px] h-[3px] w-full"
                         />
+                        {isChat && unreadCount > 0 && (
+                          <span className="bg-main absolute -top-2 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-semibold text-white">
+                            {unreadCount > 9 ? "9+" : unreadCount}
+                          </span>
+                        )}
                       </Link>
                     </li>
                   );
@@ -57,7 +69,7 @@ export const DesktopView = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             </nav>
           </LayoutGroup>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           {isLoggedIn && (
             <>
               <Alert

@@ -10,7 +10,7 @@ export interface ApiError {
 export type ApiResult<T> =
   | {
       success: true;
-      data: T;
+      data: T | null;
       headers: Headers;
     }
   | {

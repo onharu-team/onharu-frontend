@@ -17,3 +17,35 @@ export interface CharityMain {
   images: string[];
   favoriteCount: number;
 }
+
+type BusinessHour = {
+  businessDay: string;
+  openTime: string;
+  closeTime: string;
+};
+
+export type CharityDetail = {
+  id: number;
+  name: string;
+  address: string;
+  lat: string;
+  lng: string;
+  phone: string;
+
+  categoryId: number;
+  categoryName: string;
+
+  intro: string;
+  introduction: string;
+
+  images: string[];
+  tagNames: string[];
+
+  businessHours: BusinessHour[];
+
+  distance: number;
+  favoriteCount: number;
+
+  isOpen: boolean;
+  isSharing: boolean;
+};

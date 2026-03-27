@@ -11,7 +11,7 @@ export function OtherMessage({ message, time }: { message: string; time: string 
           className="object-contain"
         />
       </div>
-      <div className="max-w-50 rounded-r-[10px] rounded-bl-[10px] border px-1.5 py-2.5 text-sm font-semibold sm:max-w-100 sm:px-3 sm:py-5 sm:text-base">
+      <div className="max-w-50 rounded-r-[10px] rounded-bl-[10px] border px-1.5 py-2.5 text-sm font-semibold wrap-break-word sm:max-w-80 sm:px-3 sm:py-5 sm:text-base">
         {message}
       </div>
       <div className="text-text-secondary self-end text-xs sm:text-sm">{time}</div>

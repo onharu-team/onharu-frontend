@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/Button";
 import StatusBadge from "./StatusBadge";
 import ReservationActionButtons from "./ReservationActionButtons";
-import formatDateTime from "../../utils/format";
+import formatDateTime from "@/utils/formatDateTime";
 import { ChildReservationCardProps, OwnerReservationCardProps } from "../types";
+import { useEnterChat } from "@/hooks/useEnterChat";
 
 type ReservationCardProps = (ChildReservationCardProps | OwnerReservationCardProps) & {
   className?: string;
@@ -11,6 +12,7 @@ type ReservationCardProps = (ChildReservationCardProps | OwnerReservationCardPro
 export default function ReservationCard(props: ReservationCardProps) {
   const {
     id,
+    userId,
     role,
     status,
     storeName,
@@ -23,7 +25,11 @@ export default function ReservationCard(props: ReservationCardProps) {
     className = "bg-secondary",
   } = props;
 
+  const { enterChat } = useEnterChat();
+
   const { date, time } = formatDateTime(new Date(`${scheduleDate}T${startTime}`));
+
+  const targetUserName = role === "CHILD" ? storeName : (props.childNickname ?? "");
 
   return (
     <li
@@ -33,11 +39,15 @@ export default function ReservationCard(props: ReservationCardProps) {
         <div className="flex items-center gap-1">
           <StatusBadge status={status} role={role} />
 
-          <h3 className="text-sm font-bold sm:text-base">
-            {role === "CHILD" ? storeName : props.childNickname}
-          </h3>
+          <h3 className="text-sm font-bold sm:text-base">{targetUserName}</h3>
 
-          <Button varient="dark" width="xs" height="xs" fontSize="sm">
+          <Button
+            varient="dark"
+            width="xs"
+            height="xs"
+            fontSize="sm"
+            onClick={() => enterChat(userId, targetUserName)}
+          >
             채팅하기
           </Button>
         </div>
@@ -64,6 +74,8 @@ export default function ReservationCard(props: ReservationCardProps) {
           storeName={storeName}
           storeId={storeId}
           reviewed={reviewed}
+          userId={userId}
+          targetUserName={targetUserName}
         />
       </div>
     </li>

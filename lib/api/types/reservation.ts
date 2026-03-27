@@ -27,6 +27,7 @@ export type GetReservationsParams = ChildReservationParams | OwnerReservationPar
 
 interface BaseReservation {
   id: number;
+  userId: number;
   childId: number;
   storeScheduleId: number;
   storeId: number;
@@ -56,4 +57,16 @@ export interface ReservationsData<T> {
   currentPage: number;
   totalPages: number;
   perPage: number;
+}
+
+// 가게 스케줄 생성
+export interface CreateStoreScheduleItem {
+  scheduleDate: string;
+  startTime: string;
+  endTime: string;
+  maxPeople: number;
+}
+
+export interface CreateStoreSchedulesReq {
+  storeSchedules: CreateStoreScheduleItem[];
 }

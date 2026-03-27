@@ -72,11 +72,9 @@ export const EmailAuthField = <T extends FieldValues>({
       if (success) {
         clearErrors([emailName, codeName]);
         onVerifiedChange(true);
-      } else {
-        setError(codeName, { type: "manual", message: "인증번호가 일치하지 않습니다!" });
       }
     } catch (error) {
-      setError(codeName, { type: "manual", message: "인증번호 확인 중 문제가 발생했습니다." });
+      setError(codeName, { type: "manual", message: "인증번호가 일치하지 않습니다!" });
     }
   };
 

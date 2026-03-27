@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useLayoutEffect, useEffect } from "react";
+import { useRef, useLayoutEffect, useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
 import { useChatMessagesQuery } from "@/hooks/useChatMessages";
 import { buildRenderableMessages } from "../utils/groupMessagesByDate";
@@ -31,8 +31,14 @@ export function MessageList({ userName, userId, chatRoomId, unreadCount = 0 }: M
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useChatMessagesQuery(chatRoomId);
 
-  // 전체 메시지 배열을 최신 순으로 정렬
-  const allMessages = data?.pages?.flat().reverse() ?? [];
+  // 전체 메시지 배열을 과거 ~ 최신 순으로 정렬
+  const allMessages = useMemo(() => {
+    return (
+      data?.pages
+        ?.flat()
+        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) ?? []
+    );
+  }, [data]);
 
   // 메시지를 포맷팅 날짜 포함해서 렌더링용 배열로 변환
   const items = buildRenderableMessages(allMessages);

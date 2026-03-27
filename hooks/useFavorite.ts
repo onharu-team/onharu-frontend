@@ -6,7 +6,7 @@ export const useFavoritesQuery = (params: { pageNum: number; perPage: number }) 
   return useQuery({
     queryKey: ["favorites", params],
     queryFn: () => getFavorites(params),
-    select: res => res.success && res.data,
+    select: res => (res.success ? res.data : undefined),
   });
 };
 

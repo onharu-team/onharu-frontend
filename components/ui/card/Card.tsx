@@ -2,6 +2,8 @@ import Link from "next/link";
 import LikeButton from "@/components/feature/LikeButton";
 import { CardProps } from "./type/type";
 import { cn } from "@/lib/utils";
+import { useAuthProfile } from "@/hooks/useAuth";
+import { useFavoritesQuery } from "@/hooks/useFavorite";
 
 /**
  * @param storelink - 상세페이지 이동 url (공통)
@@ -22,6 +24,13 @@ export const Card = (props: CardProps) => {
   const reservation = props.type === "nearby" ? props.reservation : null;
   const category = props.type === "charity" ? props.category : null;
   const hashtags = props.type === "charity" ? props.hashtags : null;
+  const { data: user } = useAuthProfile();
+
+  const isChild = user?.userType === "CHILD";
+
+  const { data: favorites } = useFavoritesQuery({ pageNum: 1, perPage: 9999 });
+  const isLiked =
+    favorites?.favorites?.some(f => String(f.storeId) === String(props.storeId)) ?? false;
 
   return (
     <Link
@@ -44,9 +53,11 @@ export const Card = (props: CardProps) => {
           {category}
         </div>
         <div className="relative flex-1 bg-white p-2.5 md:p-4">
-          <div className="absolute top-2 right-5 z-5">
-            <LikeButton storeId={Number(props.storeId)} isLiked={false} className="static" />
-          </div>
+          {isChild && (
+            <div className="absolute top-2 right-5 z-5">
+              <LikeButton storeId={Number(props.storeId)} isLiked={isLiked} className="static" />
+            </div>
+          )}
           <p className="md:text-md flex items-center gap-2 pr-6 text-base font-bold">
             <span className="line-clamp-1">{props.storename}</span>
             {operating}

@@ -17,7 +17,10 @@ export default function middleware(req: NextRequest) {
   const isPublicOnlyRoute = publicOnlyRoutes.some(route => pathname.startsWith(route));
 
   if (!isLoggedIn && isProtectedRoute) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    // return NextResponse.redirect(new URL("/login", req.url));
+    const loginUrl = new URL("/login", req.url);
+    loginUrl.searchParams.set("redirect", pathname); // 현재 경로 추가
+    return NextResponse.redirect(loginUrl);
   }
   if (pathname.startsWith("/reservation") && userType !== "CHILD") {
     return NextResponse.redirect(new URL("/unauthorized", req.url));

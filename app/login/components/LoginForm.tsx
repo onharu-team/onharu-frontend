@@ -11,6 +11,7 @@ import { LoginFormValues } from "../types";
 import { useLogin } from "@/hooks/useLogin";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginForm() {
   const {
@@ -24,6 +25,7 @@ export default function LoginForm() {
   const queryClient = useQueryClient();
   const { mutate: login } = useLogin();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const onSubmit = (data: LoginFormValues) => {
     login(
@@ -39,7 +41,9 @@ export default function LoginForm() {
 
           await queryClient.invalidateQueries({ queryKey: ["auth"] });
 
-          router.refresh();
+          // router.refresh();
+          const redirect = searchParams.get("redirect");
+          router.push(redirect ?? "/");
         },
         onError: () => {
           setLoginError("이메일 또는 비밀번호를 잘못 입력하셨습니다.");

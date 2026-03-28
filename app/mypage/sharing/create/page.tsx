@@ -3,7 +3,6 @@
 import { useState, useMemo } from "react";
 import { PageSection } from "../../components/PageSection";
 import { Button } from "@/components/ui/Button";
-import useModal from "@/hooks/ui/useModal";
 import { useCalendarSelect } from "@/components/feature/calendar/useCalendarSelect";
 import { useMultiReservationTime } from "@/components/feature/reservation/useMultiReservationTime";
 import { useStoreSchedules } from "@/hooks/UseStoreSchedules";
@@ -15,7 +14,6 @@ import { PeopleCountInput } from "./components/PeopleCountInput";
 import { AlwaysProvideArea } from "./components/AlwaysProvideArea";
 import { SingleReservationArea } from "./components/SingleReservationArea";
 import { SelectedReservationList } from "./components/SelectedReservationList";
-import { SubmissionModal } from "./components/SubmissionModal";
 import { generateAlwaysProvideSchedules, getEndTime } from "./util/schedules";
 import { useAuthProfile } from "@/hooks/useAuth";
 import { OwnerData } from "@/lib/api/types/auth";
@@ -35,7 +33,6 @@ export default function SharingPage() {
   const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1);
 
   const { selectedDate, setSelectedDate } = useCalendarSelect();
-  const { open, handleOpenModal, handleCloseModal } = useModal();
   const {
     selectedTimes,
     handleSelectTimes,
@@ -110,10 +107,11 @@ export default function SharingPage() {
       });
 
       resetForm();
-      handleOpenModal();
+
+      Toast("success", "나눔 등록 완료", "나눔이 등록되었습니다.");
     } catch (error) {
       console.error("나눔 등록 실패:", error);
-      Toast("error", "나눔 등록에 실패했습니다.", "잠시후에 다시 시도해주세요.");
+      Toast("error", "나눔 등록 실패", "잠시후에 다시 시도해주세요.");
     }
   };
 
@@ -183,8 +181,6 @@ export default function SharingPage() {
           </Button>
         </div>
       </div>
-
-      <SubmissionModal open={open} onClose={handleCloseModal} />
     </PageSection>
   );
 }

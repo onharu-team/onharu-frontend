@@ -9,12 +9,14 @@ interface ReservationCalendar {
   data: GroupedReservations;
   selectedDate: Date | null;
   setSelectedDate: Dispatch<SetStateAction<Date | null>>;
+  onMonthChange?: (year: number, month: number) => void;
 }
 
 export const ReservationCalendar = ({
   data,
   selectedDate,
   setSelectedDate,
+  onMonthChange,
 }: ReservationCalendar) => {
   /**
    * 공통 Calendar 컴포넌트를 사용하기 전 날짜 데이터를 가공하는 곳입니다.
@@ -44,6 +46,7 @@ export const ReservationCalendar = ({
       filterDate={filterDate}
       selectedDate={selectedDate}
       setSelectedDate={setSelectedDate}
+      onMonthChange={onMonthChange}
     />
   );
 };

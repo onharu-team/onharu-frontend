@@ -55,30 +55,38 @@ export const Card = (props: CardProps) => {
           {category}
         </div>
         <div className="relative flex-1 bg-white p-2.5 md:p-4">
-          {isChild && (
-            <div className="absolute top-2 right-5 z-5">
-              <LikeButton storeId={Number(props.storeId)} isLiked={isLiked} className="static" />
+          <div className="flex h-full flex-col justify-between">
+            {isChild && (
+              <div className="absolute top-2 right-5 z-5">
+                <LikeButton storeId={Number(props.storeId)} isLiked={isLiked} className="static" />
+              </div>
+            )}
+            <div>
+              <p className="md:text-md flex items-center gap-2 pr-6 text-base font-bold">
+                <span className="line-clamp-1">{props.storename}</span>
+                {operating}
+              </p>
+              {storeAddress}
+              <p className="text-text mt-2 line-clamp-2 text-sm md:text-base">
+                {props.storeIntroduce}
+              </p>
             </div>
-          )}
-          <p className="md:text-md flex items-center gap-2 pr-6 text-base font-bold">
-            <span className="line-clamp-1">{props.storename}</span>
-            {operating}
-          </p>
-          {storeAddress}
-          <p className="text-text mt-2 line-clamp-2 text-sm md:text-base">{props.storeIntroduce}</p>
-          {hashtags && (
-            <div className="w-[calc(100% - 20px)] absolute bottom-4 left-2.5 mt-3.5 flex h-[22px] flex-wrap items-center gap-1 overflow-hidden md:mt-7.5 md:h-[29px]">
-              {hashtags}
+
+            {reservation && (
+              <div className="mt-3.5 flex flex-wrap items-center gap-1 md:mt-7.5">
+                {reservation}
+              </div>
+            )}
+
+            <div className={cn("flex flex-col justify-end")}>
+              {distance && (
+                <p className="text-main text-right text-sm font-semibold">
+                  {distance < 1 ? `${Math.round(distance * 1000)}m` : `${distance.toFixed(1)}km`}
+                </p>
+              )}
+              {hashtags && hashtags}
             </div>
-          )}
-          {reservation && (
-            <div className="mt-3.5 flex flex-wrap items-center gap-1 md:mt-7.5">{reservation}</div>
-          )}
-          {distance && (
-            <p className="text-main absolute right-4 bottom-14 text-sm font-semibold">
-              {distance} km
-            </p>
-          )}
+          </div>
         </div>
       </div>
     </Link>

@@ -4,7 +4,7 @@ interface DefaultCard {
   storeThumnail: React.ReactNode;
   storename: string;
   storeIntroduce: string;
-  distance?: number;
+  distance?: number | null;
 }
 
 interface CharityCard extends DefaultCard {

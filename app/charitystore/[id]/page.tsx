@@ -78,6 +78,8 @@ export default function Detail() {
 
   console.log(reservation);
 
+  console.log(reservation);
+
   return (
     <section className="mt-section-sm-top md:mt-section-lg-top mb-section-sm-bottom md:mb-section-lg-bottom">
       <div className="wrapper">

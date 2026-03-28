@@ -24,6 +24,8 @@ export const Card = (props: CardProps) => {
   const reservation = props.type === "nearby" ? props.reservation : null;
   const category = props.type === "charity" ? props.category : null;
   const hashtags = props.type === "charity" ? props.hashtags : null;
+  const distance = props.distance;
+
   const { data: user } = useAuthProfile();
 
   const isChild = user?.userType === "CHILD";
@@ -37,7 +39,7 @@ export const Card = (props: CardProps) => {
       href={`/charitystore/${props.storelink}`}
       id={props.storeId}
       className={cn(
-        "inline-block h-full min-h-60.5 duration-300 ease-in-out hover:-translate-y-1.5 md:min-h-89.5",
+        "inline-block h-full min-h-60.5 duration-300 ease-in-out hover:-translate-y-1.5 md:min-h-95.5",
         props.type === "nearby" && "h-fit w-full"
       )}
     >
@@ -71,6 +73,11 @@ export const Card = (props: CardProps) => {
           )}
           {reservation && (
             <div className="mt-3.5 flex flex-wrap items-center gap-1 md:mt-7.5">{reservation}</div>
+          )}
+          {distance && (
+            <p className="text-main absolute right-4 bottom-14 text-sm font-semibold">
+              {distance} km
+            </p>
           )}
         </div>
       </div>

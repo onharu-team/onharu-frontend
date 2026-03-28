@@ -7,12 +7,13 @@ interface ReservationProps {
 
 export const Reservation = ({ data }: ReservationProps) => {
   const availableDates = data.filter(day => day.availableSlots > 0);
+
   const formatDate = (dateStr: string) => {
     const [year, month, day] = dateStr.split("-");
     return `${year}년 ${parseInt(month)}월 ${parseInt(day)}일`;
   };
 
-  if (data.length > 0) {
+  if (availableDates.length !== 0) {
     return (
       <>
         <p className="lg:text-md flex items-center gap-1.5 text-base font-semibold">

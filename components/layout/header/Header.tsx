@@ -8,7 +8,6 @@ export const Header = () => {
   const { data: user } = useAuthProfile();
 
   const isLoggedIn = !!user;
-  console.log(user);
 
   return (
     <>

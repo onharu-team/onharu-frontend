@@ -38,7 +38,7 @@ export default function FindIdForm() {
       return;
     }
 
-    console.log("아이디 찾기 요청:", data);
+    ("아이디 찾기 요청:", data);
   };
 
   return (

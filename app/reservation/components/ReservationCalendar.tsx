@@ -24,12 +24,21 @@ export const ReservationCalendar = ({
    * 어떤 날짜를 활성화(선택 가능)할지 결정하는 필터 함수입니다.
    */
 
-  const availableDates: Date[] = Object.keys(data).map(dateStr => {
-    const [year, month, day] = dateStr.split("-").map(Number);
-    return new Date(year, month - 1, day);
-  });
-  const filterDate = (d: Date) => availableDates.some(ad => isSameDay(d, ad));
+  const availableDates: Date[] = Object.keys(data)
+    .filter(dateStr => data[dateStr].some(slot => slot.isAvailable)) // 추가
+    .map(dateStr => {
+      const [year, month, day] = dateStr.split("-").map(Number);
+      return new Date(year, month - 1, day);
+    });
 
+  const now = new Date();
+
+  const filterDate = (d: Date) => {
+    // 오늘 이전 날짜는 무조건 false
+    if (d < new Date(now.getFullYear(), now.getMonth(), now.getDate())) return false;
+    // 날짜 자체가 availableDates에 있으면 true (시간 다 지나도 날짜는 선택 가능)
+    return availableDates.some(ad => isSameDay(d, ad));
+  };
   return (
     <Calendar
       filterDate={filterDate}

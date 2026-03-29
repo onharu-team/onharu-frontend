@@ -77,17 +77,6 @@ export const Card = (props: CardProps) => {
                 {reservation}
               </div>
             )}
-
-<<<<<<< HEAD
-            <div className={cn("flex flex-col justify-end")}>
-              {distance && (
-                <p className="text-main text-right text-sm font-semibold">
-                  {distance < 1 ? `${Math.round(distance * 1000)}m` : `${distance.toFixed(1)}km`}
-                </p>
-              )}
-              {hashtags && hashtags}
-            </div>
-=======
             {props.type === "charity" && (
               <div className={cn("flex flex-col justify-end")}>
                 {distance != null ? (
@@ -113,7 +102,6 @@ export const Card = (props: CardProps) => {
                 {hashtags && hashtags}
               </div>
             )}
->>>>>>> c9a0f9a (지도 호출 리스트 변경, km 삭제)
           </div>
         </div>
       </div>

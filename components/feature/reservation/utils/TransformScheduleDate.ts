@@ -7,13 +7,12 @@ export function TransformScheduleData(apiResponse: ScheduleApiResponse): RawRese
   if (!Array.isArray(summaries)) return [];
 
   return summaries.flatMap(summary =>
-    summary.scheduleSlots
-      .filter((detail: DailyScheduleDetail) => detail.isAvailable)
-      .map((detail: DailyScheduleDetail) => ({
-        id: detail.id,
-        date: summary.date,
-        time: detail.startTime.slice(0, 5),
-        maxPeople: detail.maxPeople,
-      }))
+    summary.scheduleSlots.map((detail: DailyScheduleDetail) => ({
+      id: detail.id,
+      date: summary.date,
+      time: detail.startTime.slice(0, 5),
+      maxPeople: detail.maxPeople,
+      isAvailable: detail.isAvailable, // 추가, filter 제거
+    }))
   );
 }

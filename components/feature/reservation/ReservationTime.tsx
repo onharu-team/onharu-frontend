@@ -23,6 +23,21 @@ export const ReservationTime = ({
 }: ReservationTimeProps) => {
   const formatted = selectedDate ? format(selectedDate, "yyyy-MM-dd") : "";
   const timesForSelectedDate = data[formatted] || [];
+<<<<<<< HEAD
+=======
+  const existingTimes = existingSchedules?.[formatted] ?? [];
+
+  const isToday = formatted === format(new Date(), "yyyy-MM-dd");
+
+  const isPastTime = (time: string) => {
+    if (!isToday) return false; // 오늘이 아니면 무조건 false
+    const [hour, minute] = time.split(":").map(Number);
+    const now = new Date();
+    const slotTime = new Date();
+    slotTime.setHours(hour, minute, 0, 0);
+    return slotTime <= now; // 현재 시간 이전이면 true
+  };
+>>>>>>> b5241a2 (예약 페이지에서 현재 시간 이전 버튼 비활성화)
 
   /**
    * 날짜별로 시간을 그룹핑
@@ -39,6 +54,7 @@ export const ReservationTime = ({
   if (timesForSelectedDate.length > 0) {
     return (
       <div className="grid grid-cols-4 gap-2">
+<<<<<<< HEAD
         {timesForSelectedDate.map(date => (
           <button
             key={date}
@@ -51,6 +67,32 @@ export const ReservationTime = ({
             {date}
           </button>
         ))}
+=======
+        {timesForSelectedDate.map(slot => {
+          const isSelected = Array.isArray(selectedTime)
+            ? selectedTime.includes(slot.time)
+            : selectedTime === slot.time;
+
+          const isDisabled = !slot.isAvailable;
+
+          return (
+            <button
+              key={slot.time}
+              disabled={isDisabled}
+              onClick={() => !isDisabled && handleSelectTime(slot.time)}
+              className={clsx(
+                "focus-visible:bg-main-300 rounded-md border border-gray-300 bg-white py-2 transition duration-150 md:py-4",
+                isSelected && "!bg-main text-white",
+                isDisabled
+                  ? "cursor-not-allowed bg-gray-200 text-gray-400"
+                  : "cursor-pointer hover:bg-gray-50"
+              )}
+            >
+              {slot.time}
+            </button>
+          );
+        })}
+>>>>>>> b5241a2 (예약 페이지에서 현재 시간 이전 버튼 비활성화)
       </div>
     );
   }

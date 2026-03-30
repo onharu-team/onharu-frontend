@@ -73,34 +73,36 @@ export const Card = (props: CardProps) => {
             </div>
 
             {reservation && (
-              <div className="mt-3.5 flex flex-wrap items-center gap-1 md:mt-7.5">
+              <div className="relative z-10 mt-3.5 flex flex-wrap items-center gap-1 md:mt-7.5">
                 {reservation}
               </div>
             )}
 
-            <div className={cn("flex flex-col justify-end")}>
-              {distance != null ? (
-                <p className="text-main text-right text-sm font-semibold">
-                  {distance < 1 ? `${Math.round(distance * 1000)}m` : `${distance.toFixed(1)}km`}
-                </p>
-              ) : (
-                <div className="flex w-full justify-end gap-1">
-                  <span
-                    className="bg-main-400 block h-1.5 w-1.5 animate-bounce rounded-full"
-                    style={{ animationDelay: "0ms" }}
-                  />
-                  <span
-                    className="bg-main-400 block h-1.5 w-1.5 animate-bounce rounded-full"
-                    style={{ animationDelay: "150ms" }}
-                  />
-                  <span
-                    className="bg-main-400 block h-1.5 w-1.5 animate-bounce rounded-full"
-                    style={{ animationDelay: "300ms" }}
-                  />
-                </div>
-              )}
-              {hashtags && hashtags}
-            </div>
+            {props.type === "charity" && (
+              <div className={cn("flex flex-col justify-end")}>
+                {distance != null ? (
+                  <p className="text-main text-right text-sm font-semibold">
+                    {distance < 1 ? `${Math.round(distance * 1000)}m` : `${distance.toFixed(1)}km`}
+                  </p>
+                ) : (
+                  <div className="flex w-full justify-end gap-1">
+                    <span
+                      className="bg-main-400 block h-1.5 w-1.5 animate-bounce rounded-full"
+                      style={{ animationDelay: "0ms" }}
+                    />
+                    <span
+                      className="bg-main-400 block h-1.5 w-1.5 animate-bounce rounded-full"
+                      style={{ animationDelay: "150ms" }}
+                    />
+                    <span
+                      className="bg-main-400 block h-1.5 w-1.5 animate-bounce rounded-full"
+                      style={{ animationDelay: "300ms" }}
+                    />
+                  </div>
+                )}
+                {hashtags && hashtags}
+              </div>
+            )}
           </div>
         </div>
       </div>

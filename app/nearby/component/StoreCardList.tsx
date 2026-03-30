@@ -44,7 +44,11 @@ export function StoreCardList({ stores, activeId, cardRefs }: StoreCardListProps
                 height="md"
                 fontSize="md"
                 disabled={!store.isSharing}
-                onClick={() => router.push(`/reservation/${store.id}`)}
+                onClick={e => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  router.push(`/reservation/${store.id}`);
+                }}
               >
                 {store.isSharing ? "나눔 예약하기" : "나눔 준비중"}
               </Button>

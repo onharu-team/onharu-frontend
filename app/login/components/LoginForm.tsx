@@ -40,6 +40,7 @@ export default function LoginForm() {
           }
 
           await queryClient.invalidateQueries({ queryKey: ["auth"] });
+          await queryClient.invalidateQueries({ queryKey: ["chatList"] });
 
           // router.refresh();
           const redirect = searchParams.get("redirect");

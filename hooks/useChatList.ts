@@ -15,6 +15,8 @@ export const useChatList = () => {
       return res.data;
     },
     staleTime: 0,
+    refetchInterval: 60000,
+    refetchOnWindowFocus: true,
     gcTime: 1000 * 60 * 60 * 24,
   });
 };

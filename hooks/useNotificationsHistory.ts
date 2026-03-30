@@ -8,7 +8,7 @@ export const useNotificationHistory = (params?: { pageNum?: number; perPage?: nu
   const query = useQuery({
     queryKey,
     queryFn: () => getNotificationHistories(params),
-    refetchInterval: 30000,
+    refetchInterval: 60000,
     refetchOnWindowFocus: true,
     select: res => {
       const histories = res.success ? res.data.histories : [];

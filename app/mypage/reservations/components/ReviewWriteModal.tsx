@@ -6,6 +6,8 @@ import Textarea from "@/components/ui/TextArea";
 import Input from "@/components/ui/Input";
 import { useState } from "react";
 import { writeReview } from "@/lib/api/reviews";
+import { Toast } from "@/components/feature/toast/Toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   open: boolean;
@@ -26,6 +28,8 @@ export default function ReviewWriteModal({
 
   const isValid = content.trim().length > 0;
 
+  const queryClient = useQueryClient();
+
   const handleSubmit = async () => {
     if (!isValid) return;
 
@@ -35,13 +39,18 @@ export default function ReviewWriteModal({
     };
 
     try {
-      const res = await writeReview(storeId, payload);
+      await writeReview(storeId, payload);
 
-      console.log("리뷰 등록 성공", res.success);
+      await queryClient.invalidateQueries({
+        queryKey: ["reservations"],
+      });
+
+      Toast("success", "리뷰 작성 완료", "사장님께 감사 리뷰가 전달되었어요.");
 
       onClose();
     } catch (error) {
       console.error("리뷰 작성 실패", error);
+      Toast("error", "리뷰 작성 실패", "잠시후에 다시 시도해주세요.");
     }
   };
 

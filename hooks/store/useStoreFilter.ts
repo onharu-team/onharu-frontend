@@ -24,7 +24,7 @@ export const useStoreFilter = ({
   });
   const filters = {
     pageNum: Number(searchParams.get("pageNum")) || 1,
-    perPage: Number(searchParams.get("perPage")) || 16,
+    perPage: Number(searchParams.get("perPage")) || 33,
     lat: Number(searchParams.get("lat")) || null,
     lng: Number(searchParams.get("lng")) || null,
     categoryId: Number(searchParams.get("categoryId")) || 0,

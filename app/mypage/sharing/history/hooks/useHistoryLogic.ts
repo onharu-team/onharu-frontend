@@ -6,6 +6,7 @@ import { useDeleteStoreSchedules } from "@/hooks/useDeleteStoreSchedules";
 import useModal from "@/hooks/ui/useModal";
 import { Toast } from "@/components/feature/toast/Toast";
 import { OwnerData } from "@/lib/api/types/auth";
+import { getFutureOrTodayDates } from "@/utils/date";
 
 export const useHistoryLogic = () => {
   const today = new Date();
@@ -26,7 +27,7 @@ export const useHistoryLogic = () => {
   });
 
   // 예약 내역이 있는 날짜 목록
-  const reservedDates = useMemo(() => Object.keys(detailed), [detailed]);
+  const reservedDates = getFutureOrTodayDates(Object.keys(detailed ?? {}));
 
   // 모달 및 삭제 대상 관리 상태
   const { open: modalOpen, handleOpenModal, handleCloseModal } = useModal();
@@ -74,7 +75,7 @@ export const useHistoryLogic = () => {
         setPendingDeleteIdList([]);
         Toast("success", "나눔이 삭제되었습니다.");
       },
-      onError: () => Toast("error", "나눔 삭제에 실패했습니다.", '잠시후에 다시 시도해주세요.'),
+      onError: () => Toast("error", "나눔 삭제에 실패했습니다.", "잠시후에 다시 시도해주세요."),
     });
   };
 

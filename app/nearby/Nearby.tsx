@@ -51,10 +51,6 @@ export default function Nearby() {
   const stores: CharityMain[] = data?.data?.stores ?? [];
   const mylocation = { lat: filters.lat, lng: filters.lng };
 
-  const handleReservation = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-  };
-
   const commonProps = {
     isReady,
     error,
@@ -67,7 +63,6 @@ export default function Nearby() {
     onInputChange: handleInputChange,
     onSearch: handleSearch,
     onCategoryChange: handleCategoryCahnge,
-    onReservation: handleReservation,
   };
 
   return (

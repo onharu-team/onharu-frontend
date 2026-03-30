@@ -26,7 +26,7 @@ export function ReservationUtils(data: RawReservation[]): GroupedReservations {
 
   return data.reduce((acc, cur) => {
     if (!acc[cur.date]) acc[cur.date] = [];
-    acc[cur.date].push(cur.time);
+    acc[cur.date].push({ time: cur.time, isAvailable: cur.isAvailable }); // 수정
     return acc;
   }, {} as GroupedReservations);
 }

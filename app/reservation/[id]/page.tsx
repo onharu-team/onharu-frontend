@@ -20,11 +20,12 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useEffect, useMemo, useState } from "react";
 import { handleReservationSubmit } from "@/components/feature/reservation/utils/ReservationSubmit";
+import { useRouter } from "next/navigation";
 
 export default function Reservation() {
   const params = useParams();
   const storeId = params.id as string;
-
+  const router = useRouter();
   const { selectedDate, setSelectedDate } = useCalendarSelect();
   const { selectedTime, handleSelectTime } = useReservationTime({ selectedDate });
   const [maxPeople, setMaxPeople] = useState<number>(1);
@@ -32,8 +33,8 @@ export default function Reservation() {
   const counterDisabled = !selectedDate || !selectedTime;
 
   const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth() + 1;
+  const [year, setYear] = useState(now.getFullYear());
+  const [month, setMonth] = useState(now.getMonth() + 1);
   const { counter, handleSubtract, handleAdd, handleCounterInit } = usePeopleCounter({
     availableCounter: maxPeople,
   });
@@ -65,16 +66,16 @@ export default function Reservation() {
     return `${year}-${month}-${day}`;
   };
 
+  console.log(groupedDate);
+
   useEffect(() => {
     const matched = rawData.find(
       r => r.date === (selectedDate ? formatDate(selectedDate) : "") && r.time === selectedTime
     );
     setMaxPeople(matched?.maxPeople ?? 5);
     setStoreScheduleId(matched?.id ?? null);
-    console.log(matched?.id);
+    // console.log(matched?.id);
   }, [selectedDate, selectedTime, rawData]);
-
-  //console.log(maxPeople);
 
   return (
     <section className="mt-section-sm-top lg:mt-section-lg-top mb-section-sm-bottom lg:mb-section-lg-bottom">
@@ -90,16 +91,30 @@ export default function Reservation() {
         <DevideBar />
         <div>
           <Heading title="날짜와 시간을 선택해 주세요." />
-          {scheduleLoading && <Skeleton height={700} className="mt-9" />}
-          {!scheduleLoading && (
-            <>
-              <div className="mt-9">
-                <ReservationCalendar
-                  data={groupedDate}
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
-                />
+          {/* 캘린더는 항상 렌더 */}
+          <div
+            className={`relative mt-9 transition-opacity duration-300 ${scheduleLoading ? "pointer-events-none opacity-40" : "opacity-100"}`}
+          >
+            <ReservationCalendar
+              data={groupedDate}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              onMonthChange={(y, m) => {
+                setYear(y);
+                setMonth(m);
+              }}
+            />
+            {scheduleLoading && (
+              <div className="absolute top-0 left-0 z-10 h-full w-full">
+                <Skeleton height={630} className="p-0" style={{ lineHeight: 1.6 }} />
               </div>
+            )}
+          </div>
+          {/* 시간/선택정보는 로딩중 스켈레톤 */}
+          {scheduleLoading ? (
+            <Skeleton height={100} className="mt-6" />
+          ) : (
+            <>
               <div className="mt-6">
                 <ReservationTime
                   data={groupedDate}
@@ -134,7 +149,14 @@ export default function Reservation() {
             width="lg"
             height="lg"
             onClick={() =>
-              handleReservationSubmit(selectedDate, selectedTime, counter, storeId, storeScheduleId)
+              handleReservationSubmit(
+                selectedDate,
+                selectedTime,
+                counter,
+                storeId,
+                storeScheduleId,
+                router
+              )
             }
           >
             예약하기

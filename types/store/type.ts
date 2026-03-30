@@ -48,4 +48,6 @@ export type CharityDetail = {
 
   isOpen: boolean;
   isSharing: boolean;
+
+  userId: number;
 };

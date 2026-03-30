@@ -29,10 +29,10 @@ export function DayTimeSelect({
       <Section title="나눔을 원하는 시간이 있나요? (여러개 선택 가능)" className="mt-2.5 sm:mt-5">
         {TIMES.map(time => (
           <SelectButton
-            key={time}
-            label={time}
-            selected={selectedTimes.includes(time)}
-            onClick={() => onTimeToggle(time)}
+            key={time.time}
+            label={time.time}
+            selected={selectedTimes.includes(time.time)}
+            onClick={() => onTimeToggle(time.time)}
           />
         ))}
       </Section>

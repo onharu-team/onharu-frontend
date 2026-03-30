@@ -20,7 +20,6 @@ interface MobileViewProps {
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSearch: (value: string) => void;
   onCategoryChange: (value: number) => void;
-  onReservation: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export function MobileView({
@@ -35,7 +34,6 @@ export function MobileView({
   onInputChange,
   onSearch,
   onCategoryChange,
-  onReservation,
 }: MobileViewProps) {
   return (
     <>
@@ -51,12 +49,7 @@ export function MobileView({
         <MyAddress mylocation={mylocation} handleOpenModal={onOpenModal} />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {stores.length > 0 && (
-            <StoreCardList
-              stores={stores}
-              activeId={activeId}
-              cardRefs={cardRefs}
-              onReservation={onReservation}
-            />
+            <StoreCardList stores={stores} activeId={activeId} cardRefs={cardRefs} />
           )}
           {stores.length === 0 && <SearchNoResult />}
           {error && <>데이터를 읽을 수 없습니다.</>}

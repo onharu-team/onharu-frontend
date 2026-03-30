@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useCallback, useState } from "react";
 import { useQueryClient, InfiniteData } from "@tanstack/react-query";
-import { Client, IMessage } from "@stomp/stompjs";
+import { Client, IMessage, StompSubscription } from "@stomp/stompjs";
 import { ChatMessage } from "@/lib/api/types/chat";
+import { Toast } from "@/components/feature/toast/Toast";
 
 interface ChatPageRes {
   success: boolean;
@@ -21,6 +22,8 @@ interface ChatPageRes {
 
 export function useChatSocket(roomId: number | null, senderId: number) {
   const stompClientRef = useRef<Client | null>(null); // STOMP 클라이언트 참조
+  const subscriptionRef = useRef<StompSubscription | null>(null); // 구독 참조
+  const reconnectCountRef = useRef(0); // 재연결 시도 횟수
   const [isConnected, setIsConnected] = useState(false); // 소켓 연결 상태
 
   const queryClient = useQueryClient();
@@ -33,10 +36,23 @@ export function useChatSocket(roomId: number | null, senderId: number) {
     // STOMP 클라이언트 생성 (웹소켓 기반 실시간 메시지 통신)
     const stompClient = new Client({
       brokerURL,
-      reconnectDelay: 5000, // 연결 끊기면 5초 후 재연결
+      reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
-      // debug: msg => console.log("[STOMP Debug]:", msg),
+      debug: msg => console.log("[STOMP Debug]:", msg),
+
+      onWebSocketError: event => {
+        console.error("WebSocket ERROR:", event);
+        Toast("error", "연결 실패", "잠시 후 다시 시도해주세요.");
+      },
+
+      onWebSocketClose: () => {
+        reconnectCountRef.current++;
+
+        if (reconnectCountRef.current > 2) {
+          stompClient.deactivate();
+        }
+      },
     });
 
     // 서버에서 메시지 받았을 때 처리
@@ -48,24 +64,30 @@ export function useChatSocket(roomId: number | null, senderId: number) {
         queryClient.setQueryData<InfiniteData<ChatPageRes>>(["chatMessages", roomId], oldData => {
           if (!oldData?.pages?.length) return oldData;
 
-          // 기존 페이지 복사 후 첫 페이지에 새 메시지 추가
-          const newPages = [...oldData.pages];
-          const firstPageMessages = newPages[0].data.chatRoomMessageResponses;
+          const firstPage = oldData.pages[0];
+          const messages = firstPage.data.chatRoomMessageResponses;
 
           // 중복 메시지 제거
-          if (firstPageMessages.some(msg => msg.chatMessageId === newMessage.chatMessageId)) {
+          if (messages.some(msg => msg.chatMessageId === newMessage.chatMessageId)) {
             return oldData;
           }
 
-          newPages[0] = {
-            ...newPages[0],
-            data: {
-              ...newPages[0].data,
-              chatRoomMessageResponses: [newMessage, ...firstPageMessages],
-            },
+          return {
+            ...oldData,
+            pages: [
+              {
+                ...firstPage,
+                data: {
+                  ...firstPage.data,
+                  chatRoomMessageResponses: [newMessage, ...messages],
+                },
+              },
+              ...oldData.pages.slice(1),
+            ],
           };
-
-          return { ...oldData, pages: newPages };
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["chatList"],
         });
       } catch (error) {
         console.error("Parsing error:", error);
@@ -77,20 +99,28 @@ export function useChatSocket(roomId: number | null, senderId: number) {
       // console.log("STOMP CONNECTED");
       setIsConnected(true);
 
+      // 기존 구독 있으면 제거
+      if (subscriptionRef.current) {
+        subscriptionRef.current.unsubscribe();
+      }
+
       // 실시간 채팅 구독: 해당 경로로 들어오는 메시지를 감지하여 처리
-      stompClient.subscribe(`/topic/chat/${roomId}`, handleIncomingMessage);
+      subscriptionRef.current = stompClient.subscribe(
+        `/topic/chat/${roomId}`,
+        handleIncomingMessage
+      );
     };
 
     // 연결 끊김 및 에러 처리
     stompClient.onDisconnect = () => {
+      // console.log("STOMP DISCONNECTED");
       setIsConnected(false);
-      stompClientRef.current = null;
     };
 
     stompClient.onStompError = frame => {
       console.error("STOMP ERROR:", frame);
       setIsConnected(false);
-      stompClientRef.current = null;
+      Toast("error", "채팅 서버 오류", "잠시 후 다시 시도해주세요.");
     };
 
     // 클라이언트 참조 저장 및 활성화
@@ -98,12 +128,21 @@ export function useChatSocket(roomId: number | null, senderId: number) {
     stompClient.activate();
 
     // cleanup: 컴포넌트 언마운트 시 연결 해제
-
     return () => {
+      // console.log("CLEANUP SOCKET");
+
+      // 구독 해제
+      if (subscriptionRef.current) {
+        subscriptionRef.current.unsubscribe();
+        subscriptionRef.current = null;
+      }
+
+      // 연결 해제
       if (stompClientRef.current) {
         stompClientRef.current.deactivate();
         stompClientRef.current = null;
       }
+
       setIsConnected(false);
     };
   }, [roomId, queryClient]);
@@ -116,20 +155,28 @@ export function useChatSocket(roomId: number | null, senderId: number) {
   const sendMessage = useCallback(
     (content: string) => {
       const client = stompClientRef.current;
-      if (!content.trim() || !client?.connected) {
-        console.warn("STOMP connection not ready");
+
+      if (!content.trim()) return;
+
+      if (!client || !client.connected) {
+        console.warn("STOMP not connected");
+        Toast("error", "전송 실패", "잠시 후 다시 시도해주세요.");
         return;
       }
 
-      // 서버로 메시지 발송
-      client.publish({
-        destination: "/app/chat/send",
-        body: JSON.stringify({
-          chatRoomId: roomId!,
-          senderId,
-          content,
-        }),
-      });
+      try {
+        // 서버로 메시지 발송
+        client.publish({
+          destination: "/app/chat/send",
+          body: JSON.stringify({
+            chatRoomId: roomId!,
+            senderId,
+            content,
+          }),
+        });
+      } catch (error) {
+        console.error("SEND ERROR:", error);
+      }
     },
     [roomId, senderId]
   );

@@ -2,6 +2,8 @@ import Link from "next/link";
 import LikeButton from "@/components/feature/LikeButton";
 import { CardProps } from "./type/type";
 import { cn } from "@/lib/utils";
+import { useAuthProfile } from "@/hooks/useAuth";
+import { useFavoritesQuery } from "@/hooks/useFavorite";
 
 /**
  * @param storelink - 상세페이지 이동 url (공통)
@@ -22,13 +24,22 @@ export const Card = (props: CardProps) => {
   const reservation = props.type === "nearby" ? props.reservation : null;
   const category = props.type === "charity" ? props.category : null;
   const hashtags = props.type === "charity" ? props.hashtags : null;
+  const distance = props.type === "charity" ? props.distance : null;
+
+  const { data: user } = useAuthProfile();
+
+  const isChild = user?.userType === "CHILD";
+
+  const { data: favorites } = useFavoritesQuery({ pageNum: 1, perPage: 9999 });
+  const isLiked =
+    favorites?.favorites?.some(f => String(f.storeId) === String(props.storeId)) ?? false;
 
   return (
     <Link
       href={`/charitystore/${props.storelink}`}
       id={props.storeId}
       className={cn(
-        "inline-block h-full min-h-60.5 duration-300 ease-in-out hover:-translate-y-1.5 md:min-h-89.5",
+        "inline-block h-full min-h-60.5 duration-300 ease-in-out hover:-translate-y-1.5 md:min-h-95.5",
         props.type === "nearby" && "h-fit w-full"
       )}
     >
@@ -44,23 +55,55 @@ export const Card = (props: CardProps) => {
           {category}
         </div>
         <div className="relative flex-1 bg-white p-2.5 md:p-4">
-          <div className="absolute top-2 right-5 z-5">
-            <LikeButton storeId={Number(props.storeId)} isLiked={false} className="static" />
-          </div>
-          <p className="md:text-md flex items-center gap-2 pr-6 text-base font-bold">
-            <span className="line-clamp-1">{props.storename}</span>
-            {operating}
-          </p>
-          {storeAddress}
-          <p className="text-text mt-2 line-clamp-2 text-sm md:text-base">{props.storeIntroduce}</p>
-          {hashtags && (
-            <div className="w-[calc(100% - 20px)] absolute bottom-4 left-2.5 mt-3.5 flex h-[22px] flex-wrap items-center gap-1 overflow-hidden md:mt-7.5 md:h-[29px]">
-              {hashtags}
+          <div className="flex h-full flex-col justify-between">
+            {isChild && (
+              <div className="absolute top-2 right-5 z-5">
+                <LikeButton storeId={Number(props.storeId)} isLiked={isLiked} className="static" />
+              </div>
+            )}
+            <div>
+              <p className="md:text-md flex items-center gap-2 pr-6 text-base font-bold">
+                <span className="line-clamp-1">{props.storename}</span>
+                {operating}
+              </p>
+              {storeAddress}
+              <p className="text-text mt-2 line-clamp-2 text-sm md:text-base">
+                {props.storeIntroduce}
+              </p>
             </div>
-          )}
-          {reservation && (
-            <div className="mt-3.5 flex flex-wrap items-center gap-1 md:mt-7.5">{reservation}</div>
-          )}
+
+            {reservation && (
+              <div className="relative z-10 mt-3.5 flex flex-wrap items-center gap-1 md:mt-7.5">
+                {reservation}
+              </div>
+            )}
+
+            {props.type === "charity" && (
+              <div className={cn("flex flex-col justify-end")}>
+                {distance != null ? (
+                  <p className="text-main text-right text-sm font-semibold">
+                    {distance < 1 ? `${Math.round(distance * 1000)}m` : `${distance.toFixed(1)}km`}
+                  </p>
+                ) : (
+                  <div className="flex w-full justify-end gap-1">
+                    <span
+                      className="bg-main-400 block h-1.5 w-1.5 animate-bounce rounded-full"
+                      style={{ animationDelay: "0ms" }}
+                    />
+                    <span
+                      className="bg-main-400 block h-1.5 w-1.5 animate-bounce rounded-full"
+                      style={{ animationDelay: "150ms" }}
+                    />
+                    <span
+                      className="bg-main-400 block h-1.5 w-1.5 animate-bounce rounded-full"
+                      style={{ animationDelay: "300ms" }}
+                    />
+                  </div>
+                )}
+                {hashtags && hashtags}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </Link>

@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { GetStores } from "@/lib/api/GetStores";
 import { CharityMain } from "../../types/store/type";
@@ -13,10 +14,24 @@ import { Pagination } from "@/components/feature/pagination/Pagination";
 import { useDropdown } from "@/components/feature/dropdown/useDropdown";
 import { SelectData } from "@/components/feature/dropdown/data/DropdownData";
 import { Thumbnail } from "@/components/ui/card/Thumbnail";
-
 import { useStoreFilter } from "@/hooks/store/useStoreFilter";
+import { getCurrentPosition } from "@/components/feature/map/utils/getCurrentPositin"; // 경로 맞게
+import { calcDistance } from "@/lib/distance";
 
 export default function CharityStore() {
+  const [myLocation, setMyLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  useEffect(() => {
+    getCurrentPosition().then(pos => {
+      if (pos) {
+        setMyLocation({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        });
+      }
+    });
+  }, []);
+
   const { filters, handlePageChange, handleCategoryCahnge, handleSortChange } = useStoreFilter({
     pathname: "charitystore",
     sort: "favoriteCount",
@@ -48,7 +63,7 @@ export default function CharityStore() {
 
   return (
     <section className="mt-section-sm-top md:mt-section-lg-top mb-section-sm-bottom md:mb-section-lg-bottom">
-      <h2 className="sr-only">나눔 가게 전체 보기</h2>
+      <h2 className="sr-only"> 전체 보기</h2>
       <div className="wrapper">
         <Navigation onChange={handleCategoryCahnge} />
         <BgrDropdown
@@ -78,25 +93,37 @@ export default function CharityStore() {
         {!isLoading && !error && storeLength > 0 && (
           <>
             <div className="mt-4 grid grid-cols-2 gap-4 md:mt-8 lg:grid-cols-4">
-              {stores.map(items => (
-                <Card
-                  key={items.id}
-                  type="charity"
-                  storeId={items.id}
-                  storelink={String(items.id)}
-                  storeThumnail={
-                    <Thumbnail
-                      src={items.images}
-                      isOpen={items.isOpen}
-                      hasSharing={items.isSharing}
-                    />
-                  }
-                  storename={items.name}
-                  storeIntroduce={items.introduction}
-                  category={<Category category={items.categoryName} />}
-                  hashtags={<HashTag tags={items.tagNames || []} />}
-                />
-              ))}
+              {stores.map(items => {
+                const distance =
+                  myLocation && items.lat && items.lng
+                    ? calcDistance(
+                        myLocation.lat,
+                        myLocation.lng,
+                        Number(items.lat),
+                        Number(items.lng)
+                      )
+                    : null;
+                return (
+                  <Card
+                    key={items.id}
+                    type="charity"
+                    storeId={items.id}
+                    storelink={String(items.id)}
+                    storeThumnail={
+                      <Thumbnail
+                        src={items.images}
+                        isOpen={items.isOpen}
+                        hasSharing={items.isSharing}
+                      />
+                    }
+                    storename={items.name}
+                    storeIntroduce={items.introduction}
+                    category={<Category category={items.categoryName} />}
+                    hashtags={<HashTag tags={items.tagNames || []} />}
+                    distance={distance}
+                  />
+                );
+              })}
             </div>
             <div className="mt-section-sm-top md:mt-section-lg-top flex justify-center">
               <Pagination totalPage={data?.data?.totalPages} handlePageChange={handlePageChange} />
@@ -104,7 +131,9 @@ export default function CharityStore() {
           </>
         )}
         {!isLoading && !error && storeLength === 0 && (
-          <p className="font-gmarketsans text-center text-xl">결과가 없습니다.</p>
+          <div className="flex h-[calc(100vh-550px)] items-center justify-center">
+            <p className="font-gmarketsans text-center text-xl">결과가 없습니다.</p>
+          </div>
         )}
       </div>
     </section>

@@ -5,7 +5,6 @@ export const Like = ({ isLiked = false }: { isLiked: boolean }) => {
     <button
       onClick={e => {
         e.preventDefault();
-        console.log("like");
       }}
     >
       {isLiked ? (

@@ -10,7 +10,5 @@ export async function POST(request: Request, { params }: { params: Promise<{ sto
     body
   );
 
-  console.log("result:", result);
-
   return handleApiResult(result);
 }

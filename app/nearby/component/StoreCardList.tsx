@@ -4,15 +4,17 @@ import { Thumbnail } from "@/components/ui/card/Thumbnail";
 import { StoreAddress } from "@/components/ui/card/StoreAddress";
 import { OperatingBedge } from "@/components/ui/card/OperatingBedge";
 import { Button } from "@/components/ui/Button";
+import { useRouter } from "next/navigation";
 
 interface StoreCardListProps {
   stores: CharityMain[];
   activeId: string;
   cardRefs: React.MutableRefObject<Record<string, HTMLDivElement | null>>;
-  onReservation: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export function StoreCardList({ stores, activeId, cardRefs, onReservation }: StoreCardListProps) {
+export function StoreCardList({ stores, activeId, cardRefs }: StoreCardListProps) {
+  const router = useRouter();
+
   return (
     <>
       {stores.map(store => (
@@ -42,7 +44,11 @@ export function StoreCardList({ stores, activeId, cardRefs, onReservation }: Sto
                 height="md"
                 fontSize="md"
                 disabled={!store.isSharing}
-                onClick={onReservation}
+                onClick={e => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  router.push(`/reservation/${store.id}`);
+                }}
               >
                 {store.isSharing ? "나눔 예약하기" : "나눔 준비중"}
               </Button>

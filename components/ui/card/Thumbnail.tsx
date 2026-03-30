@@ -13,6 +13,7 @@ export const Thumbnail = ({ src, isOpen, hasSharing }: ThumbnailProps) => {
   // const realStatus =
   //   status.openMinutes < status.closeMinutes ? status.midnightStatus : status.status;
   //const imageSrc = src || "/image/page/no-image.svg";
+
   const imageSrc = src.length > 0 ? src[0] : "/image/page/no-image.svg";
 
   return (

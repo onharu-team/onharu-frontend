@@ -24,7 +24,6 @@ interface DesktopViewProps {
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSearch: (value: string) => void;
   onCategoryChange: (value: number) => void;
-  onReservation: React.MouseEventHandler<HTMLButtonElement>;
   isCategoryQuery: boolean | null;
   isSidemenuQuery: boolean | null;
 }
@@ -41,7 +40,6 @@ export function DesktopView({
   onInputChange,
   onSearch,
   onCategoryChange,
-  onReservation,
   isCategoryQuery,
   isSidemenuQuery,
 }: DesktopViewProps) {
@@ -57,12 +55,7 @@ export function DesktopView({
       <div className="scrollbar-thin grid flex-1 grid-cols-1 gap-8 overflow-y-scroll p-7.5">
         {!isReady && Array.from({ length: 3 }).map((_, idx) => <CardSkeleton key={idx} />)}
         {isReady && stores.length > 0 && (
-          <StoreCardList
-            stores={stores}
-            activeId={activeId}
-            cardRefs={cardRefs}
-            onReservation={onReservation}
-          />
+          <StoreCardList stores={stores} activeId={activeId} cardRefs={cardRefs} />
         )}
         {isReady && stores.length === 0 && <SearchNoResult />}
         {isReady && error && <>데이터를 읽을 수 없습니다.</>}

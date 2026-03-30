@@ -37,8 +37,6 @@ export default function FindIdForm() {
       setError("authCode", { type: "manual", message: "인증 확인을 완료해 주세요." });
       return;
     }
-
-    console.log("아이디 찾기 요청:", data);
   };
 
   return (

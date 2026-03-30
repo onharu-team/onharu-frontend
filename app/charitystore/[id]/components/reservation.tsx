@@ -6,20 +6,18 @@ interface ReservationProps {
 }
 
 export const Reservation = ({ data }: ReservationProps) => {
-  console.log(data);
-  const time = ["11:00", "12:00", "15:00"];
-
   const availableDates = data.filter(day => day.availableSlots > 0);
+
   const formatDate = (dateStr: string) => {
     const [year, month, day] = dateStr.split("-");
     return `${year}년 ${parseInt(month)}월 ${parseInt(day)}일`;
   };
 
-  if (data.length > 0) {
+  if (availableDates.length !== 0) {
     return (
       <>
         <p className="lg:text-md flex items-center gap-1.5 text-base font-semibold">
-          <RiCalendar2Line size={20} /> 예약 가능 날짜
+          <RiCalendar2Line size={20} /> 이번 달 예약 가능 날짜
         </p>
         {/* 그룹 날짜별 그루핑 */}
         <div>

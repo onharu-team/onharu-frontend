@@ -4,6 +4,7 @@ import Calendar from "@/components/feature/calendar/Calendar";
 import { ReservationTime } from "@/components/feature/reservation/ReservationTime";
 import { TIMES } from "../constants/schedule";
 import { GroupedReservations } from "@/components/feature/reservation/type/ReservationType";
+import { getFutureOrTodayDates } from "@/utils/date";
 
 export function SingleReservationArea({
   selectedDate,
@@ -21,9 +22,16 @@ export function SingleReservationArea({
   onMonthChange?: (year: number, month: number) => void;
 }) {
   const dataForReservation: GroupedReservations = selectedDate
-    ? { [format(selectedDate, "yyyy-MM-dd")]: TIMES }
+    ? {
+        [format(selectedDate, "yyyy-MM-dd")]: TIMES.map(slot => ({
+          ...slot,
+          isAvailable: !existingSchedules[format(selectedDate, "yyyy-MM-dd")]?.includes(slot.time),
+        })),
+      }
     : {};
-  const reservedDates = Object.keys(existingSchedules ?? {});
+
+  const reservedDates = getFutureOrTodayDates(Object.keys(existingSchedules ?? {}));
+
   return (
     <>
       <div className="sm:text-md mb-2 text-base font-medium sm:mb-5">나눔 일정</div>

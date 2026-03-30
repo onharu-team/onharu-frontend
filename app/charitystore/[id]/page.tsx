@@ -74,6 +74,7 @@ export default function Detail() {
 
   // 예약 가능 일정
   const reservation = scheduleData?.data.dateSummaries ?? [];
+  // const availableDates = reservation.filter(day => day.availableSlots > 0);
 
   return (
     <section className="mt-section-sm-top md:mt-section-lg-top mb-section-sm-bottom md:mb-section-lg-bottom">
@@ -127,7 +128,13 @@ export default function Detail() {
         </article>
         <article className="mt-15 md:mt-21">
           <Heading title="예약 정보" addClassName="justify-between">
-            <ReservationBtn storeId={storeId} isSharing={storedetail.isSharing} />
+            <ReservationBtn
+              reservation={reservation}
+              storeName={storedetail.name}
+              storeId={storeId}
+              storeUserId={storedetail.userId}
+              isSharing={storedetail.isSharing}
+            />
           </Heading>
           <div className="mt-3 md:mt-8">
             <Reservation data={reservation} />

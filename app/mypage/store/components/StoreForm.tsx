@@ -10,8 +10,6 @@ import { SelectButton } from "../../sharing/create/components/SelectButton";
 import DocumentUploadField from "@/components/feature/DocumentUploadField";
 import { useStoreForm } from "./useStoreForm";
 import type { StoreInitialData } from "../types";
-import useModal from "@/hooks/ui/useModal";
-import { Modal } from "@/components/ui/Modal";
 import TagInput from "./TagInput";
 import AddressSearchModal from "@/components/feature/AddressSearchModal";
 import { Toast } from "@/components/feature/toast/Toast";
@@ -88,21 +86,18 @@ export default function StoreForm({ initialData, storeId }: StoreFormProps) {
 
   const { isValid, CATEGORY_OPTIONS, TIME_OPTIONS, DAYS } = storeForm.computed;
 
-  const { open, handleOpenModal, handleCloseModal } = useModal();
-
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
 
   const initialFiles = useMemo(() => mapInitialFiles(initialData?.files), [initialData?.files]);
-
 
   const handleRegisterClick = async () => {
     try {
       await handleSubmit();
 
-      handleOpenModal();
+      Toast("success", "가게 등록 완료", "이제 나눔 등록을 진행해보세요.");
     } catch (error) {
       console.error("가게 등록 실패:", error);
-      Toast("error", "가게 등록에 실패했습니다.", "잠시후에 다시 시도해주세요.");
+      Toast("error", "가게 등록 실패", "잠시후에 다시 시도해주세요.");
     }
   };
 
@@ -259,25 +254,6 @@ export default function StoreForm({ initialData, storeId }: StoreFormProps) {
           </Button>
         </div>
       </div>
-
-      {open && (
-        <Modal onClick={handleCloseModal}>
-          <div className="flex flex-col items-center gap-2 sm:gap-4">
-            <p className="mb-5 text-center font-medium break-keep sm:mb-10 sm:text-lg">
-              가게 등록이 완료되었습니다!
-            </p>
-            <Button
-              varient="default"
-              width="lg"
-              height="md"
-              fontSize="md"
-              onClick={handleCloseModal}
-            >
-              확인
-            </Button>
-          </div>
-        </Modal>
-      )}
 
       <AddressSearchModal
         open={isAddressModalOpen}

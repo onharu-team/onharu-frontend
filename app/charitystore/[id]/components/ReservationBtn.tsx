@@ -25,25 +25,6 @@ export const ReservationBtn = ({
   const { data: user } = useAuthProfile();
   const availableDates = reservation.filter(day => day.availableSlots > 0);
 
-  if (!isSharing) {
-    return (
-      <Button
-        varient="dark"
-        fontSize="md"
-        width="md"
-        height="md"
-        onClick={() => {
-          if (user?.userType !== "CHILD") {
-            Toast("info", "아동 회원만 채팅 가능합니다.");
-            return;
-          }
-          enterChat(Number(storeUserId), storeName);
-        }}
-      >
-        채팅하기
-      </Button>
-    );
-  }
   return (
     <div className="flex gap-1.5">
       {availableDates.length !== 0 && (

@@ -7,10 +7,12 @@ import { SortValue, SrotDirection } from "@/components/feature/dropdown/data/Dro
 import { Toast } from "@/components/feature/toast/Toast";
 
 export const useStoreFilter = ({
+  perPage,
   pathname,
   sort,
   direction,
 }: {
+  perPage: number;
   pathname: string;
   sort: SortValue;
   direction: SrotDirection;
@@ -24,7 +26,7 @@ export const useStoreFilter = ({
   });
   const filters = {
     pageNum: Number(searchParams.get("pageNum")) || 1,
-    perPage: Number(searchParams.get("perPage")) || 33,
+    perPage: perPage,
     lat: Number(searchParams.get("lat")) || null,
     lng: Number(searchParams.get("lng")) || null,
     categoryId: Number(searchParams.get("categoryId")) || 0,
@@ -32,6 +34,8 @@ export const useStoreFilter = ({
     sortDirection: searchParams.get("sortDirection") || direction,
     keyword: searchParams.get("keyword") || "",
   };
+
+  console.log(searchParams.get("perPage"));
 
   useEffect(() => {
     if (filters.sortField !== "distance") return;

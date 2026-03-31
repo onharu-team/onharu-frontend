@@ -33,6 +33,7 @@ export default function CharityStore() {
   }, []);
 
   const { filters, handlePageChange, handleCategoryCahnge, handleSortChange } = useStoreFilter({
+    perPage: 16,
     pathname: "charitystore",
     sort: "favoriteCount",
     direction: "desc",

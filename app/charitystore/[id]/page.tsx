@@ -16,6 +16,8 @@ import { DetailSkeleton } from "./components/DetailSkeleton";
 import Skeleton from "react-loading-skeleton";
 import { GetStoreSchedules } from "@/lib/api/GetStoreSchedules";
 import { CharityDetail } from "@/types/store/type";
+import { useAuthProfile } from "@/hooks/useAuth";
+import { useFavoritesQuery } from "@/hooks/useFavorite";
 
 export default function Detail() {
   const params = useParams();
@@ -53,6 +55,13 @@ export default function Detail() {
     }),
   });
 
+  const { data: user } = useAuthProfile();
+
+  const isChild = user?.userType === "CHILD";
+
+  const { data: favorites } = useFavoritesQuery({ pageNum: 1, perPage: 9999 });
+  const isLiked = favorites?.favorites?.some(f => String(f.storeId) === String(storeId)) ?? false;
+
   // 스토어 로딩 중
   if (storeLoading) return <DetailSkeleton />;
 
@@ -77,8 +86,6 @@ export default function Detail() {
   const storereview = reviewData?.data.reviews ?? [];
 
   // 예약 가능 일정
-  //const reservation = scheduleData?.data.dateSummaries ?? [];
-  // const availableDates = reservation.filter(day => day.availableSlots > 0);
   const scheduleLoading = scheduleDataList.some(q => q.isLoading);
   const reservation = scheduleDataList
     .flatMap(q => q.data?.data.dateSummaries ?? [])
@@ -89,7 +96,11 @@ export default function Detail() {
       <div className="wrapper">
         <article>
           <Heading title={storedetail.name}>
-            <LikeButton storeId={Number(params.id)} isLiked={false} className="static" />
+            {isChild && (
+              <div className="absolute top-2 right-5 z-5">
+                <LikeButton storeId={Number(params.id)} isLiked={isLiked} className="static" />
+              </div>
+            )}
           </Heading>
           <div className="relative mt-5 h-[110px] md:mt-8 md:h-[340px]">
             <h3 className="sr-only">매장 내부, 음식 사진이 나열되어 있습니다.</h3>

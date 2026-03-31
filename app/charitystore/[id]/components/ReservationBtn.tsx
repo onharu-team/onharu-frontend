@@ -27,7 +27,7 @@ export const ReservationBtn = ({
 
   return (
     <div className="flex gap-1.5">
-      {availableDates.length !== 0 && (
+      {isSharing && (
         <Button
           varient="default"
           fontSize="md"

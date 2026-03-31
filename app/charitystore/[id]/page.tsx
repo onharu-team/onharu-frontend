@@ -1,7 +1,7 @@
 "use client";
 import { useParams } from "next/navigation";
 import Image from "next/image";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueries } from "@tanstack/react-query";
 import { GetStoreDetail } from "@/lib/api/GetStoreDetail";
 import { Heading } from "./components/shared/heading";
 import LikeButton from "@/components/feature/LikeButton";
@@ -20,9 +20,7 @@ import { CharityDetail } from "@/types/store/type";
 export default function Detail() {
   const params = useParams();
   const storeId = params.id as string;
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth() + 1;
+
   const {
     data: storeData,
     error: storeError,
@@ -41,12 +39,18 @@ export default function Detail() {
     throwOnError: false,
   });
 
-  const { data: scheduleData, isLoading: scheduleLoading } = useQuery({
-    queryKey: ["store-schedules", storeId, year, month],
-    queryFn: () => GetStoreSchedules(storeId, year, month),
-    enabled: !!storeId,
-    staleTime: 1000 * 60,
-    retry: false,
+  const scheduleDataList = useQueries({
+    queries: Array.from({ length: 2 }, (_, i) => {
+      const now = new Date();
+      const d = new Date(now.getFullYear(), now.getMonth() + i, 1); // 매번 새 객체 생성
+      return {
+        queryKey: ["store-schedules", storeId, d.getFullYear(), d.getMonth() + 1],
+        queryFn: () => GetStoreSchedules(storeId, d.getFullYear(), d.getMonth() + 1),
+        enabled: !!storeId,
+        staleTime: 1000 * 60,
+        retry: false,
+      };
+    }),
   });
 
   // 스토어 로딩 중
@@ -73,8 +77,12 @@ export default function Detail() {
   const storereview = reviewData?.data.reviews ?? [];
 
   // 예약 가능 일정
-  const reservation = scheduleData?.data.dateSummaries ?? [];
+  //const reservation = scheduleData?.data.dateSummaries ?? [];
   // const availableDates = reservation.filter(day => day.availableSlots > 0);
+  const scheduleLoading = scheduleDataList.some(q => q.isLoading);
+  const reservation = scheduleDataList
+    .flatMap(q => q.data?.data.dateSummaries ?? [])
+    .filter((item, index, self) => index === self.findIndex(t => t.date === item.date));
 
   return (
     <section className="mt-section-sm-top md:mt-section-lg-top mb-section-sm-bottom md:mb-section-lg-bottom">

@@ -35,8 +35,6 @@ export const useStoreFilter = ({
     keyword: searchParams.get("keyword") || "",
   };
 
-  console.log(searchParams.get("perPage"));
-
   useEffect(() => {
     if (filters.sortField !== "distance") return;
     (async () => {

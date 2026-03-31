@@ -23,7 +23,7 @@ export const ReservationBtn = ({
   const router = useRouter();
   const { enterChat } = useEnterChat();
   const { data: user } = useAuthProfile();
-  const availableDates = reservation.filter(day => day.availableSlots > 0);
+  console.log(user);
 
   return (
     <div className="flex gap-1.5">
@@ -34,6 +34,10 @@ export const ReservationBtn = ({
           width="md"
           height="md"
           onClick={() => {
+            if (user?.userType !== "CHILD") {
+              Toast("info", "아동 회원만 예약 가능합니다.");
+              return;
+            }
             router.push(`/reservation/${storeId}`);
           }}
         >
@@ -46,6 +50,12 @@ export const ReservationBtn = ({
         width="md"
         height="md"
         onClick={() => {
+          if (user === null) {
+            router.push(
+              `/login?redirect=/chat&targetId=${storeUserId}&targetName=${encodeURIComponent(storeName)}`
+            );
+            return;
+          }
           if (user?.userType !== "CHILD") {
             Toast("info", "아동 회원만 채팅 가능합니다.");
             return;

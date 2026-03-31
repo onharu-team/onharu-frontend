@@ -15,11 +15,14 @@ import { useDropdown } from "@/components/feature/dropdown/useDropdown";
 import { SelectData } from "@/components/feature/dropdown/data/DropdownData";
 import { Thumbnail } from "@/components/ui/card/Thumbnail";
 import { useStoreFilter } from "@/hooks/store/useStoreFilter";
-import { getCurrentPosition } from "@/components/feature/map/utils/getCurrentPositin"; // 경로 맞게
+import { getCurrentPosition } from "@/components/feature/map/utils/getCurrentPositin";
 import { calcDistance } from "@/lib/distance";
+
+const DEFAULT_LOCATION = { lat: 37.5665, lng: 126.978 };
 
 export default function CharityStore() {
   const [myLocation, setMyLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [isDeniedLocation, setIsDeniedLocation] = useState(false); // 위치권한 거부 여부
 
   useEffect(() => {
     getCurrentPosition().then(pos => {
@@ -28,6 +31,10 @@ export default function CharityStore() {
           lat: pos.coords.latitude,
           lng: pos.coords.longitude,
         });
+      } else {
+        // 위치 권한 거부 시 기본 위치 사용
+        setMyLocation(DEFAULT_LOCATION);
+        setIsDeniedLocation(true);
       }
     });
   }, []);
@@ -93,38 +100,45 @@ export default function CharityStore() {
         )}
         {!isLoading && !error && storeLength > 0 && (
           <>
-            <div className="mt-4 grid grid-cols-2 gap-4 md:mt-8 lg:grid-cols-4">
-              {stores.map(items => {
-                const distance =
-                  myLocation && items.lat && items.lng
-                    ? calcDistance(
-                        myLocation.lat,
-                        myLocation.lng,
-                        Number(items.lat),
-                        Number(items.lng)
-                      )
-                    : null;
-                return (
-                  <Card
-                    key={items.id}
-                    type="charity"
-                    storeId={items.id}
-                    storelink={String(items.id)}
-                    storeThumnail={
-                      <Thumbnail
-                        src={items.images}
-                        isOpen={items.isOpen}
-                        hasSharing={items.isSharing}
-                      />
-                    }
-                    storename={items.name}
-                    storeIntroduce={items.introduction}
-                    category={<Category category={items.categoryName} />}
-                    hashtags={<HashTag tags={items.tagNames || []} />}
-                    distance={distance}
-                  />
-                );
-              })}
+            <div className="mt-4 md:mt-8">
+              {isDeniedLocation && (
+                <p className="mb-2 text-sm text-gray-700">
+                  위치 권한이 거부되어 기본 위치(서울)를 기준으로 거리를 계산합니다.
+                </p>
+              )}
+              <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                {stores.map(items => {
+                  const distance =
+                    myLocation && items.lat && items.lng
+                      ? calcDistance(
+                          myLocation.lat,
+                          myLocation.lng,
+                          Number(items.lat),
+                          Number(items.lng)
+                        )
+                      : null;
+                  return (
+                    <Card
+                      key={items.id}
+                      type="charity"
+                      storeId={items.id}
+                      storelink={String(items.id)}
+                      storeThumnail={
+                        <Thumbnail
+                          src={items.images}
+                          isOpen={items.isOpen}
+                          hasSharing={items.isSharing}
+                        />
+                      }
+                      storename={items.name}
+                      storeIntroduce={items.introduction}
+                      category={<Category category={items.categoryName} />}
+                      hashtags={<HashTag tags={items.tagNames || []} />}
+                      distance={distance}
+                    />
+                  );
+                })}
+              </div>
             </div>
             <div className="mt-section-sm-top md:mt-section-lg-top flex justify-center">
               <Pagination totalPage={data?.data?.totalPages} handlePageChange={handlePageChange} />

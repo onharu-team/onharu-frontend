@@ -14,6 +14,7 @@ import { getCurrentPosition } from "@/components/feature/map/utils/getCurrentPos
 export const CharityShop = () => {
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isDefaultLocation, setIsDefaultLocation] = useState(false); // 기본위치 여부
+  const [isDeniedLocation, setIsDeniedLocation] = useState(false); // 위치권한 거부 여부
 
   const DEFAULT_LOCATION = { lat: 37.5665, lng: 126.978 };
 
@@ -34,6 +35,7 @@ export const CharityShop = () => {
         });
       } else {
         setLocation(DEFAULT_LOCATION);
+        setIsDeniedLocation(true);
       }
     });
   }, []);
@@ -86,6 +88,11 @@ export const CharityShop = () => {
   return (
     <>
       <CharityShopWrapper>
+        {isDeniedLocation && (
+          <p className="mb-2 text-sm text-gray-700">
+            위치 권한이 거부되어 기본 위치(서울)를 기준으로 거리를 계산합니다.
+          </p>
+        )}
         {isDefaultLocation && stores.length > 0 && (
           <p className="mb-2 text-sm text-gray-700">주변에 가게가 없어 전체 가게를 보여드려요!</p>
         )}

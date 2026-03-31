@@ -25,6 +25,7 @@ export default function Nearby() {
     handleSearch,
     handleMyLocation,
   } = useStoreFilter({
+    perPage: 33,
     pathname: "nearby",
     sort: "distance",
     direction: "asc",

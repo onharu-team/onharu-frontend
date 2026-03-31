@@ -6,12 +6,13 @@ import Link from "next/link";
 import Input from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import Checkbox from "@/components/ui/Checkbox";
-import KakaoLoginButton from "./KakaoLoginButton";
+// import KakaoLoginButton from "./KakaoLoginButton";
 import { LoginFormValues } from "../types";
 import { useLogin } from "@/hooks/useLogin";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
+import { useEnterChat } from "@/hooks/useEnterChat";
 
 export default function LoginForm() {
   const {
@@ -26,6 +27,7 @@ export default function LoginForm() {
   const { mutate: login } = useLogin();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { enterChat } = useEnterChat();
 
   const onSubmit = (data: LoginFormValues) => {
     login(
@@ -44,6 +46,15 @@ export default function LoginForm() {
 
           // router.refresh();
           const redirect = searchParams.get("redirect");
+
+          //비로그인 상태에서 채팅하기 버튼 클릭 시 id, name 정보를 redirect 합니다.
+          const targetId = searchParams.get("targetId");
+          const targetName = searchParams.get("targetName");
+          if (targetId && targetName) {
+            await enterChat(Number(targetId), decodeURIComponent(targetName));
+            return;
+          }
+
           router.push(redirect ?? "/");
         },
         onError: () => {
@@ -102,9 +113,9 @@ export default function LoginForm() {
           </Link>
         </div>
 
-        <hr className="my-6.25 border-gray-300" />
+        {/* <hr className="my-6.25 border-gray-300" /> */}
 
-        <KakaoLoginButton className="flex justify-center" />
+        {/* <KakaoLoginButton className="flex justify-center" /> */}
       </form>
     </div>
   );

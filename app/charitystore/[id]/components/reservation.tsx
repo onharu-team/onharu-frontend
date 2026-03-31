@@ -17,7 +17,7 @@ export const Reservation = ({ data }: ReservationProps) => {
     return (
       <>
         <p className="lg:text-md flex items-center gap-1.5 text-base font-semibold">
-          <RiCalendar2Line size={20} /> 이번 달 예약 가능 날짜
+          <RiCalendar2Line size={20} /> 예약 가능 날짜
         </p>
         {/* 그룹 날짜별 그루핑 */}
         <div>

@@ -18,7 +18,7 @@ export const Alert = ({
   return (
     <>
       <button className={buttonClass} onClick={() => router.push("/mypage/notifications")}>
-        <span className="relative">
+        <span>
           <RiNotification3Line size={iconSize} />
           {hasUnread && <span className={cn("bg-main absolute rounded-full", alertClass)} />}
         </span>

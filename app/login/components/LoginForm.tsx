@@ -73,7 +73,7 @@ export default function LoginForm() {
   }, [setValue]);
 
   return (
-    <div className="mt-section-sm-top md:mt-section-lg-top mb-section-sm-bottom md:mb-section-lg-bottom wrapper flex flex-col items-center">
+    <div className="mt-section-sm-top md:mt-section-lg-top mb-section-sm-bottom md:mb-section-lg-bottom wrapper flex h-[calc(100vh-300px)] flex-col items-center justify-center md:h-[calc(100vh-330px)]">
       <h2 className="text-2xl font-bold">로그인</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex w-full max-w-sm flex-col gap-5">
